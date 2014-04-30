@@ -18,13 +18,14 @@ public class ExplosionThread extends Thread implements Serializable {
 	private int position;
 	private BombStatus bombStatus;
 	protected final static int OTHER_LINE_STEP = 21;
-	
-	public ExplosionThread(int position, BombStatus bombStatus, MapController mapController) {
+
+	public ExplosionThread(int position, BombStatus bombStatus,
+			MapController mapController) {
 		this.mapController = mapController;
 		this.position = position;
 		this.bombStatus = bombStatus;
 	}
-	
+
 	@Override
 	public void run() {
 		try {
@@ -35,6 +36,9 @@ public class ExplosionThread extends Thread implements Serializable {
 		}
 
 		deleteBomb();
+		ExplodingThread et = new ExplodingThread(bombStatus, mapController,
+				position);
+		et.start();
 
 		try {
 			Thread.sleep(INTERVAL);
@@ -43,9 +47,10 @@ public class ExplosionThread extends Thread implements Serializable {
 			e.printStackTrace();
 		}
 
+		et.setRunning(false);
 		exploded();
 	}
-	
+
 	//
 	public void bombExplode() {
 		char[] mapArray = mapController.getMap().toCharArray();
@@ -65,11 +70,13 @@ public class ExplosionThread extends Thread implements Serializable {
 
 		mapController.setMap(new String(mapArray));
 	}
+
 	//
 	public void deleteBomb() {
 		LinkedList<GhostStatus> ghostsStatus = mapController.getGhostsStatus();
-		// 
+		//
 		bombStatus.die();
+		bombStatus.getBomberman().setCanBomb(true);
 		//
 		bombExplode();
 
@@ -80,6 +87,7 @@ public class ExplosionThread extends Thread implements Serializable {
 				bombStatus.getBomberman().increaseScore(1); // TODO
 			}
 	}
+
 	//
 	private boolean checkDeathPos(int currentPos, int position) {
 		return currentPos == position || currentPos == position - 1
@@ -107,5 +115,5 @@ public class ExplosionThread extends Thread implements Serializable {
 
 		mapController.setMap(new String(mapArray));
 	}
-	
+
 }

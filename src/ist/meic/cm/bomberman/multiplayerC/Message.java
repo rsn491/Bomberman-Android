@@ -22,6 +22,8 @@ public class Message implements Serializable {
 
 	public static final int REFRESH = 15;
 
+	public static final int READY = 25;
+
 	private int code;
 	private String details;
 

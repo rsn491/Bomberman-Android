@@ -22,20 +22,23 @@
 
         <Button
             android:id="@+id/Connect"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Connect" />
 
         <Button
             android:id="@+id/Start"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Start" />
 
         <Button
             android:id="@+id/Quit"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Quit" />
     </LinearLayout>
 
@@ -44,29 +47,27 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
-        android:gravity="center"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Players List"
             android:layout_margin="10dp"
+            android:text="Players List"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Button
+        <ImageButton
             android:id="@+id/Refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Refresh" />
+            android:layout_margin="10dp"
+            android:background="@drawable/refresh" />
     </LinearLayout>
 
     <ListView
-        android:id="@+id/listView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true" >
-    </ListView>
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

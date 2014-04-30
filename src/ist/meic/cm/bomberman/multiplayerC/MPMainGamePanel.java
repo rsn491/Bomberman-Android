@@ -8,12 +8,14 @@ import java.util.ArrayList;
 
 import ist.meic.cm.bomberman.AbsMainGamePanel;
 import ist.meic.cm.bomberman.InGame;
+import ist.meic.cm.bomberman.R;
 import ist.meic.cm.bomberman.SPMainGamePanel;
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.widget.SpinnerAdapter;
@@ -116,6 +118,28 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 		return output;
 	}
 
+	@Override
+	public void loadModels() {
+		super.loadModels();
+
+		map.setBomberman2U(BitmapFactory.decodeResource(getResources(),
+				R.drawable.up2));
+		map.setBomberman2L(BitmapFactory.decodeResource(getResources(),
+				R.drawable.left2));
+		map.setBomberman2R(BitmapFactory.decodeResource(getResources(),
+				R.drawable.right2));
+		map.setBomberman2D(BitmapFactory.decodeResource(getResources(),
+				R.drawable.down2));
+		map.setBomberman3U(BitmapFactory.decodeResource(getResources(),
+				R.drawable.up3));
+		map.setBomberman3L(BitmapFactory.decodeResource(getResources(),
+				R.drawable.left3));
+		map.setBomberman3R(BitmapFactory.decodeResource(getResources(),
+				R.drawable.right3));
+		map.setBomberman3D(BitmapFactory.decodeResource(getResources(),
+				R.drawable.down3));
+	}
+
 	private class MoveTask extends AsyncTask<Object, Void, Void> {
 
 		private Message toSend;
@@ -129,7 +153,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 				synchronized (output) {
 					output.writeObject(toSend);
 					output.reset();
-					
+
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

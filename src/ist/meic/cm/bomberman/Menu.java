@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -76,7 +78,15 @@ public class Menu extends Activity {
 				startActivity(intent);
 
 			}
+		});
+		ImageButton settings = (ImageButton) findViewById(R.id.settings);
+		settings.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getBaseContext(), "Settings porra!",
+						Toast.LENGTH_SHORT).show();
+			}
 		});
 
 		Button newGame = (Button) findViewById(R.id.NewGame);
@@ -92,14 +102,14 @@ public class Menu extends Activity {
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
-										askForName(InGame.class,1);
+										askForName(InGame.class, 1);
 									}
 								})
 						.setPositiveButton("Single Player",
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
-										askForName(InGame.class,0);
+										askForName(InGame.class, 0);
 									}
 
 								})
@@ -244,9 +254,11 @@ public class Menu extends Activity {
 		mHideHandler.postDelayed(mHideRunnable, delayMillis);
 	}
 
-	private void askForName(final Class<? extends InGame> gameMode, final int mode) {
+	private void askForName(final Class<? extends InGame> gameMode,
+			final int mode) {
 
-		final AlertDialog.Builder alert = new AlertDialog.Builder(Menu.this).setTitle("Insert Player Name:");
+		final AlertDialog.Builder alert = new AlertDialog.Builder(Menu.this)
+				.setTitle("Insert Player Name:");
 		final EditText input = new EditText(this);
 		alert.setView(input);
 		alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -257,12 +269,12 @@ public class Menu extends Activity {
 					value = tmp;
 				Intent intent = new Intent(Menu.this, gameMode);
 				intent.putExtra("player_name", value);
-				if(mode == 0) {
-					//singlePlayer - mode 0
+				if (mode == 0) {
+					// singlePlayer - mode 0
 					intent.putExtra("game_mode", "singleplayer");
 				}
-				if(mode == 1) {
-					//multiplayer centralized - mode 1
+				if (mode == 1) {
+					// multiplayer centralized - mode 1
 					intent.putExtra("game_mode", "multiplayer");
 				}
 				intent.putExtra("levelName", "Level1");

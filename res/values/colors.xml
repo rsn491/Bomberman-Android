@@ -2,5 +2,6 @@
 
     <color name="black_overlay">#66000000</color>
 	<color name="white">#ffffffff</color>
+	<color name="Black">#FF000000</color>
 	
 </resources>
