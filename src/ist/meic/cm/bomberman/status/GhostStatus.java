@@ -1,6 +1,6 @@
 package ist.meic.cm.bomberman.status;
 
-import ist.meic.cm.bomberman.model.PossibleMoves;
+import ist.meic.cm.bomberman.controller.PossibleMoves;
 
 import java.io.Serializable;
 import java.util.LinkedList;

@@ -126,7 +126,7 @@ public class MapController implements Serializable {
 	// Getters and Setters
 	//
 
-	public void setBombermanOrientation(char orientation) {
+	public void setBombermanOrientation(PossibleMoves orientation) {// BUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		bombermansStatus.get(0).setOrientation(orientation);
 	}
 

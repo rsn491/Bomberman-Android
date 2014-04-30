@@ -1,8 +1,10 @@
 package ist.meic.cm.bomberman.status;
 
+import ist.meic.cm.bomberman.controller.PossibleMoves;
+
 import java.io.Serializable;
 
-public abstract class Status implements Serializable{
+public abstract class Status implements Serializable {
 	/**
 	 * 
 	 */
@@ -13,41 +15,41 @@ public abstract class Status implements Serializable{
 	private int y;
 	protected char[] mapArray;
 	private boolean dead;
-	private char orientation;
-	
+	private PossibleMoves orientation;
+
 	public Status(int i, int x, int y, char[] mapArray) {
 		this.mapArray = mapArray;
 		this.i = i;
 		this.x = x;
 		this.y = y;
-		this.orientation = 'r';
+		this.orientation = PossibleMoves.RIGHT;
 		this.dead = false;
 	}
 
 	public void up() {
 		i -= 21;
 		y -= 1;
-		orientation = 'u';
+		orientation = PossibleMoves.UP;
 	}
-	
+
 	public void left() {
 		i -= 1;
-		x -= 1;	
-		orientation = 'l';
+		x -= 1;
+		orientation = PossibleMoves.LEFT;
 	}
-	
+
 	public void right() {
 		i += 1;
 		x += 1;
-		orientation = 'r';
+		orientation = PossibleMoves.RIGHT;
 	}
-	
+
 	public void down() {
 		i += 21;
 		y += 1;
-		orientation = 'd';
+		orientation = PossibleMoves.DOWN;
 	}
-	
+
 	public int getI() {
 		return i;
 	}
@@ -72,20 +74,20 @@ public abstract class Status implements Serializable{
 		this.y = y;
 	}
 
-	public char getOrientation() {
+	public PossibleMoves getOrientation() {
 		return orientation;
 	}
 
-	public void setOrientation(char orientation) {
+	public void setOrientation(PossibleMoves orientation) {
 		this.orientation = orientation;
 	}
-	
+
 	public boolean isDead() {
 		return dead;
 	}
-	
+
 	public void die() {
 		dead = true;
 	}
-	
+
 }

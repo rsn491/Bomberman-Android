@@ -33,6 +33,14 @@ public class Map {
 	private Bitmap explosion;
 	private List<Ghost> ghosts;
 	private BombermanStatus myStatus;
+	private Bitmap bomberman2D;
+	private Bitmap bomberman2U;
+	private Bitmap bomberman2L;
+	private Bitmap bomberman2R;
+	private Bitmap bomberman3L;
+	private Bitmap bomberman3R;
+	private Bitmap bomberman3U;
+	private Bitmap bomberman3D;
 
 	private final static int H_STEP = 20;
 	private static final int OTHER_LINE_STEP = 21;
@@ -87,8 +95,10 @@ public class Map {
 		}
 		//
 
+		boolean multiplayer = !InGame.isSinglePlayer();
+
 		// Draws Bomberman(s)
-		if (!InGame.isSinglePlayer() && bombermansPos != null) {
+		if (multiplayer && bombermansPos != null) {
 			myStatus = bombermansPos.get(InGame.getId());
 			bombermansPos = mapController.getBombermansStatus();
 			bombermansPos.set(InGame.getId(), myStatus);
@@ -98,31 +108,63 @@ public class Map {
 
 		bombermanObj = new LinkedList<Bomberman>();
 
-		int i = 0;
+		int i = 0, a, b;
 		for (BombermanStatus bombermanPos : bombermansPos) {
-
+			a = bombermanPos.getX();
+			b = bombermanPos.getY();
 			switch (bombermanPos.getOrientation()) {
-			case 'u':
-				bombermanObj.add(new Bomberman(this, bombermanU, bombermanPos
-						.getI()));
+			case UP:
+				if (i != 0 && multiplayer) {
+					if (i == 1)
+						bombermanObj.add(new Bomberman(this, bomberman2U,
+								bombermanPos.getI(), a, b));
+					if (i == 2)
+						bombermanObj.add(new Bomberman(this, bomberman3U,
+								bombermanPos.getI(), a, b));
+				} else
+					bombermanObj.add(new Bomberman(this, bombermanU,
+							bombermanPos.getI(), a, b));
 				break;
-			case 'l':
-				bombermanObj.add(new Bomberman(this, bombermanL, bombermanPos
-						.getI()));
+			case LEFT:
+				if (i != 0 && multiplayer) {
+					if (i == 1)
+						bombermanObj.add(new Bomberman(this, bomberman2L,
+								bombermanPos.getI(), a, b));
+					if (i == 2)
+						bombermanObj.add(new Bomberman(this, bomberman3L,
+								bombermanPos.getI(), a, b));
+				} else
+					bombermanObj.add(new Bomberman(this, bombermanL,
+							bombermanPos.getI(), a, b));
 				break;
-			case 'r':
-				bombermanObj.add(new Bomberman(this, bombermanR, bombermanPos
-						.getI()));
+			case RIGHT:
+				if (i != 0 && multiplayer) {
+					if (i == 1)
+						bombermanObj.add(new Bomberman(this, bomberman2R,
+								bombermanPos.getI(), a, b));
+					if (i == 2)
+						bombermanObj.add(new Bomberman(this, bomberman3R,
+								bombermanPos.getI(), a, b));
+				} else
+					bombermanObj.add(new Bomberman(this, bombermanR,
+							bombermanPos.getI(), a, b));
 				break;
-			case 'd':
-				bombermanObj.add(new Bomberman(this, bombermanD, bombermanPos
-						.getI()));
+			case DOWN:
+				if (i != 0 && multiplayer) {
+					if (i == 1)
+						bombermanObj.add(new Bomberman(this, bomberman2D,
+								bombermanPos.getI(), a, b));
+					if (i == 2)
+						bombermanObj.add(new Bomberman(this, bomberman3D,
+								bombermanPos.getI(), a, b));
+				} else
+					bombermanObj.add(new Bomberman(this, bombermanD,
+							bombermanPos.getI(), a, b));
 				break;
 			default:
 				break;
 			}
-			bombermanObj.get(i).setX(bombermanPos.getX());
-			bombermanObj.get(i).setY(bombermanPos.getY());
+
 			bombermanObj.get(i).draw(canvas);
 			i++;
 		}
@@ -189,6 +231,46 @@ public class Map {
 				height / 13, true);
 	}
 
+	public void setBomberman2R(Bitmap bomberman2R) {
+		this.bomberman2R = Bitmap.createScaledBitmap(bomberman2R, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman2L(Bitmap bomberman2L) {
+		this.bomberman2L = Bitmap.createScaledBitmap(bomberman2L, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman2U(Bitmap bomberman2U) {
+		this.bomberman2U = Bitmap.createScaledBitmap(bomberman2U, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman2D(Bitmap bomberman2D) {
+		this.bomberman2D = Bitmap.createScaledBitmap(bomberman2D, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman3R(Bitmap bomberman3R) {
+		this.bomberman3R = Bitmap.createScaledBitmap(bomberman3R, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman3L(Bitmap bomberman3L) {
+		this.bomberman3L = Bitmap.createScaledBitmap(bomberman3L, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman3U(Bitmap bomberman3U) {
+		this.bomberman3U = Bitmap.createScaledBitmap(bomberman3U, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman3D(Bitmap bomberman3D) {
+		this.bomberman3D = Bitmap.createScaledBitmap(bomberman3D, width
+				/ H_STEP, height / 13, true);
+	}
+
 	public void setBombermanR(Bitmap bombermanR) {
 		this.bombermanR = Bitmap.createScaledBitmap(bombermanR, width / H_STEP,
 				height / 13, true);
@@ -230,9 +312,10 @@ public class Map {
 	}
 
 	public Bomberman getBomberman(int playerId) {
-		if(bombermanObj.size()>0)
-		return bombermanObj.get(playerId);
-		else return null;
+		if (bombermanObj.size() > 0)
+			return bombermanObj.get(playerId);
+		else
+			return null;
 	}
 
 	public boolean isDead(int playerId) {

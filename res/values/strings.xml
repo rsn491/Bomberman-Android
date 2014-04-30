@@ -11,5 +11,6 @@
     <string name="quit">Quit</string>
     <string name="bomb">Bomb</string>
     <string name="title_activity_multiplayer_c">MultiplayerC</string>
+    <string name="image">Image thumbnail</string>
 
 </resources>

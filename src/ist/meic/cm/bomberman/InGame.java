@@ -6,8 +6,8 @@ import java.net.UnknownHostException;
 
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
+import ist.meic.cm.bomberman.gamelobby.GameLobby;
 import ist.meic.cm.bomberman.model.Bomberman;
-import ist.meic.cm.bomberman.multiplayerC.GameLobby;
 import ist.meic.cm.bomberman.multiplayerC.MPMainGamePanel;
 import ist.meic.cm.bomberman.multiplayerC.SyncMap;
 import android.annotation.SuppressLint;
@@ -272,7 +272,7 @@ public class InGame extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (resultCode == 0) {
-			playerId = data.getIntExtra("playerId", 1);
+			playerId = data.getIntExtra("playerId", 0);
 
 			timerThread();
 			intent = new Intent(getBaseContext(), SyncMap.class);

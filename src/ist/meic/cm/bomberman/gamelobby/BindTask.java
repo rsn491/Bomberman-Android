@@ -1,7 +1,8 @@
-package ist.meic.cm.bomberman.multiplayerC;
+package ist.meic.cm.bomberman.gamelobby;
 
 import ist.meic.cm.bomberman.AbsMainGamePanel;
 import ist.meic.cm.bomberman.controller.MapController;
+import ist.meic.cm.bomberman.multiplayerC.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

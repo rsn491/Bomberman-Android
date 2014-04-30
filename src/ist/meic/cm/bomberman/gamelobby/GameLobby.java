@@ -1,17 +1,14 @@
-package ist.meic.cm.bomberman.multiplayerC;
+package ist.meic.cm.bomberman.gamelobby;
 
-import ist.meic.cm.bomberman.AbsMainGamePanel;
 import ist.meic.cm.bomberman.InGame;
 import ist.meic.cm.bomberman.R;
-import ist.meic.cm.bomberman.controller.MapController;
+import ist.meic.cm.bomberman.multiplayerC.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,26 +21,38 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class GameLobby extends Activity { // FALTA ATUALIZAR LISTA DE
-											// JOGADORES!!
+public class GameLobby extends Activity implements OnItemClickListener {
 
 	private static boolean connected;
 	private int playerId;
-	private String value = "192.168.1.83";
+	private String value = "192.168.1.67";
 	private ArrayList<String> playersList = new ArrayList<String>();
-	private ArrayAdapter<String> adapter;
-	private static final String NO_PLAYERS = "No Players Yet!";
+	private static final String NO_PLAYERS = "Not Connected!";
 	private Context context;
 	private boolean trying;
 	private BindTask communication = new BindTask();
+	private WaitTask waitToStart = new WaitTask();
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
+	private CustomBaseAdapter adapter;
+
+	private static final String[] titles = new String[] { "Player 1",
+			"Player 2", "Player 3" };
+
+	private static final Integer[] images = { R.drawable.head,
+			R.drawable.mario, R.drawable.luigi };
+
+	private ListView listView;
+	private List<RowItem> rowItems;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +63,17 @@ public class GameLobby extends Activity { // FALTA ATUALIZAR LISTA DE
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_lobby);
 
-		ListView myListView = (ListView) findViewById(R.id.listView1);
-
 		trying = false;
 
 		playersList.add(NO_PLAYERS);
-		adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, playersList);
-		myListView.setAdapter(adapter);
+
+		rowItems = new ArrayList<RowItem>();
+		updateList();
+
+		listView = (ListView) findViewById(R.id.list);
+		adapter = new CustomBaseAdapter(this, rowItems);
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(this);
 
 		context = getApplicationContext();
 
@@ -104,7 +116,7 @@ public class GameLobby extends Activity { // FALTA ATUALIZAR LISTA DE
 
 									playersList.remove(NO_PLAYERS);
 									playersList.add(playerName);
-									adapter.notifyDataSetChanged();
+									updateList();
 								}
 							});
 
@@ -131,13 +143,7 @@ public class GameLobby extends Activity { // FALTA ATUALIZAR LISTA DE
 			public void onClick(View v) {
 
 				if (connected) {
-					Intent i = new Intent();
-
-					i.putExtra("playerId", playerId);
-
-					setResult(0, i);
-
-					finish();
+					waitToStart.execute();
 				} else
 					Toast.makeText(context,
 							"You must be connected in order to play!",
@@ -155,17 +161,32 @@ public class GameLobby extends Activity { // FALTA ATUALIZAR LISTA DE
 			}
 
 		});
-		Button refresh = (Button) findViewById(R.id.Refresh);
+		ImageButton refresh = (ImageButton) findViewById(R.id.Refresh);
 		refresh.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				RefreshTask rt = new RefreshTask();
-				rt.execute();
+				if (connected) {
+					Toast.makeText(context, "Refreshing!", Toast.LENGTH_SHORT)
+							.show();
+					RefreshTask rt = new RefreshTask();
+					rt.execute();
+				} else
+					Toast.makeText(context,
+							"You must be connected in order to refresh!",
+							Toast.LENGTH_SHORT).show();
 			}
 
 		});
 
+	}
+
+	private void updateList() {
+		rowItems.clear();
+		for (int i = 0; i < playersList.size(); i++) {
+			RowItem item = new RowItem(images[i], titles[i], playersList.get(i));
+			rowItems.add(item);
+		}
 	}
 
 	static void setConnected(boolean con) {
@@ -179,11 +200,13 @@ public class GameLobby extends Activity { // FALTA ATUALIZAR LISTA DE
 
 		playersList.addAll(players);
 
+		updateList();
+
 		adapter.notifyDataSetChanged();
 	}
 
 	private class RefreshTask extends AsyncTask<Object, Void, Void> {
-		
+
 		private Message toSend, received;
 		private ArrayList<String> players;
 
@@ -223,5 +246,68 @@ public class GameLobby extends Activity { // FALTA ATUALIZAR LISTA DE
 	public void setInput(ObjectInputStream input) {
 		this.input = input;
 
+	}
+
+	private class WaitTask extends AsyncTask<Object, Void, Void> {
+
+		private Message toSend, received;
+
+		@Override
+		protected Void doInBackground(Object... objects) {
+			try {
+
+				toSend = new Message(Message.READY);
+
+				output.writeObject(toSend);
+				output.reset();
+
+				received = (Message) input.readObject();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void v) {
+			startGame(received);
+
+		}
+
+	}
+
+	private void startGame(Message received) {
+		if (received.getCode() == Message.SUCCESS) {
+			Intent i = new Intent();
+
+			i.putExtra("playerId", playerId);
+
+			setResult(0, i);
+
+			finish();
+		} else {
+			Toast.makeText(context,
+					"No other players are connected at the moment!",
+					Toast.LENGTH_SHORT).show();
+			// DELETE
+			Intent i = new Intent();
+
+			i.putExtra("playerId", playerId);
+
+			setResult(0, i);
+
+			finish();
+			// DELETE
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+			long arg3) {
+		Toast.makeText(getApplicationContext(),
+				rowItems.get(position).toString(), Toast.LENGTH_SHORT).show();
 	}
 }

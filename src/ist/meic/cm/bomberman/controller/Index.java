@@ -1,6 +1,5 @@
 package ist.meic.cm.bomberman.controller;
 
-import ist.meic.cm.bomberman.model.PossibleMoves;
 
 import java.io.Serializable;
 import java.util.LinkedList;
