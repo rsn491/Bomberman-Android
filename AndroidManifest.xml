@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ist.meic.cm.bomberman"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="ist.meic.cm.bomberman.Menu"
+            android:configChanges="keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/FullscreenTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ist.meic.cm.bomberman.InGame"
+            android:configChanges="keyboardHidden|screenSize"
+            android:label="@style/FullscreenTheme" >
+        </activity>
+        <activity
+            android:name="ist.meic.cm.bomberman.multiplayerC.GameLobby"
+            android:configChanges="keyboardHidden|screenSize"
+            android:label="@style/FullscreenTheme"
+            android:noHistory="true" >
+        </activity>
+
+        <service
+            android:enabled="true"
+            android:name="ist.meic.cm.bomberman.multiplayerC.SyncMap"
+            android:label="SyncMap" >
+        </service>
+      
+    </application>
+
+</manifest>
