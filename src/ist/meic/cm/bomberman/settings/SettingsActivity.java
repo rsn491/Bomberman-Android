@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ActivityInfo;
@@ -60,6 +61,32 @@ public class SettingsActivity extends Activity implements
 	}
 
 	private void displaySharedPreferences() {
+
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(SettingsActivity.this);
+
+		settings.setLevelName(prefs.getString(Settings.MAP, "Level1"));
+
+		settings.setGameDuration(Integer.parseInt(prefs.getString(
+				Settings.DURATION, "120")));
+
+		settings.setRobotSpeed(Integer.parseInt(prefs.getString(Settings.RS,
+				"1")));
+
+		settings.setExplosionTimeout(Integer.parseInt(prefs.getString(
+				Settings.ET, "3")));
+
+		settings.setExplosionDuration(Integer.parseInt(prefs.getString(
+				Settings.ED, "3")));
+
+		settings.setExplosionRange(Integer.parseInt(prefs.getString(
+				Settings.ER, "1")));
+
+		settings.setExplosionRange(Integer.parseInt(prefs.getString(
+				Settings.PR, "1")));
+
+		settings.setPointsOpponent(Integer.parseInt(prefs.getString(
+				Settings.PO, "5")));
 
 		Builder ad = new AlertDialog.Builder(SettingsActivity.this)
 				.setTitle("Current Settings").setMessage(settings.toString())
