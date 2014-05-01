@@ -136,7 +136,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		map.setBomb(BitmapFactory.decodeResource(getResources(),
 				R.drawable.bomb));
 		map.setGhost(BitmapFactory.decodeResource(getResources(),
-				R.drawable.ghost));
+				R.drawable.bghost));
 	}
 
 	public void moveDown() {

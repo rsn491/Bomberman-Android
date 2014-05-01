@@ -29,6 +29,13 @@
                 android:text="New Game" />
 
             <Button
+                android:id="@+id/settings"
+                style="?buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Settings" />
+            <Button
                 android:id="@+id/Exit"
                 style="?buttonBarButtonStyle"
                 android:layout_width="0dp"
@@ -44,37 +51,11 @@
         android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:src="@drawable/bomberstart" />
-
+    
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="400dp"
         android:scaleType="fitStart"
         android:src="@drawable/logo" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|center_vertical"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="70dp"
-        android:orientation="vertical" >
-
-        <ImageButton
-            android:id="@+id/settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/settings" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Settings"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/Black"
-             android:textStyle="bold" />
-    </LinearLayout>
-
 </FrameLayout>
