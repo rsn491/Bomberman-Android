@@ -42,6 +42,7 @@ public class Map {
 	private Bitmap bomberman3R;
 	private Bitmap bomberman3U;
 	private Bitmap bomberman3D;
+	private Object bombermanLock;
 	private int playerId;
 
 	private final static int H_STEP = 20;
@@ -51,7 +52,7 @@ public class Map {
 		this.width = width;
 		this.height = height;
 		this.playerId = playerId;
-
+		this.bombermanLock = new Object();
 	}
 
 	public void draw(Canvas canvas) {
@@ -109,70 +110,71 @@ public class Map {
 		} else
 			bombermansPos = mapController.getBombermansStatus();
 
-		bombermanObj = new LinkedList<Bomberman>();
+		synchronized(bombermanLock){
+			bombermanObj = new LinkedList<Bomberman>();
 
-		int i = 0, a, b;
-		for (BombermanStatus bombermanPos : bombermansPos) {
-			a = bombermanPos.getX();
-			b = bombermanPos.getY();
-			switch (bombermanPos.getOrientation()) {
-			case UP:
-				if (i != 0 && multiplayer) {
-					if (i == 1)
-						bombermanObj.add(new Bomberman(this, bomberman2U,
+			int i = 0, a, b;
+			for (BombermanStatus bombermanPos : bombermansPos) {
+				a = bombermanPos.getX();
+				b = bombermanPos.getY();
+				switch (bombermanPos.getOrientation()) {
+				case UP:
+					if (i != 0 && multiplayer) {
+						if (i == 1)
+							bombermanObj.add(new Bomberman(this, bomberman2U,
+									bombermanPos.getI(), a, b));
+						if (i == 2)
+							bombermanObj.add(new Bomberman(this, bomberman3U,
+									bombermanPos.getI(), a, b));
+					} else
+						bombermanObj.add(new Bomberman(this, bombermanU,
 								bombermanPos.getI(), a, b));
-					if (i == 2)
-						bombermanObj.add(new Bomberman(this, bomberman3U,
+					break;
+				case LEFT:
+					if (i != 0 && multiplayer) {
+						if (i == 1)
+							bombermanObj.add(new Bomberman(this, bomberman2L,
+									bombermanPos.getI(), a, b));
+						if (i == 2)
+							bombermanObj.add(new Bomberman(this, bomberman3L,
+									bombermanPos.getI(), a, b));
+					} else
+						bombermanObj.add(new Bomberman(this, bombermanL,
 								bombermanPos.getI(), a, b));
-				} else
-					bombermanObj.add(new Bomberman(this, bombermanU,
-							bombermanPos.getI(), a, b));
-				break;
-			case LEFT:
-				if (i != 0 && multiplayer) {
-					if (i == 1)
-						bombermanObj.add(new Bomberman(this, bomberman2L,
+					break;
+				case RIGHT:
+					if (i != 0 && multiplayer) {
+						if (i == 1)
+							bombermanObj.add(new Bomberman(this, bomberman2R,
+									bombermanPos.getI(), a, b));
+						if (i == 2)
+							bombermanObj.add(new Bomberman(this, bomberman3R,
+									bombermanPos.getI(), a, b));
+					} else
+						bombermanObj.add(new Bomberman(this, bombermanR,
 								bombermanPos.getI(), a, b));
-					if (i == 2)
-						bombermanObj.add(new Bomberman(this, bomberman3L,
+					break;
+				case DOWN:
+					if (i != 0 && multiplayer) {
+						if (i == 1)
+							bombermanObj.add(new Bomberman(this, bomberman2D,
+									bombermanPos.getI(), a, b));
+						if (i == 2)
+							bombermanObj.add(new Bomberman(this, bomberman3D,
+									bombermanPos.getI(), a, b));
+					} else
+						bombermanObj.add(new Bomberman(this, bombermanD,
 								bombermanPos.getI(), a, b));
-				} else
-					bombermanObj.add(new Bomberman(this, bombermanL,
-							bombermanPos.getI(), a, b));
-				break;
-			case RIGHT:
-				if (i != 0 && multiplayer) {
-					if (i == 1)
-						bombermanObj.add(new Bomberman(this, bomberman2R,
-								bombermanPos.getI(), a, b));
-					if (i == 2)
-						bombermanObj.add(new Bomberman(this, bomberman3R,
-								bombermanPos.getI(), a, b));
-				} else
-					bombermanObj.add(new Bomberman(this, bombermanR,
-							bombermanPos.getI(), a, b));
-				break;
-			case DOWN:
-				if (i != 0 && multiplayer) {
-					if (i == 1)
-						bombermanObj.add(new Bomberman(this, bomberman2D,
-								bombermanPos.getI(), a, b));
-					if (i == 2)
-						bombermanObj.add(new Bomberman(this, bomberman3D,
-								bombermanPos.getI(), a, b));
-				} else
-					bombermanObj.add(new Bomberman(this, bombermanD,
-							bombermanPos.getI(), a, b));
-				break;
-			default:
-				break;
+					break;
+				default:
+					break;
+				}
+
+				bombermanObj.get(i).draw(canvas);
+				i++;
 			}
-
-			bombermanObj.get(i).draw(canvas);
-			i++;
+			//
 		}
-		//
-
 		//
 		bombsPos = mapController.getBombsStatus();
 		for (BombStatus bombpos : bombsPos) {
@@ -315,7 +317,12 @@ public class Map {
 	}
 
 	public Bomberman getBomberman(int playerId) {
-		return bombermanObj.get(playerId);
+		synchronized(bombermanLock) {
+			if (bombermanObj.size() > 0)
+				return bombermanObj.get(playerId);
+			else
+				return null;
+		}
 	}
 
 	public boolean isDead(int playerId) {
