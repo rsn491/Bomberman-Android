@@ -5,10 +5,14 @@ import ist.meic.cm.bomberman.util.SystemUiHider;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -102,7 +106,17 @@ public class Menu extends Activity {
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
-										askForName(InGame.class, 1);
+										if (!isWifiOn()) {
+											Toast.makeText(Menu.this,
+													"Wifi must be ON!",
+													Toast.LENGTH_SHORT).show();
+										} else if (connected())
+											askForName(InGame.class, 1);
+										else
+											Toast.makeText(
+													Menu.this,
+													"You must connected to a Network!",
+													Toast.LENGTH_SHORT).show();
 									}
 								})
 						.setPositiveButton("Single Player",
@@ -190,6 +204,28 @@ public class Menu extends Activity {
 		findViewById(R.id.NewGame).setOnTouchListener(mDelayHideTouchListener);
 
 		findViewById(R.id.Exit).setOnTouchListener(mDelayHideTouchListener);
+	}
+
+	private boolean connected() {
+		try {
+			ConnectivityManager connectivityManager = (ConnectivityManager) Menu.this
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo wifiInfo = connectivityManager
+					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+			if (wifiInfo.isConnected()) {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+
+	}
+
+	public boolean isWifiOn() {
+		WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		return wifi.isWifiEnabled();
 	}
 
 	@Override
