@@ -1,37 +1,26 @@
 package ist.meic.cm.bomberman.settings;
 
-import ist.meic.cm.bomberman.InGame;
 import ist.meic.cm.bomberman.R;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends Activity implements
+		OnSharedPreferenceChangeListener {
 
-	private static final String FILENAME = ".settings";
 	private Settings settings;
 
 	@Override
@@ -44,8 +33,6 @@ public class SettingsActivity extends Activity {
 		setContentView(R.layout.activity_settings);
 
 		settings = new Settings();
-
-		writeToFile();
 
 		FragmentManager mFragmentManager = getFragmentManager();
 		FragmentTransaction mFragmentTransaction = mFragmentManager
@@ -64,23 +51,18 @@ public class SettingsActivity extends Activity {
 		});
 	}
 
+	@Override
+	public void onBackPressed() {
+
+		Toast.makeText(SettingsActivity.this, "Settings Saved!",
+				Toast.LENGTH_SHORT).show();
+		super.onBackPressed();
+	}
+
 	private void displaySharedPreferences() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(SettingsActivity.this);
-
-		String username = prefs.getString("username", "Default NickName");
-		String passw = prefs.getString("password", "Default Password");
-		boolean checkBox = prefs.getBoolean("checkBox", false);
-		String listPrefs = prefs.getString("listpref", "Default list prefs");
-
-		StringBuilder builder = new StringBuilder();
-		builder.append("Username: " + username + "\n");
-		builder.append("Password: " + passw + "\n");
-		builder.append("Keep me logged in: " + String.valueOf(checkBox) + "\n");
-		builder.append("List preference: " + listPrefs);
 
 		Builder ad = new AlertDialog.Builder(SettingsActivity.this)
-				.setTitle("Current Settings").setMessage(builder.toString())
+				.setTitle("Current Settings").setMessage(settings.toString())
 				.setNeutralButton("OK", null).setIcon(R.drawable.ic_launcher);
 		try {
 			ad.show();
@@ -90,62 +72,55 @@ public class SettingsActivity extends Activity {
 		}
 	}
 
-	private void writeToFile() {
-		StringBuilder sb = new StringBuilder(settings.getLevelName());
-		sb.append("\n");
-		sb.append(settings.getGameDuration());
-		sb.append("\n");
-		sb.append(settings.getExplosionTimeout());
-		sb.append("\n");
-		sb.append(settings.getExplosionDuration());
-		sb.append("\n");
-		sb.append(settings.getExplosionRange());
-		sb.append("\n");
-		sb.append(settings.getRobotSpeed());
-		sb.append("\n");
-		sb.append(settings.getPointsRobot());
-		sb.append("\n");
-		sb.append(settings.getPointsOpponent());
-
-		try {
-			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
-					openFileOutput(FILENAME, Context.MODE_PRIVATE));
-			outputStreamWriter.write(sb.toString());
-			outputStreamWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	@Override
+	public void onResume() {
+		super.onResume();
+		PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this)
+				.registerOnSharedPreferenceChangeListener(this);
 
 	}
 
-	private String readFromFile() {
+	@Override
+	public void onPause() {
+		PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this)
+				.unregisterOnSharedPreferenceChangeListener(this);
+		super.onPause();
+	}
 
-		String ret = "";
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+		if (key.equals(Settings.MAP)) {
 
-		try {
-			InputStream inputStream = openFileInput(FILENAME);
+			settings.setLevelName(prefs.getString(Settings.MAP, "Level1"));
+		} else if (key.equals(Settings.DURATION)) {
 
-			if (inputStream != null) {
-				InputStreamReader inputStreamReader = new InputStreamReader(
-						inputStream);
-				BufferedReader bufferedReader = new BufferedReader(
-						inputStreamReader);
-				String receiveString = "";
-				StringBuilder stringBuilder = new StringBuilder();
+			settings.setGameDuration(Integer.parseInt(prefs.getString(
+					Settings.DURATION, "120")));
+		} else if (key.equals(Settings.RS)) {
 
-				while ((receiveString = bufferedReader.readLine()) != null) {
-					stringBuilder.append(receiveString);
-				}
+			settings.setRobotSpeed(Integer.parseInt(prefs.getString(
+					Settings.RS, "1")));
+		} else if (key.equals(Settings.ET)) {
 
-				inputStream.close();
-				ret = stringBuilder.toString();
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			settings.setExplosionTimeout(Integer.parseInt(prefs.getString(
+					Settings.ET, "3")));
+		} else if (key.equals(Settings.ED)) {
+
+			settings.setExplosionDuration(Integer.parseInt(prefs.getString(
+					Settings.ED, "3")));
+		} else if (key.equals(Settings.ER)) {
+
+			settings.setExplosionRange(Integer.parseInt(prefs.getString(
+					Settings.ER, "1")));
+		} else if (key.equals(Settings.PR)) {
+
+			settings.setExplosionRange(Integer.parseInt(prefs.getString(
+					Settings.PR, "1")));
+		} else if (key.equals(Settings.PO)) {
+
+			settings.setPointsOpponent(Integer.parseInt(prefs.getString(
+					Settings.PO, "5")));
 		}
 
-		return ret;
 	}
 }

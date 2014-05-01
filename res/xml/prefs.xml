@@ -1,31 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
- <PreferenceCategory
-   android:summary="Username and password information"
-   android:title="Login information" >
-  <EditTextPreference
-     android:key="username"
-     android:summary="Please enter your login username"
-     android:title="Username" />
-  <EditTextPreference
-     android:key="password"
-     android:summary="Enter your password"
-     android:title="Password" />
- </PreferenceCategory>
- 
- <PreferenceCategory
-   android:summary="Username and password information"
-   android:title="Settings" >
-  <CheckBoxPreference
-     android:key="checkBox"
-     android:summary="On/Off"
-     android:title="Keep me logged in" />
- 
-  <ListPreference
-     android:entries="@array/listOptions"
-     android:entryValues="@array/listValues"
-     android:key="listpref"
-     android:summary="List preference example"
-     android:title="List preference" />
- </PreferenceCategory>
+
+    <PreferenceCategory
+        android:summary="General Settings"
+        android:title="General Settings" >
+        <ListPreference
+            android:defaultValue="Level1"
+            android:entries="@array/listOptions"
+            android:entryValues="@array/listValues"
+            android:key="map"
+            android:summary="Pick the desired game map"
+            android:title="Game Map" />
+
+        <EditTextPreference
+            android:defaultValue="120"
+            android:inputType="number"
+            android:key="duration"
+            android:summary="Please enter the game duration"
+            android:title="Game Duration" />
+        <EditTextPreference
+            android:defaultValue="1"
+            android:inputType="number"
+            android:key="robotSpeed"
+            android:summary="Please enter the robot speed"
+            android:title="Robot Speed" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:summary="Explosion Settings"
+        android:title="Explosion Settings" >
+        <EditTextPreference
+            android:defaultValue="3"
+            android:inputType="number"
+            android:key="explosionTimeout"
+            android:summary="Please enter the explosion timeout"
+            android:title="Explosion Timeout" />
+        <EditTextPreference
+            android:defaultValue="3"
+            android:inputType="number"
+            android:key="explosionDuration"
+            android:summary="Please enter the explosion duration"
+            android:title="Explosion Duration" />
+        <EditTextPreference
+            android:defaultValue="1"
+            android:inputType="number"
+            android:key="explosionRange"
+            android:summary="Please enter the explosion range"
+            android:title="Explosion Range" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:summary="Points Settings"
+        android:title="Points Settings" >
+        <EditTextPreference
+            android:defaultValue="1"
+            android:inputType="number"
+            android:key="pointsRobot"
+            android:summary="Please enter the points earned from destroying a robot"
+            android:title="Points Robot" />
+        <EditTextPreference
+            android:defaultValue="5"
+            android:inputType="number"
+            android:key="pointsOpponent"
+            android:summary="Please enter the points earned from destroying an opponent"
+            android:title="Points Opponent" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

@@ -11,6 +11,16 @@ public class Settings {
 	private int pointsRobot;
 	private int pointsOpponent;
 
+	// KEYS
+	public static final String MAP = "map";
+	public static final String DURATION = "duration";
+	public static final String RS = "robotSpeed";
+	public static final String ET = "explosionTimeout";
+	public static final String ED = "explosionDuration";
+	public static final String ER = "explosionRange";
+	public static final String PR = "pointsRobot";
+	public static final String PO = "pointsOpponent";
+
 	// Default
 	public Settings() {
 		levelName = "Level1";
@@ -87,4 +97,17 @@ public class Settings {
 		this.pointsOpponent = pointsOpponent;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Map: " + levelName + "\n");
+		builder.append("Game Duration: " + gameDuration + "\n");
+		builder.append("Robot Speed: " + robotSpeed + "\n");
+		builder.append("Explosion Timeout: " + explosionTimeout + "\n");
+		builder.append("Explosion Duration: " + explosionDuration + "\n");
+		builder.append("Explosion Range: " + explosionRange + "\n");
+		builder.append("Points Robot: " + pointsRobot + "\n");
+		builder.append("Points Opponent: " + pointsOpponent);
+		return builder.toString();
+	}
 }
