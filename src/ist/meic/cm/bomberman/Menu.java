@@ -79,7 +79,7 @@ public class Menu extends Activity {
 
 			}
 		});
-		ImageButton settings = (ImageButton) findViewById(R.id.settings);
+		Button settings = (Button) findViewById(R.id.settings);
 		settings.setOnClickListener(new OnClickListener() {
 
 			@Override

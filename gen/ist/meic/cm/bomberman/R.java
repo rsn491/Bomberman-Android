@@ -39,16 +39,16 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
-        public static final int bomb=0x7f020000;
-        public static final int bomberstart=0x7f020001;
-        public static final int border1=0x7f020002;
-        public static final int down=0x7f020003;
-        public static final int down2=0x7f020004;
-        public static final int down3=0x7f020005;
-        public static final int downb=0x7f020006;
-        public static final int explosion=0x7f020007;
-        public static final int floor=0x7f020008;
-        public static final int ghost=0x7f020009;
+        public static final int bghost=0x7f020000;
+        public static final int bomb=0x7f020001;
+        public static final int bomberstart=0x7f020002;
+        public static final int border1=0x7f020003;
+        public static final int down=0x7f020004;
+        public static final int down2=0x7f020005;
+        public static final int down3=0x7f020006;
+        public static final int downb=0x7f020007;
+        public static final int explosion=0x7f020008;
+        public static final int floor=0x7f020009;
         public static final int head=0x7f02000a;
         public static final int ic_launcher=0x7f02000b;
         public static final int left=0x7f02000c;
@@ -65,33 +65,32 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int right3=0x7f020017;
         public static final int rightb=0x7f020018;
         public static final int rounded_corner=0x7f020019;
-        public static final int settings=0x7f02001a;
-        public static final int trydown=0x7f02001b;
-        public static final int tryleft=0x7f02001c;
-        public static final int tryright=0x7f02001d;
-        public static final int tryup=0x7f02001e;
-        public static final int up=0x7f02001f;
-        public static final int up2=0x7f020020;
-        public static final int up3=0x7f020021;
-        public static final int upb=0x7f020022;
-        public static final int wall=0x7f020023;
+        public static final int trydown=0x7f02001a;
+        public static final int tryleft=0x7f02001b;
+        public static final int tryright=0x7f02001c;
+        public static final int tryup=0x7f02001d;
+        public static final int up=0x7f02001e;
+        public static final int up2=0x7f02001f;
+        public static final int up3=0x7f020020;
+        public static final int upb=0x7f020021;
+        public static final int wall=0x7f020022;
     }
     public static final class id {
         public static final int Connect=0x7f0a000e;
-        public static final int Exit=0x7f0a0015;
+        public static final int Exit=0x7f0a0016;
         public static final int LinearLayout1=0x7f0a000c;
         public static final int NewGame=0x7f0a0014;
         public static final int Quit=0x7f0a0010;
         public static final int Refresh=0x7f0a0011;
         public static final int Start=0x7f0a000f;
-        public static final int action_settings=0x7f0a001d;
+        public static final int action_settings=0x7f0a001c;
         public static final int bomb_button=0x7f0a000b;
-        public static final int descText=0x7f0a001c;
+        public static final int descText=0x7f0a001b;
         public static final int down_button=0x7f0a0009;
         public static final int fullscreen_content_controls=0x7f0a0013;
-        public static final int iconImage=0x7f0a001a;
-        public static final int imageView1=0x7f0a0017;
-        public static final int imageView2=0x7f0a0016;
+        public static final int iconImage=0x7f0a0019;
+        public static final int imageView1=0x7f0a0018;
+        public static final int imageView2=0x7f0a0017;
         public static final int in_game_screen=0x7f0a0004;
         public static final int left_button=0x7f0a0007;
         public static final int list=0x7f0a0012;
@@ -101,11 +100,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int player_score=0x7f0a0001;
         public static final int quit_button=0x7f0a0006;
         public static final int right_button=0x7f0a000a;
-        public static final int settings=0x7f0a0018;
+        public static final int settings=0x7f0a0015;
         public static final int textView1=0x7f0a000d;
-        public static final int textView2=0x7f0a0019;
         public static final int time_left=0x7f0a0002;
-        public static final int titleText=0x7f0a001b;
+        public static final int titleText=0x7f0a001a;
         public static final int up_button=0x7f0a0008;
     }
     public static final class layout {
