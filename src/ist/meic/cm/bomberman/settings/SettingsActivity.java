@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ActivityInfo;
@@ -65,28 +64,29 @@ public class SettingsActivity extends Activity implements
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(SettingsActivity.this);
 
-		settings.setLevelName(prefs.getString(Settings.MAP, "Level1"));
+		settings.setLevelName(prefs.getString(Settings.MAP,
+				Settings.MAP_DEFAULT));
 
 		settings.setGameDuration(Integer.parseInt(prefs.getString(
-				Settings.DURATION, "120")));
+				Settings.DURATION, Settings.DURATION_DEFAULT)));
 
 		settings.setRobotSpeed(Integer.parseInt(prefs.getString(Settings.RS,
-				"1")));
+				Settings.RS_DEFAULT)));
 
 		settings.setExplosionTimeout(Integer.parseInt(prefs.getString(
-				Settings.ET, "3")));
+				Settings.ET, Settings.ET_DEFAULT)));
 
 		settings.setExplosionDuration(Integer.parseInt(prefs.getString(
-				Settings.ED, "3")));
+				Settings.ED, Settings.ED_DEFAULT)));
 
 		settings.setExplosionRange(Integer.parseInt(prefs.getString(
-				Settings.ER, "1")));
+				Settings.ER, Settings.ER_DEFAULT)));
 
 		settings.setExplosionRange(Integer.parseInt(prefs.getString(
-				Settings.PR, "1")));
+				Settings.PR, Settings.PR_DEFAULT)));
 
 		settings.setPointsOpponent(Integer.parseInt(prefs.getString(
-				Settings.PO, "5")));
+				Settings.PO, Settings.PO_DEFAULT)));
 
 		Builder ad = new AlertDialog.Builder(SettingsActivity.this)
 				.setTitle("Current Settings").setMessage(settings.toString())
@@ -118,35 +118,36 @@ public class SettingsActivity extends Activity implements
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 		if (key.equals(Settings.MAP)) {
 
-			settings.setLevelName(prefs.getString(Settings.MAP, "Level1"));
+			settings.setLevelName(prefs.getString(Settings.MAP,
+					Settings.MAP_DEFAULT));
 		} else if (key.equals(Settings.DURATION)) {
 
 			settings.setGameDuration(Integer.parseInt(prefs.getString(
-					Settings.DURATION, "120")));
+					Settings.DURATION, Settings.DURATION_DEFAULT)));
 		} else if (key.equals(Settings.RS)) {
 
 			settings.setRobotSpeed(Integer.parseInt(prefs.getString(
-					Settings.RS, "1")));
+					Settings.RS, Settings.RS_DEFAULT)));
 		} else if (key.equals(Settings.ET)) {
 
 			settings.setExplosionTimeout(Integer.parseInt(prefs.getString(
-					Settings.ET, "3")));
+					Settings.ET, Settings.ET_DEFAULT)));
 		} else if (key.equals(Settings.ED)) {
 
 			settings.setExplosionDuration(Integer.parseInt(prefs.getString(
-					Settings.ED, "3")));
+					Settings.ED, Settings.ED_DEFAULT)));
 		} else if (key.equals(Settings.ER)) {
 
 			settings.setExplosionRange(Integer.parseInt(prefs.getString(
-					Settings.ER, "1")));
+					Settings.ER, Settings.ER_DEFAULT)));
 		} else if (key.equals(Settings.PR)) {
 
 			settings.setExplosionRange(Integer.parseInt(prefs.getString(
-					Settings.PR, "1")));
+					Settings.PR, Settings.PR_DEFAULT)));
 		} else if (key.equals(Settings.PO)) {
 
 			settings.setPointsOpponent(Integer.parseInt(prefs.getString(
-					Settings.PO, "5")));
+					Settings.PO, Settings.PO_DEFAULT)));
 		}
 
 	}

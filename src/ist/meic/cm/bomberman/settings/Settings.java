@@ -21,6 +21,16 @@ public class Settings {
 	public static final String PR = "pointsRobot";
 	public static final String PO = "pointsOpponent";
 
+	// DefaultValues
+	public static final String MAP_DEFAULT = "Level1";
+	public static final String DURATION_DEFAULT = "120";
+	public static final String RS_DEFAULT = "1";
+	public static final String ET_DEFAULT = "3";
+	public static final String ED_DEFAULT = "4";
+	public static final String ER_DEFAULT = "1";
+	public static final String PR_DEFAULT = "1";
+	public static final String PO_DEFAULT = "1";
+
 	// Default
 	public Settings() {
 		levelName = "Level1";
