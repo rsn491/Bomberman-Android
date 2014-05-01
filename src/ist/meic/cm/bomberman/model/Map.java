@@ -11,6 +11,7 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 
 public class Map {
 
@@ -41,13 +42,15 @@ public class Map {
 	private Bitmap bomberman3R;
 	private Bitmap bomberman3U;
 	private Bitmap bomberman3D;
+	private int playerId;
 
 	private final static int H_STEP = 20;
 	private static final int OTHER_LINE_STEP = 21;
 
-	public Map(int width, int height) {
+	public Map(int playerId, int width, int height) {
 		this.width = width;
 		this.height = height;
+		this.playerId = playerId;
 
 	}
 
@@ -99,9 +102,9 @@ public class Map {
 
 		// Draws Bomberman(s)
 		if (multiplayer && bombermansPos != null) {
-			myStatus = bombermansPos.get(InGame.getId());
+			myStatus = bombermansPos.get(playerId);
 			bombermansPos = mapController.getBombermansStatus();
-			bombermansPos.set(InGame.getId(), myStatus);
+			bombermansPos.set(playerId, myStatus);
 
 		} else
 			bombermansPos = mapController.getBombermansStatus();
@@ -312,10 +315,7 @@ public class Map {
 	}
 
 	public Bomberman getBomberman(int playerId) {
-		if (bombermanObj.size() > 0)
-			return bombermanObj.get(playerId);
-		else
-			return null;
+		return bombermanObj.get(playerId);
 	}
 
 	public boolean isDead(int playerId) {

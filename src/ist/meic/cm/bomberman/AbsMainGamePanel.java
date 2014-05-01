@@ -115,7 +115,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 	}
 
 	public void loadModels() {
-		map = new Map(InGame.getWidth(), InGame.getHeight());
+		map = new Map(playerId, InGame.getWidth(), InGame.getHeight());
 		map.setMapController(mapController);
 		map.setWall(BitmapFactory.decodeResource(getResources(),
 				R.drawable.wall));

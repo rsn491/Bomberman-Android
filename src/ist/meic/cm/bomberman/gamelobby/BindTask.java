@@ -44,6 +44,7 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 			if (received.getCode() == Message.SUCCESS) {
 				objects[1] = received.getPlayerID();
 				mapController = received.getGameMap();
+				gamePanel.setPlayerId(received.getPlayerID());
 				gamePanel.setMapController(mapController);
 				gamePanel.setSocket(client);
 				gamePanel.setOutput(output);

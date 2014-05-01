@@ -47,7 +47,6 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 
 	private void sendBombermanStatus() {
 		synchronized (output) {
-
 			MoveTask mt = new MoveTask();
 			mt.execute();
 		}
@@ -153,7 +152,6 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 				synchronized (output) {
 					output.writeObject(toSend);
 					output.reset();
-
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
