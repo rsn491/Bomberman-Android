@@ -22,7 +22,11 @@ import android.widget.SpinnerAdapter;
 
 public class MPMainGamePanel extends AbsMainGamePanel {
 
+	public static final long CANBOMBAGAININTERVAL = 6000;
+	private static final Object BOMBLOCK = new Object();
 	private boolean connected;
+	private boolean canBomb;
+	private boolean exploded;
 
 	public MPMainGamePanel(Context context) {
 		super(context);
@@ -30,13 +34,23 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 
 	public MPMainGamePanel(Context context, String levelName) {
 		super(context, levelName);
-
+		canBomb = true;
 		connected = true;
+		exploded = true;
 	}
 
 	@Override
 	public void bomb() {
-
+		if(canBomb) {
+			synchronized (BOMBLOCK) {
+				if(exploded) {
+					BombTask bt = new BombTask();
+					bt.execute();
+					canBomb = false;
+					exploded = false;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -159,5 +173,35 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 			return null;
 		}
 
+	}
+	
+	private class BombTask extends AsyncTask<Object, Void, Void> {
+		private Message toSend;
+
+		@Override
+		protected Void doInBackground(Object... objects) {
+			try {
+
+				toSend = new Message(Message.REQUEST, OperationCodes.BOMB,
+						mapController.getBombermansStatus().get(playerId));
+				synchronized (output) {
+					output.writeObject(toSend);
+					output.reset();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				Thread.sleep(CANBOMBAGAININTERVAL);
+				canBomb = true;
+				exploded = true;
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
 	}
 }
