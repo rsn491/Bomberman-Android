@@ -27,7 +27,7 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 	@Override
 	protected Void doInBackground(Object... objects) {
 		try {
-			gameLobby=(GameLobby)objects[5];
+			gameLobby = (GameLobby) objects[5];
 			client = new Socket((String) objects[3], port);
 			gamePanel = (AbsMainGamePanel) objects[0];
 			output = new ObjectOutputStream(client.getOutputStream());
