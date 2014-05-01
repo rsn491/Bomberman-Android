@@ -10,17 +10,21 @@ import ist.meic.cm.bomberman.gamelobby.GameLobby;
 import ist.meic.cm.bomberman.model.Bomberman;
 import ist.meic.cm.bomberman.multiplayerC.MPMainGamePanel;
 import ist.meic.cm.bomberman.multiplayerC.SyncMap;
+import ist.meic.cm.bomberman.settings.Settings;
+import ist.meic.cm.bomberman.settings.SettingsActivity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -38,7 +42,7 @@ public class InGame extends Activity {
 	private static boolean multiplayerC;
 	private static boolean prepared;
 	private static boolean connected;
-	private static int time;
+	// private static int time;
 	private static AbsMainGamePanel gamePanel;
 
 	private MediaPlayer player;
@@ -47,6 +51,8 @@ public class InGame extends Activity {
 	private String playerName;
 	private static int playerId;
 	private static Button quit, pause;
+	private SharedPreferences prefs;
+	private int time;
 
 	private Intent intent;
 
@@ -63,6 +69,8 @@ public class InGame extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+		prefs = PreferenceManager.getDefaultSharedPreferences(InGame.this);
 
 		intent = this.getIntent();
 
@@ -210,7 +218,8 @@ public class InGame extends Activity {
 
 		((TextView) findViewById(R.id.player_name)).setText(playerName);
 		((TextView) findViewById(R.id.player_score)).setText("0");
-		time = 0;
+		time = Integer.parseInt(prefs.getString(Settings.DURATION,
+				Settings.DURATION_DEFAULT));
 		((TextView) findViewById(R.id.time_left)).setText(time + "s");
 		((TextView) findViewById(R.id.number_of_players)).setText("1");
 
@@ -299,9 +308,13 @@ public class InGame extends Activity {
 				.getSerializableExtra("mapController"));
 	}
 
-	public void updateTime() {
-		time++;
+	public boolean updateTime() {
+		if (time == 0)
+			return false;
+
+		time--;
 		((TextView) findViewById(R.id.time_left)).setText(time + "s");
+		return true;
 	}
 
 	public static int getHeight() {
@@ -323,9 +336,10 @@ public class InGame extends Activity {
 	private void timerThread() {
 		final Handler handler = new Handler();
 		Runnable runnable = new Runnable() {
+			boolean running = true;
 
 			public void run() {
-				while (!gamePanel.getThread().isInterrupted()) {
+				while (!gamePanel.getThread().isInterrupted() && running) {
 					try {
 						Thread.sleep(INTERVAL);
 					} catch (InterruptedException e) {
@@ -333,7 +347,10 @@ public class InGame extends Activity {
 					}
 					handler.post(new Runnable() {
 						public void run() {
-							updateTime();
+							running = updateTime();
+
+							if (!running)
+								gamePanel.gameOver(null);
 						}
 					});
 				}

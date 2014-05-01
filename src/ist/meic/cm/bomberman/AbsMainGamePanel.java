@@ -60,27 +60,29 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 	public abstract void bomb();
 
 	public boolean gameOver(Creature creature) {
-		synchronized(CHECKINGAMEOVER) {
-			if(!gameEnded) {
-				if (creature.checkCreature()
-						|| (creature instanceof Bomberman && creature.isDestroyed())
-						|| isDead()) {
+		synchronized (CHECKINGAMEOVER) {
+			if (!gameEnded) {
+				if (creature == null
+						|| creature.checkCreature()
+						|| (creature instanceof Bomberman && creature
+								.isDestroyed()) || isDead()) {
 					bomberman.setIgnore();
 					Builder ad = new AlertDialog.Builder(getContext())
-					.setTitle("Game Over!")
-					.setMessage("You Lose!")
-					.setNeutralButton("OK",
-							new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int which) {
-	
-							InGame.quit();
-						}
-					}).setCancelable(false)
-					.setIcon(R.drawable.ic_launcher);
+							.setTitle("Game Over!")
+							.setMessage("You Lose!")
+							.setNeutralButton("OK",
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+
+											InGame.quit();
+										}
+									}).setCancelable(false)
+							.setIcon(R.drawable.ic_launcher);
 					try {
 						ad.show();
-	
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
