@@ -42,7 +42,6 @@ public class InGame extends Activity {
 	private static boolean multiplayerC;
 	private static boolean prepared;
 	private static boolean connected;
-	// private static int time;
 	private static AbsMainGamePanel gamePanel;
 
 	private MediaPlayer player;
@@ -216,12 +215,14 @@ public class InGame extends Activity {
 
 		playerName = this.getIntent().getStringExtra("player_name");
 
-		((TextView) findViewById(R.id.player_name)).setText(playerName);
-		((TextView) findViewById(R.id.player_score)).setText("0");
+		((TextView) findViewById(R.id.player_name)).setText("Name\n"
+				+ playerName);
+		((TextView) findViewById(R.id.player_score)).setText("Score\n0");
 		time = Integer.parseInt(prefs.getString(Settings.DURATION,
 				Settings.DURATION_DEFAULT));
-		((TextView) findViewById(R.id.time_left)).setText(time + "s");
-		((TextView) findViewById(R.id.number_of_players)).setText("1");
+		((TextView) findViewById(R.id.time_left))
+				.setText("Time\n" + time + "s");
+		((TextView) findViewById(R.id.number_of_players)).setText("Number\n1");
 
 		final RelativeLayout rl = (RelativeLayout) findViewById(R.id.in_game_screen);
 		// sets the width and height of the game screen (pixels)
@@ -309,11 +310,16 @@ public class InGame extends Activity {
 	}
 
 	public boolean updateTime() {
+
 		if (time == 0)
 			return false;
 
 		time--;
-		((TextView) findViewById(R.id.time_left)).setText(time + "s");
+		StringBuilder sb = new StringBuilder("Time\n");
+		sb.append(time);
+		sb.append("s");
+		((TextView) findViewById(R.id.time_left)).setText(sb.toString());
+
 		return true;
 	}
 
