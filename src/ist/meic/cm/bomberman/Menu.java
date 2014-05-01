@@ -1,5 +1,6 @@
 package ist.meic.cm.bomberman;
 
+import ist.meic.cm.bomberman.settings.SettingsActivity;
 import ist.meic.cm.bomberman.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -88,8 +89,8 @@ public class Menu extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getBaseContext(), "Settings porra!",
-						Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(Menu.this, SettingsActivity.class);
+				startActivity(intent);
 			}
 		});
 
