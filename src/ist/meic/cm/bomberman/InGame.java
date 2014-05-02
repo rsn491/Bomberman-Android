@@ -50,6 +50,7 @@ public class InGame extends Activity {
 	private String playerName;
 	private static int playerId;
 	private static Button quit, pause;
+	private static int robotSpeed;
 	private SharedPreferences prefs;
 	private int time;
 
@@ -70,6 +71,9 @@ public class InGame extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(InGame.this);
+
+		robotSpeed = Integer.parseInt(prefs.getString(Settings.RS,
+				Settings.RS_DEFAULT));
 
 		intent = this.getIntent();
 
@@ -377,5 +381,10 @@ public class InGame extends Activity {
 
 	public static boolean isSinglePlayer() {
 		return !multiplayerC;
+	}
+
+	public static int getRobotSpeed() {
+
+		return robotSpeed;
 	}
 }
