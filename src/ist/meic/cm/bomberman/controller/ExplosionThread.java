@@ -59,30 +59,50 @@ public class ExplosionThread extends Thread implements Serializable {
 
 	//
 	public void bombExplode() {
-		
+
 		char[] mapArray = mapController.getMap().toCharArray();
 		mapArray[position] = 'E';
 
 		int len = mapArray.length;
 		int pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+		boolean pos_1 = true, pos_2 = true, pos_3 = true, pos_4 = true;
+
 		for (int i = 1; i <= EXPLOSION_RANGE
-				&& (pos1 >= 0 || pos2 < len || pos3 >= 0 || pos4 < len); i++) {
+				&& (pos_1 && pos1 >= 0 || pos_2 && pos2 < len || pos_3
+						&& pos3 >= 0 || pos_4 && pos4 < len); i++) {
 
-			pos1 = position - i;
-			if (pos1 >= 0 && mapArray[pos1] != 'W')
-				mapArray[pos1] = 'E';
-
-			pos2 = position + i;
-			if (pos2 < len && mapArray[pos2] != 'W')
-				mapArray[pos2] = 'E';
-
-			pos3 = position - (i * OTHER_LINE_STEP);
-			if (pos3 >= 0 && mapArray[pos3] != 'W')
-				mapArray[pos3] = 'E';
-
-			pos4 = position + (i * OTHER_LINE_STEP);
-			if (pos4 < len && mapArray[pos4] != 'W')
-				mapArray[pos4] = 'E';
+			if (pos_1) {
+				pos1 = position - i;
+				if (pos1 >= 0)
+					if (mapArray[pos1] == 'W')
+						pos_1 = false;
+					else if (mapArray[pos1] != 'W')
+						mapArray[pos1] = 'E';
+			}
+			if (pos_2) {
+				pos2 = position + i;
+				if (pos2 < len)
+					if (mapArray[pos2] == 'W')
+						pos_2 = false;
+					else if (mapArray[pos2] != 'W')
+						mapArray[pos2] = 'E';
+			}
+			if (pos_3) {
+				pos3 = position - (i * OTHER_LINE_STEP);
+				if (pos3 >= 0)
+					if (mapArray[pos3] == 'W')
+						pos_3 = false;
+					else if (mapArray[pos3] != 'W')
+						mapArray[pos3] = 'E';
+			}
+			if (pos_4) {
+				pos4 = position + (i * OTHER_LINE_STEP);
+				if (pos4 < len)
+					if (mapArray[pos4] == 'W')
+						pos_4 = false;
+					else if (mapArray[pos4] != 'W')
+						mapArray[pos4] = 'E';
+			}
 		}
 
 		mapController.setMap(new String(mapArray));
