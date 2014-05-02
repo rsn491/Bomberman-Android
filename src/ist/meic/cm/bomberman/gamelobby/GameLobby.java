@@ -87,7 +87,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 					final Intent i = getIntent();
 
 					final AlertDialog.Builder alert = new AlertDialog.Builder(
-							GameLobby.this).setTitle("Insert IP Address:");
+							GameLobby.this).setTitle("Insert the host IP Address:");
 					final EditText input = new EditText(GameLobby.this);
 					alert.setView(input);
 					alert.setPositiveButton("OK",

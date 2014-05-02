@@ -297,7 +297,9 @@ public class Menu extends Activity {
 		final AlertDialog.Builder alert = new AlertDialog.Builder(Menu.this)
 				.setTitle("Insert Player Name:");
 		final EditText input = new EditText(this);
+		input.setHint("Player");
 		alert.setView(input);
+		
 		alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String value = "Player";
