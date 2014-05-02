@@ -22,14 +22,15 @@ public class ExplosionThread extends Thread implements Serializable {
 	private BombStatus bombStatus;
 	private char[] array;
 	protected final static int OTHER_LINE_STEP = 21;
+	private static final int ADJUST = 1000;
 
 	public ExplosionThread(int position, BombStatus bombStatus,
 			MapController mapController) {
 		this.mapController = mapController;
 		this.position = position;
 		this.bombStatus = bombStatus;
-		EXPLOSION_DURATION = InGame.getExplosionDuration() * 1000;
-		EXPLOSION_TIMEOUT = InGame.getExplosionTimeout() * 1000;
+		EXPLOSION_DURATION = InGame.getExplosionDuration() * ADJUST;
+		EXPLOSION_TIMEOUT = InGame.getExplosionTimeout() * ADJUST;
 		EXPLOSION_RANGE = InGame.getExplosionRange();
 	}
 

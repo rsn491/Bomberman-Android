@@ -38,6 +38,9 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 			sb.append((String) objects[4]);
 			sb.append(" ");
 			sb.append((String) objects[6]);
+			sb.append(" ");
+			sb.append((String) objects[7]);
+			
 			toSend = new Message(Message.JOIN, sb.toString());
 
 			output.writeObject(toSend);

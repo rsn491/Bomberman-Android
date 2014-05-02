@@ -115,12 +115,14 @@ public class GameLobby extends Activity implements OnItemClickListener {
 											levelName, value, playerName,
 											GameLobby.this, Integer
 													.toString((InGame
-															.getRobotSpeed())));
+															.getRobotSpeed())),
+											getExplosionDetails());
 
 									playersList.remove(NO_PLAYERS);
 									playersList.add(playerName);
 									updateList();
 								}
+
 							});
 
 					alert.setNegativeButton("Cancel",
@@ -182,6 +184,17 @@ public class GameLobby extends Activity implements OnItemClickListener {
 
 		});
 
+	}
+
+	private String getExplosionDetails() {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(InGame.getExplosionDuration());
+		sb.append(" ");
+		sb.append(InGame.getExplosionTimeout());
+		sb.append(" ");
+		sb.append(InGame.getExplosionRange());
+		return sb.toString();
 	}
 
 	private void updateList() {
