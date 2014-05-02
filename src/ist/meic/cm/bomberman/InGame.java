@@ -75,6 +75,8 @@ public class InGame extends Activity {
 		robotSpeed = Integer.parseInt(prefs.getString(Settings.RS,
 				Settings.RS_DEFAULT));
 
+		levelName = prefs.getString(Settings.MAP, Settings.MAP_DEFAULT);
+
 		intent = this.getIntent();
 
 		if (intent.getStringExtra("game_mode").equals("singleplayer")) {
@@ -86,8 +88,6 @@ public class InGame extends Activity {
 			Log.d("Debug", "Starting multi player mode");
 			multiplayerC = true;
 		}
-
-		levelName = intent.getStringExtra("levelName");
 
 		Log.d("Debug", "lets play");
 		setContentView(R.layout.activity_in_game);

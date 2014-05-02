@@ -316,7 +316,7 @@ public class Menu extends Activity {
 					// multiplayer centralized - mode 1
 					intent.putExtra("game_mode", "multiplayer");
 				}
-				intent.putExtra("levelName", "Level1");
+				
 				startActivity(intent);
 			}
 		});
