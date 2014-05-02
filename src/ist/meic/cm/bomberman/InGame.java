@@ -72,6 +72,9 @@ public class InGame extends Activity {
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(InGame.this);
 
+		time = Integer.parseInt(prefs.getString(Settings.DURATION,
+				Settings.DURATION_DEFAULT));
+
 		robotSpeed = Integer.parseInt(prefs.getString(Settings.RS,
 				Settings.RS_DEFAULT));
 
@@ -222,8 +225,7 @@ public class InGame extends Activity {
 		((TextView) findViewById(R.id.player_name)).setText("Name\n"
 				+ playerName);
 		((TextView) findViewById(R.id.player_score)).setText("Score\n0");
-		time = Integer.parseInt(prefs.getString(Settings.DURATION,
-				Settings.DURATION_DEFAULT));
+
 		((TextView) findViewById(R.id.time_left))
 				.setText("Time\n" + time + "s");
 		((TextView) findViewById(R.id.number_of_players)).setText("Number\n1");
