@@ -34,7 +34,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 
 	private static boolean connected;
 	private int playerId;
-	private String value = "192.168.10.11";
+	private String value = "192.168.1.67";
 	private ArrayList<String> playersList = new ArrayList<String>();
 	private static final String NO_PLAYERS = "Not Connected!";
 	private Context context;
@@ -87,7 +87,8 @@ public class GameLobby extends Activity implements OnItemClickListener {
 					final Intent i = getIntent();
 
 					final AlertDialog.Builder alert = new AlertDialog.Builder(
-							GameLobby.this).setTitle("Insert the host IP Address:");
+							GameLobby.this)
+							.setTitle("Insert the host IP Address:");
 					final EditText input = new EditText(GameLobby.this);
 					alert.setView(input);
 					alert.setPositiveButton("OK",
@@ -112,7 +113,9 @@ public class GameLobby extends Activity implements OnItemClickListener {
 									communication.execute(
 											InGame.getGamePanel(), playerId,
 											levelName, value, playerName,
-											GameLobby.this);
+											GameLobby.this, Integer
+													.toString((InGame
+															.getRobotSpeed())));
 
 									playersList.remove(NO_PLAYERS);
 									playersList.add(playerName);

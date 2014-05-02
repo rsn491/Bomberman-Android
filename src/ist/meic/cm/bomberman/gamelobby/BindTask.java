@@ -33,8 +33,12 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 			output = new ObjectOutputStream(client.getOutputStream());
 			input = new ObjectInputStream(client.getInputStream());
 
-			toSend = new Message(Message.JOIN, (String) objects[2] + " "
-					+ (String) objects[4]);
+			StringBuilder sb = new StringBuilder((String) objects[2]);
+			sb.append(" ");
+			sb.append((String) objects[4]);
+			sb.append(" ");
+			sb.append((String) objects[6]);
+			toSend = new Message(Message.JOIN, sb.toString());
 
 			output.writeObject(toSend);
 			output.reset();
