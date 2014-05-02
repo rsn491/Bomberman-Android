@@ -138,17 +138,59 @@ public class ExplosionThread extends Thread implements Serializable {
 
 		mapArray[position] = '-';
 
-		if (mapArray[position - 1] == 'E')
-			mapArray[position - 1] = '-';
+		int len = mapArray.length;
+		int pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+		boolean pos_1 = true, pos_2 = true, pos_3 = true, pos_4 = true;
 
-		if (mapArray[position + 1] == 'E')
-			mapArray[position + 1] = '-';
+		for (int i = 1; i <= EXPLOSION_RANGE
+				&& (pos_1 && pos1 >= 0 || pos_2 && pos2 < len || pos_3
+						&& pos3 >= 0 || pos_4 && pos4 < len); i++) {
 
-		if (mapArray[position - OTHER_LINE_STEP] == 'E')
-			mapArray[position - OTHER_LINE_STEP] = '-';
+			if (pos_1) {
+				pos1 = position - i;
+				if (pos1 >= 0)
+					if (mapArray[pos1] != 'E')
+						pos_1 = false;
+					else if (mapArray[pos1] == 'E')
+						mapArray[pos1] = '-';
+			}
+			if (pos_2) {
+				pos2 = position + i;
+				if (pos2 < len)
+					if (mapArray[pos2] != 'E')
+						pos_2 = false;
+					else if (mapArray[pos2] == 'E')
+						mapArray[pos2] = '-';
+			}
+			if (pos_3) {
+				pos3 = position - (i * OTHER_LINE_STEP);
+				if (pos3 >= 0)
+					if (mapArray[pos3] != 'E')
+						pos_3 = false;
+					else if (mapArray[pos3] == 'E')
+						mapArray[pos3] = '-';
+			}
+			if (pos_4) {
+				pos4 = position + (i * OTHER_LINE_STEP);
+				if (pos4 < len)
+					if (mapArray[pos4] != 'E')
+						pos_4 = false;
+					else if (mapArray[pos4] == 'E')
+						mapArray[pos4] = '-';
+			}
+		}
 
-		if (mapArray[position + OTHER_LINE_STEP] == 'E')
-			mapArray[position + OTHER_LINE_STEP] = '-';
+		/*
+		 * if (mapArray[position - 1] == 'E') mapArray[position - 1] = '-';
+		 * 
+		 * if (mapArray[position + 1] == 'E') mapArray[position + 1] = '-';
+		 * 
+		 * if (mapArray[position - OTHER_LINE_STEP] == 'E') mapArray[position -
+		 * OTHER_LINE_STEP] = '-';
+		 * 
+		 * if (mapArray[position + OTHER_LINE_STEP] == 'E') mapArray[position +
+		 * OTHER_LINE_STEP] = '-';
+		 */
 
 		mapController.setMap(new String(mapArray));
 	}
