@@ -1,5 +1,6 @@
 package ist.meic.cm.bomberman.controller;
 
+import ist.meic.cm.bomberman.InGame;
 import ist.meic.cm.bomberman.status.BombStatus;
 import ist.meic.cm.bomberman.status.GhostStatus;
 import ist.meic.cm.bomberman.status.Status;
@@ -13,7 +14,9 @@ public class ExplosionThread extends Thread implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -390850487009272286L;
-	private static final long INTERVAL = 3000;
+	private static final int EXPLOSION_DURATION = InGame.getExplosionDuration();
+	private static final int EXPLOSION_TIMEOUT = InGame.getExplosionTimeout();
+	private static final int EXPLOSION_RANGE = InGame.getExplosionRange();
 	private MapController mapController;
 	private int position;
 	private BombStatus bombStatus;
@@ -29,7 +32,7 @@ public class ExplosionThread extends Thread implements Serializable {
 	@Override
 	public void run() {
 		try {
-			Thread.sleep(INTERVAL);
+			Thread.sleep(EXPLOSION_DURATION);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,7 +44,7 @@ public class ExplosionThread extends Thread implements Serializable {
 		et.start();
 
 		try {
-			Thread.sleep(INTERVAL);
+			Thread.sleep(EXPLOSION_TIMEOUT);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

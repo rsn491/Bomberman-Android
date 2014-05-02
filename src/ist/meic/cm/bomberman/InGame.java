@@ -55,6 +55,9 @@ public class InGame extends Activity {
 	private int time;
 
 	private Intent intent;
+	private static int explosionDuration;
+	private static int explosionTimeout;
+	private static int explosionRange;
 
 	static final long INTERVAL = 1000;
 
@@ -79,6 +82,13 @@ public class InGame extends Activity {
 				Settings.RS_DEFAULT));
 
 		levelName = prefs.getString(Settings.MAP, Settings.MAP_DEFAULT);
+		
+		explosionDuration = Integer.parseInt(prefs.getString(Settings.ED,
+				Settings.ED_DEFAULT));
+		explosionTimeout = Integer.parseInt(prefs.getString(Settings.ET,
+				Settings.ET_DEFAULT));
+		explosionRange = Integer.parseInt(prefs.getString(Settings.ER,
+				Settings.ER_DEFAULT));
 
 		intent = this.getIntent();
 
@@ -388,5 +398,17 @@ public class InGame extends Activity {
 	public static int getRobotSpeed() {
 
 		return robotSpeed;
+	}
+
+	public static int getExplosionDuration() {
+		return explosionDuration;
+	}
+
+	public static int getExplosionTimeout() {
+		return explosionTimeout;
+	}
+
+	public static int getExplosionRange() {
+		return explosionRange;
 	}
 }
