@@ -44,7 +44,7 @@ public class ExplosionThread extends Thread implements Serializable {
 
 		deleteBomb();
 		ExplodingThread et = new ExplodingThread(bombStatus, mapController,
-				position);
+				array);
 		et.start();
 
 		try {
