@@ -14,8 +14,8 @@ public class ExplosionThread extends Thread implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -390850487009272286L;
-	private static final int EXPLOSION_DURATION = InGame.getExplosionDuration();
-	private static final int EXPLOSION_TIMEOUT = InGame.getExplosionTimeout();
+	private static final int EXPLOSION_DURATION = InGame.getExplosionDuration() * 1000;
+	private static final int EXPLOSION_TIMEOUT = InGame.getExplosionTimeout() * 1000;
 	private static final int EXPLOSION_RANGE = InGame.getExplosionRange();
 	private MapController mapController;
 	private int position;
@@ -59,17 +59,22 @@ public class ExplosionThread extends Thread implements Serializable {
 		char[] mapArray = mapController.getMap().toCharArray();
 		mapArray[position] = 'E';
 
-		if (mapArray[position - 1] != 'W')
-			mapArray[position - 1] = 'E';
+		int len = mapArray.length;
+		int tmp;
+		for (int i = 0; i < EXPLOSION_RANGE && i < len; i++) {
+			tmp = i + 1;
+			if (mapArray[position - tmp] != 'W')
+				mapArray[position - tmp] = 'E';
 
-		if (mapArray[position + 1] != 'W')
-			mapArray[position + 1] = 'E';
+			if (mapArray[position + tmp] != 'W')
+				mapArray[position + tmp] = 'E';
 
-		if (mapArray[position - OTHER_LINE_STEP] != 'W')
-			mapArray[position - OTHER_LINE_STEP] = 'E';
+			if (mapArray[position - tmp * OTHER_LINE_STEP] != 'W')
+				mapArray[position - tmp * OTHER_LINE_STEP] = 'E';
 
-		if (mapArray[position + OTHER_LINE_STEP] != 'W')
-			mapArray[position + OTHER_LINE_STEP] = 'E';
+			if (mapArray[position + tmp * OTHER_LINE_STEP] != 'W')
+				mapArray[position + tmp * OTHER_LINE_STEP] = 'E';
+		}
 
 		mapController.setMap(new String(mapArray));
 	}
