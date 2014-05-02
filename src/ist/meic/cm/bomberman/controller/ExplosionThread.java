@@ -20,6 +20,7 @@ public class ExplosionThread extends Thread implements Serializable {
 	private MapController mapController;
 	private int position;
 	private BombStatus bombStatus;
+	private char[] array;
 	protected final static int OTHER_LINE_STEP = 21;
 
 	public ExplosionThread(int position, BombStatus bombStatus,
@@ -105,7 +106,7 @@ public class ExplosionThread extends Thread implements Serializable {
 			}
 		}
 
-		mapController.setMap(new String(mapArray));
+		mapController.setMap(new String(array = mapArray));
 	}
 
 	//
@@ -118,7 +119,7 @@ public class ExplosionThread extends Thread implements Serializable {
 		bombExplode();
 
 		for (Status ghost : ghostsStatus)
-			if (checkDeathPos(ghost.getI(), position)) {
+			if (checkDeathPos(ghost.getI())) {
 				ghost.die(); // remove this ghost from the list of ghosts
 								// Statuses, no longer exists
 				bombStatus.getBomberman().increaseScore(1); // TODO
@@ -126,15 +127,12 @@ public class ExplosionThread extends Thread implements Serializable {
 	}
 
 	//
-	private boolean checkDeathPos(int currentPos, int position) {
-		return currentPos == position || currentPos == position - 1
-				|| currentPos == position + 1
-				|| currentPos == position - OTHER_LINE_STEP
-				|| currentPos == position + OTHER_LINE_STEP;
+	private boolean checkDeathPos(int currentPos) {
+		return array[currentPos] == 'E';
 	}
 
 	public void exploded() {
-		char[] mapArray = mapController.getMap().toCharArray();
+		char[] mapArray = array;
 
 		mapArray[position] = '-';
 
@@ -179,18 +177,6 @@ public class ExplosionThread extends Thread implements Serializable {
 						mapArray[pos4] = '-';
 			}
 		}
-
-		/*
-		 * if (mapArray[position - 1] == 'E') mapArray[position - 1] = '-';
-		 * 
-		 * if (mapArray[position + 1] == 'E') mapArray[position + 1] = '-';
-		 * 
-		 * if (mapArray[position - OTHER_LINE_STEP] == 'E') mapArray[position -
-		 * OTHER_LINE_STEP] = '-';
-		 * 
-		 * if (mapArray[position + OTHER_LINE_STEP] == 'E') mapArray[position +
-		 * OTHER_LINE_STEP] = '-';
-		 */
 
 		mapController.setMap(new String(mapArray));
 	}
