@@ -63,23 +63,23 @@ public class ExplosionThread extends Thread implements Serializable {
 		mapArray[position] = 'E';
 
 		int len = mapArray.length;
-		int pos1 = position, pos2 = position, pos3 = position, pos4 = position;
-		for (int i = 1; i <= EXPLOSION_RANGE; i++) {
+		int pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+		for (int i = 1; i <= EXPLOSION_RANGE
+				&& (pos1 >= 0 || pos2 < len || pos3 >= 0 || pos4 < len); i++) {
 
-			pos1 = pos1 - i;
-			System.out.println(pos1);
+			pos1 = position - i;
 			if (pos1 >= 0 && mapArray[pos1] != 'W')
 				mapArray[pos1] = 'E';
 
-			pos2 = pos2 + i;
+			pos2 = position + i;
 			if (pos2 < len && mapArray[pos2] != 'W')
 				mapArray[pos2] = 'E';
 
-			pos3 = pos3 - (i * OTHER_LINE_STEP);
+			pos3 = position - (i * OTHER_LINE_STEP);
 			if (pos3 >= 0 && mapArray[pos3] != 'W')
 				mapArray[pos3] = 'E';
 
-			pos4 = pos4 + (i * OTHER_LINE_STEP);
+			pos4 = position + (i * OTHER_LINE_STEP);
 			if (pos4 < len && mapArray[pos4] != 'W')
 				mapArray[pos4] = 'E';
 		}
