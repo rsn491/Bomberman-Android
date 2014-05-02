@@ -59,6 +59,7 @@ public class ExplosionThread extends Thread implements Serializable {
 
 	//
 	public void bombExplode() {
+		
 		char[] mapArray = mapController.getMap().toCharArray();
 		mapArray[position] = 'E';
 
