@@ -14,9 +14,9 @@ public class ExplosionThread extends Thread implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -390850487009272286L;
-	private static final int EXPLOSION_DURATION = InGame.getExplosionDuration() * 1000;
-	private static final int EXPLOSION_TIMEOUT = InGame.getExplosionTimeout() * 1000;
-	private static final int EXPLOSION_RANGE = InGame.getExplosionRange();
+	private int EXPLOSION_DURATION;
+	private int EXPLOSION_TIMEOUT;
+	private int EXPLOSION_RANGE;
 	private MapController mapController;
 	private int position;
 	private BombStatus bombStatus;
@@ -27,6 +27,9 @@ public class ExplosionThread extends Thread implements Serializable {
 		this.mapController = mapController;
 		this.position = position;
 		this.bombStatus = bombStatus;
+		EXPLOSION_DURATION = InGame.getExplosionDuration() * 1000;
+		EXPLOSION_TIMEOUT = InGame.getExplosionTimeout() * 1000;
+		EXPLOSION_RANGE = InGame.getExplosionRange();
 	}
 
 	@Override
@@ -60,20 +63,25 @@ public class ExplosionThread extends Thread implements Serializable {
 		mapArray[position] = 'E';
 
 		int len = mapArray.length;
-		int tmp;
-		for (int i = 0; i < EXPLOSION_RANGE && i < len; i++) {
+		int tmp, pos1 = position, pos2 = position, pos3 = position, pos4 = position;
+		for (int i = 0; i < EXPLOSION_RANGE; i++) {
+			System.out.println("FOR!!!");
 			tmp = i + 1;
-			if (mapArray[position - tmp] != 'W')
-				mapArray[position - tmp] = 'E';
+			pos1 = pos1 - tmp;
+			if (pos1 >= 0 && mapArray[pos1] != 'W')
+				mapArray[pos1] = 'E';
 
-			if (mapArray[position + tmp] != 'W')
-				mapArray[position + tmp] = 'E';
+			pos2 = pos2 + tmp;
+			if (pos2 < len && mapArray[pos2] != 'W')
+				mapArray[pos2] = 'E';
 
-			if (mapArray[position - tmp * OTHER_LINE_STEP] != 'W')
-				mapArray[position - tmp * OTHER_LINE_STEP] = 'E';
+			pos3 = pos3 - (tmp * OTHER_LINE_STEP);
+			if (pos3 >= 0 && mapArray[pos3] != 'W')
+				mapArray[pos3] = 'E';
 
-			if (mapArray[position + tmp * OTHER_LINE_STEP] != 'W')
-				mapArray[position + tmp * OTHER_LINE_STEP] = 'E';
+			pos4 = pos4 + (tmp * OTHER_LINE_STEP);
+			if (pos4 < len && mapArray[pos4] != 'W')
+				mapArray[pos4] = 'E';
 		}
 
 		mapController.setMap(new String(mapArray));

@@ -16,10 +16,11 @@ public class GhostThread extends Thread implements Serializable {
 	private MapController mapController;
 	private boolean running;
 	private LinkedList<GhostStatus> ghostsIndex;
-	private static final int ROBOT_SPEED = InGame.getRobotSpeed();
+	private int ROBOT_SPEED;
 
 	public GhostThread(MapController mapController) {
 		this.mapController = mapController;
+		ROBOT_SPEED = InGame.getRobotSpeed();
 	}
 
 	@Override
