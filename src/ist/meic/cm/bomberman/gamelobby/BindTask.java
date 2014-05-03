@@ -33,15 +33,7 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 			output = new ObjectOutputStream(client.getOutputStream());
 			input = new ObjectInputStream(client.getInputStream());
 
-			StringBuilder sb = new StringBuilder((String) objects[2]);
-			sb.append(" ");
-			sb.append((String) objects[4]);
-			sb.append(" ");
-			sb.append((String) objects[6]);
-			sb.append(" ");
-			sb.append((String) objects[7]);
-			
-			toSend = new Message(Message.JOIN, sb.toString());
+			toSend = new Message(Message.JOIN, getSettings(objects));
 
 			output.writeObject(toSend);
 			output.reset();
@@ -67,6 +59,19 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private String getSettings(Object... objects) {
+		StringBuilder sb = new StringBuilder((String) objects[2]);
+		sb.append(" ");
+		sb.append((String) objects[4]);
+		sb.append(" ");
+		sb.append((String) objects[6]);
+		sb.append(" ");
+		sb.append((String) objects[7]);
+		sb.append(" ");
+		sb.append((String) objects[8]);
+		return sb.toString();
 	}
 
 	@Override

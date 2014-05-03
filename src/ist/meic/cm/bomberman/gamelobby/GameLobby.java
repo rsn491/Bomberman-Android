@@ -116,7 +116,8 @@ public class GameLobby extends Activity implements OnItemClickListener {
 											GameLobby.this, Integer
 													.toString((InGame
 															.getRobotSpeed())),
-											getExplosionDetails());
+											getExplosionDetails(),
+											getPointsDetails());
 
 									playersList.remove(NO_PLAYERS);
 									playersList.add(playerName);
@@ -194,6 +195,15 @@ public class GameLobby extends Activity implements OnItemClickListener {
 		sb.append(InGame.getExplosionTimeout());
 		sb.append(" ");
 		sb.append(InGame.getExplosionRange());
+		return sb.toString();
+	}
+
+	private String getPointsDetails() {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(InGame.getPointsRobot());
+		sb.append(" ");
+		sb.append(InGame.getPointsOpon());
 		return sb.toString();
 	}
 
