@@ -186,8 +186,6 @@ public class InGame extends Activity {
 				if (timer != null) {
 					timer.interrupt();
 
-					gamePanel.getGhostThread().interrupt();
-					gamePanel.getThread().interrupt();
 					gamePanel.stopController();
 
 					if (multiplayerC) {
@@ -209,10 +207,6 @@ public class InGame extends Activity {
 		pause.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// Perform action on click
-
-				final Bomberman bomberman = gamePanel.getBomberman();
-
-				bomberman.setIgnore();
 
 				gamePanel.pauseGame();
 			}
@@ -322,14 +316,12 @@ public class InGame extends Activity {
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			System.out.println("receive broadcast");
 			updateUI(intent);
 		}
 
 	};
 
 	private void updateUI(Intent intent) {
-		System.out.println("updateUI");
 
 		gamePanel.setMapController((MapController) intent
 				.getSerializableExtra("mapController"));
@@ -375,7 +367,7 @@ public class InGame extends Activity {
 					try {
 						Thread.sleep(INTERVAL);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+
 					}
 					handler.post(new Runnable() {
 						public void run() {

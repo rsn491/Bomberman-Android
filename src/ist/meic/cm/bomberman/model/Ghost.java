@@ -36,11 +36,6 @@ public class Ghost extends Creature {
 		return true;
 	}
 
-	@Override
-	public boolean checkCreature() {
-		return map.checkBomberman(currentPos);
-	}
-
 	public void setMapArray(char[] mapArray) {
 		this.mapArray = mapArray;
 

@@ -50,7 +50,6 @@ public class MapController implements Serializable {
 		if (numberOfPlayers < 3) {
 			for (int i = 0; i < mapArray.length; i++)
 				if (mapArray[i] == id) {
-					System.out.println("x:" + x);
 					BombermanStatus status = new BombermanStatus(playerId,i, x, y,
 							map.toCharArray());
 					bombermansStatus.add(status);

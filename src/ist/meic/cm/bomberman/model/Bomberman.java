@@ -1,22 +1,16 @@
 package ist.meic.cm.bomberman.model;
 
+import ist.meic.cm.bomberman.status.BombermanStatus;
 import android.graphics.Bitmap;
 import android.util.Log;
 
 public class Bomberman extends Creature {
-	private boolean ignore;
 
 	public Bomberman(Map map, Bitmap bitmap, int currentPos, int x, int y) {
 		super(map, bitmap, currentPos);
 
 		setX(x);
 		setY(y);
-
-		ignore = false;
-	}
-
-	public boolean ignore() {
-		return ignore;
 	}
 
 	@Override
@@ -69,16 +63,6 @@ public class Bomberman extends Creature {
 		}
 
 		return false;
-	}
-
-	public boolean checkCreature() {
-		return map.checkGhost(currentPos);
-	}
-
-	public void setIgnore() {
-
-		ignore = !ignore;
-
 	}
 
 }

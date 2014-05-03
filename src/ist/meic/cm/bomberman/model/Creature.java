@@ -1,6 +1,7 @@
 package ist.meic.cm.bomberman.model;
 
 import ist.meic.cm.bomberman.InGame;
+import ist.meic.cm.bomberman.status.BombermanStatus;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
@@ -28,7 +29,7 @@ public abstract class Creature {
 		this.mapArray = map.getMap().toCharArray();
 		this.destroy = false;
 	}
-	
+
 	public Bitmap getBitmap() {
 		return bitmap;
 	}
@@ -48,7 +49,7 @@ public abstract class Creature {
 	public void setBitmap(Bitmap bitmap) {
 		this.bitmap = bitmap;
 	}
-	
+
 	public int getX() {
 		return x;
 	}
@@ -58,11 +59,11 @@ public abstract class Creature {
 	}
 
 	public void setX(int x) {
-		this.x = x*(int)horizontalStep;
+		this.x = x * (int) horizontalStep;
 	}
 
 	public void setY(int y) {
-		this.y = y*(int)verticalStep;
+		this.y = y * (int) verticalStep;
 	}
 
 	public abstract boolean moveUp();
@@ -73,7 +74,9 @@ public abstract class Creature {
 
 	public abstract boolean moveRight();
 
-	public abstract boolean checkCreature();
+	public boolean checkCreature(BombermanStatus bS) {
+		return map.checkGhost(bS, currentPos);
+	}
 
 	protected void destroy() {
 		this.destroy = true;

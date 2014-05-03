@@ -19,6 +19,7 @@ import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.model.Bomberman;
 import ist.meic.cm.bomberman.model.Creature;
 import ist.meic.cm.bomberman.model.Map;
+import ist.meic.cm.bomberman.status.BombermanStatus;
 
 public abstract class AbsMainGamePanel extends SurfaceView implements
 		SurfaceHolder.Callback {
@@ -62,11 +63,15 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 	public boolean gameOver(Creature creature) {
 		synchronized (CHECKINGAMEOVER) {
 			if (!gameEnded) {
+				BombermanStatus bS = mapController.getBombermansStatus().get(
+						playerId);
 				if (creature == null
-						|| creature.checkCreature()
+						|| creature.checkCreature(bS)
 						|| (creature instanceof Bomberman && creature
 								.isDestroyed()) || isDead()) {
-					bomberman.setIgnore();
+
+					bS.setIgnore();
+
 					Builder ad = new AlertDialog.Builder(getContext())
 							.setTitle("Game Over!")
 							.setMessage("You Lose!")
@@ -185,6 +190,9 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 	}
 
 	public void pauseGame() {
+		final BombermanStatus bS = mapController.getBombermansStatus().get(playerId);
+		bS.setIgnore();
+
 		Builder ad = new AlertDialog.Builder(getContext())
 				.setTitle("Game is Paused!")
 				.setMessage("Please Select an option.")
@@ -192,7 +200,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int which) {
-								bomberman.setIgnore();
+								bS.setIgnore();
 							}
 
 						})
