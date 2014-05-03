@@ -55,6 +55,7 @@ public class InGame extends Activity {
 	private int time;
 
 	private Intent intent;
+	private static int pointsRobot, pointsOpon;
 	private static int explosionDuration;
 	private static int explosionTimeout;
 	private static int explosionRange;
@@ -73,22 +74,7 @@ public class InGame extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		prefs = PreferenceManager.getDefaultSharedPreferences(InGame.this);
-
-		time = Integer.parseInt(prefs.getString(Settings.DURATION,
-				Settings.DURATION_DEFAULT));
-
-		robotSpeed = Integer.parseInt(prefs.getString(Settings.RS,
-				Settings.RS_DEFAULT));
-
-		levelName = prefs.getString(Settings.MAP, Settings.MAP_DEFAULT);
-		
-		explosionDuration = Integer.parseInt(prefs.getString(Settings.ED,
-				Settings.ED_DEFAULT));
-		explosionTimeout = Integer.parseInt(prefs.getString(Settings.ET,
-				Settings.ET_DEFAULT));
-		explosionRange = Integer.parseInt(prefs.getString(Settings.ER,
-				Settings.ER_DEFAULT));
+		loadPrefs();
 
 		intent = this.getIntent();
 
@@ -107,6 +93,30 @@ public class InGame extends Activity {
 		setKeyPad();
 		prepareLayout();
 		Log.d("Debug", "PREPARED");
+	}
+
+	private void loadPrefs() {
+		prefs = PreferenceManager.getDefaultSharedPreferences(InGame.this);
+
+		time = Integer.parseInt(prefs.getString(Settings.DURATION,
+				Settings.DURATION_DEFAULT));
+
+		robotSpeed = Integer.parseInt(prefs.getString(Settings.RS,
+				Settings.RS_DEFAULT));
+
+		levelName = prefs.getString(Settings.MAP, Settings.MAP_DEFAULT);
+
+		explosionDuration = Integer.parseInt(prefs.getString(Settings.ED,
+				Settings.ED_DEFAULT));
+		explosionTimeout = Integer.parseInt(prefs.getString(Settings.ET,
+				Settings.ET_DEFAULT));
+		explosionRange = Integer.parseInt(prefs.getString(Settings.ER,
+				Settings.ER_DEFAULT));
+
+		pointsRobot = Integer.parseInt(prefs.getString(Settings.PR,
+				Settings.PR_DEFAULT));
+		pointsOpon = Integer.parseInt(prefs.getString(Settings.PO,
+				Settings.PO_DEFAULT));
 	}
 
 	@Override
@@ -338,7 +348,7 @@ public class InGame extends Activity {
 
 		return true;
 	}
-	
+
 	public static int getHeight() {
 		return height;
 	}
@@ -369,9 +379,9 @@ public class InGame extends Activity {
 					}
 					handler.post(new Runnable() {
 						public void run() {
-							
+
 							running = updateTime();
-							
+
 							if (!running)
 								gamePanel.gameOver(null);
 						}
@@ -411,5 +421,13 @@ public class InGame extends Activity {
 
 	public static int getExplosionRange() {
 		return explosionRange;
+	}
+
+	public static int getPointsRobot() {
+		return pointsRobot;
+	}
+
+	public static int getPointsOpon() {
+		return pointsOpon;
 	}
 }
