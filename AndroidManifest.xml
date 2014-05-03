@@ -35,8 +35,7 @@
         <activity
             android:name="ist.meic.cm.bomberman.InGame"
             android:configChanges="keyboardHidden|screenSize"
-            android:label="@style/FullscreenTheme"
-            android:noHistory="true" >
+            android:label="@style/FullscreenTheme" >
         </activity>
         <activity
             android:name="ist.meic.cm.bomberman.gamelobby.GameLobby"

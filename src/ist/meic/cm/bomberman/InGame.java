@@ -130,10 +130,11 @@ public class InGame extends Activity {
 
 	@Override
 	public void onPause() {
-		super.onPause();
-
+	
 		if (multiplayerC)
 			unregisterReceiver(broadcastReceiver);
+
+		super.onPause();
 	}
 
 	@Override

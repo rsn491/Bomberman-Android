@@ -45,6 +45,8 @@ public class GameLobby extends Activity implements OnItemClickListener {
 	private ObjectInputStream input;
 	private CustomBaseAdapter adapter;
 
+	private boolean starting;
+
 	private static final String[] titles = new String[] { "Player 1",
 			"Player 2", "Player 3" };
 
@@ -147,7 +149,8 @@ public class GameLobby extends Activity implements OnItemClickListener {
 			@Override
 			public void onClick(View v) {
 
-				if (connected) {
+				if (!starting && connected) {
+					starting = true;
 					waitToStart.execute();
 				} else
 					Toast.makeText(context,
@@ -351,6 +354,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 	}
 
 	private void notStarted() {
+		starting = false;
 		Toast.makeText(getApplicationContext(),
 				"TIMEOUT: Couldn't start game!\nTry again!", Toast.LENGTH_SHORT)
 				.show();
