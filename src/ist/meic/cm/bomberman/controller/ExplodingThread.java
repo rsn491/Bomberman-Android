@@ -34,7 +34,7 @@ public class ExplodingThread extends Thread {
 				if(!ghost.isDead()) {
 					if (checkDeathPos(ghost.getI())) {
 						ghost.die();
-						mapController.killedGhost(bombStatus.getBomberman().getId()); // TODO
+						mapController.killedGhost(bombStatus.getBomberman().getId());
 					}
 				}
 			}

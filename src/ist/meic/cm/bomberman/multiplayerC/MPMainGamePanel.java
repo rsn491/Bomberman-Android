@@ -1,6 +1,7 @@
 package ist.meic.cm.bomberman.multiplayerC;
 
 import ist.meic.cm.bomberman.AbsMainGamePanel;
+import ist.meic.cm.bomberman.InGame;
 import ist.meic.cm.bomberman.R;
 import ist.meic.cm.bomberman.controller.OperationCodes;
 
@@ -16,11 +17,13 @@ import android.os.AsyncTask;
 
 public class MPMainGamePanel extends AbsMainGamePanel {
 
-	public static final long CANBOMBAGAININTERVAL = 6000;
+	private int CAN_BOMB_AGAIN_INTERVAL;
+	private static final int ADJUST = 1000;
 	private static final Object BOMBLOCK = new Object();
 	private boolean connected;
 	private boolean canBomb;
 	private boolean exploded;
+	private BombTask bt;
 
 	public MPMainGamePanel(Context context) {
 		super(context);
@@ -31,6 +34,8 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 		canBomb = true;
 		connected = true;
 		exploded = true;
+		CAN_BOMB_AGAIN_INTERVAL = (InGame.getExplosionDuration() + InGame
+				.getExplosionTimeout()) * ADJUST;
 	}
 
 	@Override
@@ -38,7 +43,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 		if (canBomb) {
 			synchronized (BOMBLOCK) {
 				if (exploded) {
-					BombTask bt = new BombTask();
+					bt = new BombTask();
 					bt.execute();
 					canBomb = false;
 					exploded = false;
@@ -195,7 +200,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 			}
 
 			try {
-				Thread.sleep(CANBOMBAGAININTERVAL);
+				Thread.sleep(CAN_BOMB_AGAIN_INTERVAL);
 				canBomb = true;
 				exploded = true;
 			} catch (InterruptedException e) {

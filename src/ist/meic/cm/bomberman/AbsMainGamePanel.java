@@ -67,6 +67,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 						playerId);
 
 				if (creature == null
+						|| bS.isDead()
 						|| creature.checkCreature(bS)
 						|| (creature instanceof Bomberman && creature
 								.isDestroyed()) || isDead()) {
