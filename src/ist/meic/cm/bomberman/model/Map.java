@@ -189,14 +189,6 @@ public class Map {
 		//
 	}
 
-	// check if there's a bomberman
-	/*
-	 * public boolean checkBomberman(int position) { int currentPos; for
-	 * (BombermanStatus bomberman : bombermansPos) { currentPos =
-	 * bomberman.getI(); if (!bomberman.isIgnore() && checkAdjacent(position,
-	 * currentPos)) return true; } return false; }
-	 */
-
 	private boolean checkAdjacent(int position, int currentPos) {
 		return currentPos == position || currentPos == position - 1
 				|| currentPos == position + 1
