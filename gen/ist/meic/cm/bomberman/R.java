@@ -128,17 +128,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int theme=0x7f050001;
     }
     public static final class string {
-        public static final int action_settings=0x7f090004;
+        public static final int action_settings=0x7f090002;
         public static final int app_name=0x7f090000;
-        public static final int bomb=0x7f090008;
-        public static final int dummy_button=0x7f090001;
-        public static final int dummy_content=0x7f090002;
-        public static final int hello_world=0x7f090005;
-        public static final int image=0x7f09000a;
-        public static final int pause=0x7f090006;
-        public static final int quit=0x7f090007;
-        public static final int title_activity_in_game=0x7f090003;
-        public static final int title_activity_multiplayer_c=0x7f090009;
+        public static final int bomb=0x7f090006;
+        public static final int hello_world=0x7f090003;
+        public static final int image=0x7f090008;
+        public static final int pause=0x7f090004;
+        public static final int quit=0x7f090005;
+        public static final int title_activity_in_game=0x7f090001;
+        public static final int title_activity_multiplayer_c=0x7f090007;
     }
     public static final class style {
         /** 

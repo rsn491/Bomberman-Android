@@ -65,6 +65,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 			if (!gameEnded) {
 				BombermanStatus bS = mapController.getBombermansStatus().get(
 						playerId);
+
 				if (creature == null
 						|| creature.checkCreature(bS)
 						|| (creature instanceof Bomberman && creature
@@ -74,7 +75,9 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 
 					Builder ad = new AlertDialog.Builder(getContext())
 							.setTitle("Game Over!")
-							.setMessage("You Lose!")
+							.setMessage(
+									"Score: "
+											+ mapController.getScore(playerId))
 							.setNeutralButton("OK",
 									new DialogInterface.OnClickListener() {
 										public void onClick(
@@ -190,7 +193,8 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 	}
 
 	public void pauseGame() {
-		final BombermanStatus bS = mapController.getBombermansStatus().get(playerId);
+		final BombermanStatus bS = mapController.getBombermansStatus().get(
+				playerId);
 		bS.setIgnore();
 
 		Builder ad = new AlertDialog.Builder(getContext())
