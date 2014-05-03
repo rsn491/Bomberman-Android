@@ -339,6 +339,18 @@ public class InGame extends Activity {
 		return true;
 	}
 
+	public void updateScore() {
+		int score;
+		if(gamePanel.getMapController() != null) {
+			score = gamePanel.getMapController().getScore(playerId);
+
+			StringBuilder sb = new StringBuilder("Score\n");
+			sb.append(score);
+			sb.append(" pts");
+			((TextView) findViewById(R.id.player_score)).setText(sb.toString());
+		}
+	}
+	
 	public static int getHeight() {
 		return height;
 	}
@@ -369,8 +381,9 @@ public class InGame extends Activity {
 					}
 					handler.post(new Runnable() {
 						public void run() {
+							updateScore();
 							running = updateTime();
-
+							
 							if (!running)
 								gamePanel.gameOver(null);
 						}

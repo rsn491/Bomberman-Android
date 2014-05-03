@@ -8,25 +8,18 @@ public class BombermanStatus extends Status implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 7540473135344364993L;
-	private int score;
 	private boolean canBomb;
-
-	public BombermanStatus(int i, int x, int y, char[] charArray) {
+	private int id;
+	
+	public BombermanStatus(int id, int i, int x, int y, char[] charArray) {
 		super(i, x, y, charArray);
+		this.id = id;
 		setCanBomb(true);
 		// TODO Auto-generated constructor stub
 	}
 
-	public void increaseScore(int points) {
-		score += points;
-	}
-
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
+	public int getId() {
+		return id;
 	}
 
 	public boolean isCanBomb() {

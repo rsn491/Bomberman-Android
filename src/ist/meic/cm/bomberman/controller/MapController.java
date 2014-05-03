@@ -20,6 +20,7 @@ public class MapController implements Serializable {
 	private GhostThread ghostThread;
 	private int numberOfPlayers;
 	private String levelName;
+	private ScoreTable scoreTable;
 	private MapModels mapModel;
 	private String map;
 
@@ -28,6 +29,7 @@ public class MapController implements Serializable {
 		bombermansStatus = new LinkedList<BombermanStatus>();
 		ghostsStatus = new LinkedList<GhostStatus>();
 		bombsStatus = new LinkedList<BombStatus>();
+		scoreTable = new ScoreTable();
 		this.levelName = levelName;
 		mapModel = new MapModels(levelName);
 		map = mapModel.getMap();
@@ -49,9 +51,10 @@ public class MapController implements Serializable {
 			for (int i = 0; i < mapArray.length; i++)
 				if (mapArray[i] == id) {
 					System.out.println("x:" + x);
-					BombermanStatus status = new BombermanStatus(i, x, y,
+					BombermanStatus status = new BombermanStatus(playerId,i, x, y,
 							map.toCharArray());
 					bombermansStatus.add(status);
+					scoreTable.addPlayer(playerId);
 					break;
 				} else if (mapArray[i] == 'n') {
 					x = 0;
@@ -123,6 +126,14 @@ public class MapController implements Serializable {
 		return bombermansStatus.get(playerId).isDead();
 	}
 
+	public void killedGhost(int playerId) {
+		scoreTable.killedGhost(playerId);
+	}
+	
+	public void killedBomberman(int playerId) {
+		scoreTable.killedBomberman(playerId);
+	}
+	
 	// Getters and Setters
 	//
 
@@ -172,4 +183,10 @@ public class MapController implements Serializable {
 		return map;
 	}
 	//
+
+	public int getScore(int playerId) {
+		if(scoreTable != null)
+			return scoreTable.getScore(playerId);
+		return 0;
+	}
 }
