@@ -11,7 +11,6 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Log;
 
 public class Map {
 
@@ -109,8 +108,6 @@ public class Map {
 
 		} else
 			bombermansPos = mapController.getBombermansStatus();
-
-		boolean[] ignores = new boolean[mapController.getLastPlayerID()];
 
 		synchronized (bombermanLock) {
 
