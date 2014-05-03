@@ -24,6 +24,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 	private boolean canBomb;
 	private boolean exploded;
 	private BombTask bt;
+	private MoveTask mt;
 
 	public MPMainGamePanel(Context context) {
 		super(context);
@@ -60,7 +61,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 
 	private void sendBombermanStatus() {
 		synchronized (output) {
-			MoveTask mt = new MoveTask();
+			mt = new MoveTask();
 			mt.execute();
 		}
 	}
@@ -198,16 +199,14 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-			try {
+		/*	try {
 				Thread.sleep(CAN_BOMB_AGAIN_INTERVAL);
-				canBomb = true;
-				exploded = true;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-
+			}*/
+			canBomb = true;
+			exploded = true;
 			return null;
 		}
 	}
