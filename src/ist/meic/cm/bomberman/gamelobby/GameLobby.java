@@ -277,6 +277,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 	private class WaitTask extends AsyncTask<Object, Void, Void> {
 
 		private Message toSend, received;
+		private boolean started = true;
 
 		@Override
 		protected Void doInBackground(Object... objects) {
@@ -290,6 +291,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 				received = (Message) input.readObject();
 
 			} catch (IOException e) {
+				started = false;
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -299,8 +301,10 @@ public class GameLobby extends Activity implements OnItemClickListener {
 
 		@Override
 		protected void onPostExecute(Void v) {
-			startGame(received);
-
+			if (started)
+				startGame(received);
+			else
+				notStarted();
 		}
 
 	}
@@ -340,7 +344,14 @@ public class GameLobby extends Activity implements OnItemClickListener {
 	public void notConnected() {
 		trying = false;
 
-		Toast.makeText(getApplicationContext(), "ERROR: Couldn't connect!",
+		Toast.makeText(getApplicationContext(), "TIMEOUT: Couldn't connect!",
 				Toast.LENGTH_SHORT).show();
+		communication = new BindTask();
+	}
+
+	private void notStarted() {
+		Toast.makeText(getApplicationContext(),
+				"TIMEOUT: Couldn't start game!", Toast.LENGTH_SHORT).show();
+		waitToStart = new WaitTask();
 	}
 }
