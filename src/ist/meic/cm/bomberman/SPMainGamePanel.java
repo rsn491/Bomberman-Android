@@ -17,7 +17,6 @@ public class SPMainGamePanel extends AbsMainGamePanel {
 
 		super(context, levelName);
 
-		System.out.println(levelName);
 		mapController = new MapController(levelName);
 		mapController.joinBomberman();
 
