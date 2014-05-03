@@ -138,7 +138,6 @@ public class GameLobby extends Activity implements OnItemClickListener {
 						alert.show();
 					} catch (Exception e) {
 					}
-
 				}
 			}
 		});
@@ -215,9 +214,10 @@ public class GameLobby extends Activity implements OnItemClickListener {
 		}
 	}
 
-	static void setConnected(boolean con) {
+	void setConnected(boolean con) {
 
 		connected = con;
+		Toast.makeText(GameLobby.this, "Connected!", Toast.LENGTH_SHORT).show();
 	}
 
 	public void setPlayers(ArrayList<String> players) {
@@ -335,5 +335,12 @@ public class GameLobby extends Activity implements OnItemClickListener {
 			long arg3) {
 		Toast.makeText(getApplicationContext(),
 				rowItems.get(position).toString(), Toast.LENGTH_SHORT).show();
+	}
+
+	public void notConnected() {
+		trying = false;
+
+		Toast.makeText(getApplicationContext(), "ERROR: Couldn't connect!",
+				Toast.LENGTH_SHORT).show();
 	}
 }

@@ -48,9 +48,7 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 				gamePanel.setSocket(client);
 				gamePanel.setOutput(output);
 				gamePanel.setInput(input);
-				GameLobby.setConnected(true);
 				players = received.getPlayers();
-				System.out.println(players.size());
 			}
 
 		} catch (IOException e) {
@@ -76,9 +74,14 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 
 	@Override
 	protected void onPostExecute(Void v) {
-		gameLobby.setPlayers(players);
-		gameLobby.setOutput(output);
-		gameLobby.setInput(input);
+		try {
+			gameLobby.setPlayers(players);
+			gameLobby.setOutput(output);
+			gameLobby.setInput(input);
+			gameLobby.setConnected(true);
+		} catch (Exception e) {
+			gameLobby.notConnected();
+		}
 	}
 
 }
