@@ -17,7 +17,6 @@ public class BombermanStatus extends Status implements Serializable {
 		this.id = id;
 		setCanBomb(true);
 		ignore = false;
-		// TODO Auto-generated constructor stub
 	}
 
 	public int getId() {

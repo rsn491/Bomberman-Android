@@ -1,24 +1,18 @@
 package ist.meic.cm.bomberman.multiplayerC;
 
+import ist.meic.cm.bomberman.AbsMainGamePanel;
+import ist.meic.cm.bomberman.R;
+import ist.meic.cm.bomberman.controller.OperationCodes;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 
-import ist.meic.cm.bomberman.AbsMainGamePanel;
-import ist.meic.cm.bomberman.InGame;
-import ist.meic.cm.bomberman.R;
-import ist.meic.cm.bomberman.SPMainGamePanel;
-import ist.meic.cm.bomberman.controller.MapController;
-import ist.meic.cm.bomberman.controller.OperationCodes;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
-import android.widget.SpinnerAdapter;
 
 public class MPMainGamePanel extends AbsMainGamePanel {
 
@@ -41,9 +35,9 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 
 	@Override
 	public void bomb() {
-		if(canBomb) {
+		if (canBomb) {
 			synchronized (BOMBLOCK) {
-				if(exploded) {
+				if (exploded) {
 					BombTask bt = new BombTask();
 					bt.execute();
 					canBomb = false;
@@ -153,6 +147,14 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 				R.drawable.down3));
 	}
 
+	@Override
+	public void pauseGame() {
+
+		super.pauseGame();
+
+		sendBombermanStatus();
+	}
+
 	private class MoveTask extends AsyncTask<Object, Void, Void> {
 
 		private Message toSend;
@@ -174,7 +176,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 		}
 
 	}
-	
+
 	private class BombTask extends AsyncTask<Object, Void, Void> {
 		private Message toSend;
 
@@ -191,7 +193,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			try {
 				Thread.sleep(CANBOMBAGAININTERVAL);
 				canBomb = true;
@@ -200,7 +202,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			return null;
 		}
 	}

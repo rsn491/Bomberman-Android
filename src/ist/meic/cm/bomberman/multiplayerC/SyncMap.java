@@ -75,7 +75,6 @@ public class SyncMap extends Service {
 					running = false;
 				} else
 					while (running) {
-						System.out.println("send request");
 						toSend = new Message(Message.REQUEST, option);
 
 						sendToServer();
