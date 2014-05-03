@@ -34,7 +34,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 
 	private static boolean connected;
 	private int playerId;
-	private String value = "192.168.10.11";
+	private String value = "192.168.1.67";
 	private ArrayList<String> playersList = new ArrayList<String>();
 	private static final String NO_PLAYERS = "Not Connected!";
 	private Context context;
