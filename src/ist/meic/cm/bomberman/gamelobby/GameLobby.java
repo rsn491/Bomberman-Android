@@ -344,14 +344,16 @@ public class GameLobby extends Activity implements OnItemClickListener {
 	public void notConnected() {
 		trying = false;
 
-		Toast.makeText(getApplicationContext(), "TIMEOUT: Couldn't connect!",
-				Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(),
+				"TIMEOUT: Couldn't connect!\nTry again!", Toast.LENGTH_SHORT)
+				.show();
 		communication = new BindTask();
 	}
 
 	private void notStarted() {
 		Toast.makeText(getApplicationContext(),
-				"TIMEOUT: Couldn't start game!", Toast.LENGTH_SHORT).show();
+				"TIMEOUT: Couldn't start game!\nTry again!", Toast.LENGTH_SHORT)
+				.show();
 		waitToStart = new WaitTask();
 	}
 }
