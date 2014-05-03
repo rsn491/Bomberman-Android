@@ -116,7 +116,6 @@ public class Map {
 			int i = 0, a, b;
 			for (BombermanStatus bombermanPos : bombermansPos) {
 				
-				if(!bombermanPos.isDead() || bombermanPos.equals(myStatus)) {
 					a = bombermanPos.getX();
 					b = bombermanPos.getY();
 					switch (bombermanPos.getOrientation()) {
@@ -175,7 +174,7 @@ public class Map {
 					bombermanObj.get(i).draw(canvas);
 					i++;
 				}
-			}
+			
 			//
 		}
 		//
@@ -321,7 +320,7 @@ public class Map {
 
 	public Bomberman getBomberman(int playerId) {
 		synchronized(bombermanLock) {
-			if (bombermanObj.size() > 0)
+			if (bombermanObj.size() > playerId)
 				return bombermanObj.get(playerId);
 			else
 				return null;

@@ -107,7 +107,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 
 	@Override
 	public boolean isDead() {
-		return false;
+		return map.isDead(playerId);
 	}
 
 	public Socket getClient() {

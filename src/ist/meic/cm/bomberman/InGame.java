@@ -342,7 +342,7 @@ public class InGame extends Activity {
 	public void updateScore() {
 		int score;
 		if(gamePanel.getMapController() != null) {
-			score = gamePanel.getMapController().getScore(playerId);
+			score = gamePanel.getMapController().getScore(gamePanel.getPlayerId());
 
 			StringBuilder sb = new StringBuilder("Score\n");
 			sb.append(score);

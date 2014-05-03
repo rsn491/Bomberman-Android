@@ -30,20 +30,21 @@ public class ExplodingThread extends Thread {
 				.getBombermansStatus();
 
 		while (running) {
-			for (Status ghost : ghostsStatus)
+			for (Status ghost : ghostsStatus) {
 				if(!ghost.isDead()) {
 					if (checkDeathPos(ghost.getI())) {
 						ghost.die();
 						mapController.killedGhost(bombStatus.getBomberman().getId()); // TODO
 					}
 				}
-			for (Status bomberman : bombermanStatus)
+			}
+			for (Status bomberman : bombermanStatus) {
 				if(!bomberman.isDead()) {
 					if (checkDeathPos(bomberman.getI())) {
 						bomberman.die();
-						mapController.killedBomberman(bombStatus.getBomberman().getId());
 					}
 				}
+			}
 		}
 
 	}
