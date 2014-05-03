@@ -45,7 +45,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 			synchronized (BOMBLOCK) {
 				if (exploded) {
 					bt = new BombTask();
-					bt.execute();
+					bt.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 					canBomb = false;
 					exploded = false;
 				}
@@ -62,7 +62,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 	private void sendBombermanStatus() {
 		synchronized (output) {
 			mt = new MoveTask();
-			mt.execute();
+			mt.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
@@ -199,12 +199,12 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		/*	try {
+			try {
 				Thread.sleep(CAN_BOMB_AGAIN_INTERVAL);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}
 			canBomb = true;
 			exploded = true;
 			return null;
