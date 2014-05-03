@@ -1,11 +1,13 @@
 package ist.meic.cm.bomberman.settings;
 
+import ist.meic.cm.bomberman.Menu;
 import ist.meic.cm.bomberman.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ActivityInfo;
@@ -56,7 +58,9 @@ public class SettingsActivity extends Activity implements
 
 		Toast.makeText(SettingsActivity.this, "Settings Saved!",
 				Toast.LENGTH_SHORT).show();
-		super.onBackPressed();
+
+		Intent intent = new Intent(this, Menu.class);
+		startActivity(intent);
 	}
 
 	private void displaySharedPreferences() {
