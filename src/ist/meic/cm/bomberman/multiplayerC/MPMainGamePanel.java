@@ -35,8 +35,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 		canBomb = true;
 		connected = true;
 		exploded = true;
-		CAN_BOMB_AGAIN_INTERVAL = (InGame.getExplosionDuration() + InGame
-				.getExplosionTimeout()) * ADJUST;
+		CAN_BOMB_AGAIN_INTERVAL = InGame.getExplosionTimeout() * ADJUST;
 	}
 
 	@Override
