@@ -1,6 +1,7 @@
 package ist.meic.cm.bomberman.gamelobby;
 
 import ist.meic.cm.bomberman.InGame;
+import ist.meic.cm.bomberman.Menu;
 import ist.meic.cm.bomberman.R;
 import ist.meic.cm.bomberman.multiplayerC.Message;
 
@@ -8,7 +9,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -39,11 +43,12 @@ public class GameLobby extends Activity implements OnItemClickListener {
 	private static final String NO_PLAYERS = "Not Connected!";
 	private Context context;
 	private boolean trying;
-	private BindTask communication = new BindTask();
+	private BindTask communication;
 	private WaitTask waitToStart = new WaitTask();
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private CustomBaseAdapter adapter;
+	private String playerName;
 
 	private boolean starting;
 
@@ -55,6 +60,8 @@ public class GameLobby extends Activity implements OnItemClickListener {
 
 	private ListView listView;
 	private List<RowItem> rowItems;
+
+	private Button connect;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +86,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 
 		context = getApplicationContext();
 
-		Button connect = (Button) findViewById(R.id.Connect);
+		connect = (Button) findViewById(R.id.Connect);
 		connect.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -109,9 +116,11 @@ public class GameLobby extends Activity implements OnItemClickListener {
 									String levelName = i
 											.getStringExtra("levelName");
 
-									String playerName = i
-											.getStringExtra("playerName");
+									if (playerName == null)
+										playerName = i
+												.getStringExtra("playerName");
 
+									communication = new BindTask();
 									communication.execute(
 											InGame.getGamePanel(), playerId,
 											levelName, value, playerName,
@@ -123,6 +132,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 
 									playersList.remove(NO_PLAYERS);
 									playersList.add(playerName);
+
 									updateList();
 								}
 
@@ -186,6 +196,41 @@ public class GameLobby extends Activity implements OnItemClickListener {
 			}
 
 		});
+
+	}
+
+	void askForName() {
+
+		Toast.makeText(context,
+				"The name " + playerName + " is already in use!",
+				Toast.LENGTH_SHORT).show();
+		final AlertDialog.Builder alert = new AlertDialog.Builder(
+				GameLobby.this).setTitle("Insert Player Name:");
+		final EditText input = new EditText(this);
+		input.setHint("Player");
+		alert.setView(input);
+		alert.setCancelable(false);
+
+		alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String value = "Player";
+				String tmp = input.getText().toString().trim();
+				if (!tmp.equals(""))
+					value = tmp;
+
+				playersList.remove(playerName);
+				playersList.add(value);
+				playerName = value;
+
+				trying = false;
+				connect.performClick();
+			}
+		});
+
+		try {
+			alert.show();
+		} catch (Exception e) {
+		}
 
 	}
 
@@ -325,15 +370,6 @@ public class GameLobby extends Activity implements OnItemClickListener {
 			Toast.makeText(context,
 					"No other players are connected at the moment!",
 					Toast.LENGTH_SHORT).show();
-			// DELETE
-			Intent i = new Intent();
-
-			i.putExtra("playerId", playerId);
-
-			setResult(0, i);
-
-			finish();
-			// DELETE
 		}
 	}
 

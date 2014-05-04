@@ -11,7 +11,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 public class BindTask extends AsyncTask<Object, Void, Void> {
 	private Socket client;
@@ -44,7 +43,7 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 			if (received.getCode() == Message.SUCCESS) {
 				objects[1] = received.getPlayerID();
 				mapController = received.getGameMap();
-				playerId=received.getPlayerID();
+				playerId = received.getPlayerID();
 				gamePanel.setPlayerId(playerId);
 				gamePanel.setMapController(mapController);
 				gamePanel.setSocket(client);
@@ -76,15 +75,18 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 
 	@Override
 	protected void onPostExecute(Void v) {
-		try {
-			gameLobby.setPlayers(players);
-			gameLobby.setOutput(output);
-			gameLobby.setInput(input);
-			gameLobby.setPlayerId(playerId);
-			gameLobby.setConnected(true);
-		} catch (Exception e) {
-			gameLobby.notConnected();
-		}
+		if (received == null || received.getCode() == Message.SUCCESS)
+			try {
+				gameLobby.setPlayers(players);
+				gameLobby.setOutput(output);
+				gameLobby.setInput(input);
+				gameLobby.setPlayerId(playerId);
+				gameLobby.setConnected(true);
+			} catch (Exception e) {
+				gameLobby.notConnected();
+			}
+		else
+			gameLobby.askForName();
 	}
 
 }
