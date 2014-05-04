@@ -21,7 +21,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -32,7 +31,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.MultiAutoCompleteTextView.CommaTokenizer;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -130,7 +129,7 @@ public class InGame extends Activity {
 
 	@Override
 	public void onPause() {
-	
+
 		if (multiplayerC)
 			unregisterReceiver(broadcastReceiver);
 
@@ -212,7 +211,7 @@ public class InGame extends Activity {
 				gamePanel.pauseGame();
 			}
 		});
-		final Button bomb = (Button) findViewById(R.id.bomb_button);
+		final Button bomb = (Button) findViewById(R.id.bombButton);
 		bomb.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// Perform action on click
@@ -305,12 +304,28 @@ public class InGame extends Activity {
 		if (resultCode == 0) {
 			playerId = data.getIntExtra("playerId", 0);
 
+			if (playerId != 0)
+				chooseHead();
+
 			timerThread();
 			intent = new Intent(getBaseContext(), SyncMap.class);
 			intent.putExtra("option", OperationCodes.MAP);
 			startService(intent);
+			StringBuilder sb = new StringBuilder("Number\n");
+			sb.append(gamePanel.getMapController().getLastPlayerID());
+			((TextView) findViewById(R.id.number_of_players)).setText(sb
+					.toString());
 		} else if (resultCode == 1)
 			quit();
+
+	}
+
+	private void chooseHead() {
+		ImageView image = (ImageView) findViewById(R.id.head);
+		if (playerId == 1) {
+			image.setImageResource(R.drawable.mario);
+		} else
+			image.setImageResource(R.drawable.luigi);
 
 	}
 

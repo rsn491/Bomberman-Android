@@ -360,4 +360,9 @@ public class GameLobby extends Activity implements OnItemClickListener {
 				.show();
 		waitToStart = new WaitTask();
 	}
+
+	public void setPlayerId(int playerId) {
+		this.playerId = playerId;
+
+	}
 }

@@ -23,6 +23,7 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 	private MapController mapController;
 	private ArrayList<String> players;
 	private GameLobby gameLobby;
+	private int playerId;
 
 	@Override
 	protected Void doInBackground(Object... objects) {
@@ -43,7 +44,8 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 			if (received.getCode() == Message.SUCCESS) {
 				objects[1] = received.getPlayerID();
 				mapController = received.getGameMap();
-				gamePanel.setPlayerId(received.getPlayerID());
+				playerId=received.getPlayerID();
+				gamePanel.setPlayerId(playerId);
 				gamePanel.setMapController(mapController);
 				gamePanel.setSocket(client);
 				gamePanel.setOutput(output);
@@ -78,6 +80,7 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 			gameLobby.setPlayers(players);
 			gameLobby.setOutput(output);
 			gameLobby.setInput(input);
+			gameLobby.setPlayerId(playerId);
 			gameLobby.setConnected(true);
 		} catch (Exception e) {
 			gameLobby.notConnected();

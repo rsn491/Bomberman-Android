@@ -178,10 +178,11 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical" >
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
 
             <Button
-                android:id="@+id/bomb_button"
+                android:id="@+id/bombButton"
                 android:layout_width="fill_parent"
                 android:layout_height="35dp"
                 android:layout_marginBottom="10dp"
@@ -190,6 +191,12 @@
                 android:text="@string/bomb"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/head"
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
+                android:src="@drawable/head" />
         </LinearLayout>
     </LinearLayout>
 

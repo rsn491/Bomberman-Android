@@ -50,7 +50,7 @@ public class MainThread extends Thread {
 	public void run() {
 		Canvas canvas;
 		Log.d(TAG, "Starting game loop");
-
+		this.playerID = InGame.getId();
 		while (running) {
 
 			canvas = null;
