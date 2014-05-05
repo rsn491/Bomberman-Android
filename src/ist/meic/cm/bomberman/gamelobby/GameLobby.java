@@ -1,7 +1,6 @@
 package ist.meic.cm.bomberman.gamelobby;
 
 import ist.meic.cm.bomberman.InGame;
-import ist.meic.cm.bomberman.Menu;
 import ist.meic.cm.bomberman.R;
 import ist.meic.cm.bomberman.multiplayerC.Message;
 
@@ -9,9 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,7 +24,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -366,11 +362,10 @@ public class GameLobby extends Activity implements OnItemClickListener {
 			setResult(0, i);
 
 			finish();
-		} else {
+		} else 
 			Toast.makeText(context,
 					"No other players are connected at the moment!",
 					Toast.LENGTH_SHORT).show();
-		}
 	}
 
 	@Override

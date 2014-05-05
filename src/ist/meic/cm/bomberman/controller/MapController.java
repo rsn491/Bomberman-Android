@@ -49,8 +49,8 @@ public class MapController implements Serializable {
 		if (numberOfPlayers < 3) {
 			for (int i = 0; i < mapArray.length; i++)
 				if (mapArray[i] == id) {
-					BombermanStatus status = new BombermanStatus(playerId,i, x, y,
-							map.toCharArray());
+					BombermanStatus status = new BombermanStatus(playerId, i,
+							x, y, map.toCharArray());
 					bombermansStatus.add(status);
 					scoreTable.addPlayer(playerId);
 					break;
@@ -79,6 +79,7 @@ public class MapController implements Serializable {
 			if (mapArray[i] == 'G') {
 				GhostStatus status = new GhostStatus(i, x, y, map.toCharArray());
 				ghostsStatus.add(status);
+				x += 1;
 			} else if (mapArray[i] == 'n') {
 				x = 0;
 				y += 1;
@@ -127,11 +128,11 @@ public class MapController implements Serializable {
 	public void killedGhost(int playerId) {
 		scoreTable.killedGhost(playerId);
 	}
-	
+
 	public void killedBomberman(int playerId) {
 		scoreTable.killedBomberman(playerId);
 	}
-	
+
 	// Getters and Setters
 	//
 
@@ -180,10 +181,11 @@ public class MapController implements Serializable {
 	public String getMap() {
 		return map;
 	}
+
 	//
 
 	public int getScore(int playerId) {
-		if(scoreTable != null)
+		if (scoreTable != null)
 			return scoreTable.getScore(playerId);
 		return 0;
 	}

@@ -36,17 +36,17 @@ public class MapModels implements Serializable {
 			"W-O----OOO--OOO-OG-Wn" + 
 			"WWWWWWWWWWWWWWWWWWWW";
 	private final static String MAP3 = "WWWWWWWWWWWWWWWWWWWWn" + 
-			"W1----O-G---GOG----Wn" + 
+			"W1----O------O-----Wn" + 
 			"WWOW-W-W-W-W-W-W-W-Wn" + 
-			"W-O--G--O--G----O--Wn" + 
+			"W-O-----OGGGGGGGO--Wn" + 
 			"WWOWOW-W-W-W-WOW-W-Wn" + 
-			"W-GO--G-----O-G-O3-Wn" +
+			"WG-OGGGGGGGGO---O3-Wn" +
 			"WWOW-W-W-W-W-W-W-W-Wn" + 
-			"W-OOOO---2O-O----O-Wn" + 
+			"W-OOOO---2O-OGGGGO-Wn" + 
 			"WWOWOWOWOW-W-W-W-W-Wn" + 
-			"W-GOOOO--G-GOOO----Wn" + 
+			"WG-OOOOGGGGGOOO----Wn" + 
 			"WW-W-WOWOW-WOWOWOW-Wn" + 
-			"W-O--G-OOO-GOOO-OG-Wn" + 
+			"W-OGGGGOOO--OOO-O--Wn" + 
 			"WWWWWWWWWWWWWWWWWWWW";
 	
 	private String currentMap;
@@ -63,6 +63,4 @@ public class MapModels implements Serializable {
 	public  String getMap() {
 		return currentMap;
 	}
-
-	
 }
