@@ -48,6 +48,8 @@ public class InGame extends Activity {
 	private SharedPreferences prefs;
 	private int time;
 
+	private static boolean over;
+
 	private Intent intent;
 	private static Context InGame_context;
 	private static int pointsRobot, pointsOpon;
@@ -83,11 +85,9 @@ public class InGame extends Activity {
 			multiplayerC = true;
 		}
 
-		Log.d("Debug", "lets play");
 		setContentView(R.layout.activity_in_game);
 		setKeyPad();
 		prepareLayout();
-		Log.d("Debug", "PREPARED");
 
 		InGame_context = (Context) InGame.this;
 	}
@@ -392,12 +392,15 @@ public class InGame extends Activity {
 
 					}
 					handler.post(new Runnable() {
+
 						public void run() {
 
 							running = updateTime();
 
-							if (!running)
+							if (!running) {
+								over = true;
 								gamePanel.gameOver(null);
+							}
 						}
 					});
 				}
@@ -443,5 +446,9 @@ public class InGame extends Activity {
 
 	public static int getPointsOpon() {
 		return pointsOpon;
+	}
+
+	public static boolean Over() {
+		return over;
 	}
 }

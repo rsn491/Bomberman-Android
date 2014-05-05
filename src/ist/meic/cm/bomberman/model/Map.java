@@ -43,6 +43,7 @@ public class Map {
 	private Bitmap bomberman3D;
 	private Object bombermanLock;
 	private int playerId;
+	private boolean hasDied;
 
 	private final static int H_STEP = 20;
 	private static final int OTHER_LINE_STEP = 21;
@@ -104,8 +105,12 @@ public class Map {
 		if (multiplayer && bombermansPos != null) {
 			myStatus = bombermansPos.get(playerId);
 			bombermansPos = mapController.getBombermansStatus();
-			bombermansPos.set(playerId, myStatus);
+			if (bombermansPos.get(playerId).isDead() || myStatus.isDead())
+				hasDied = true;
 
+			if (hasDied)
+				myStatus.die();
+			bombermansPos.set(playerId, myStatus);
 		} else
 			bombermansPos = mapController.getBombermansStatus();
 
@@ -218,8 +223,10 @@ public class Map {
 			currentPos = ghost.getI();
 
 			if (!ghost.isDead() && !bS.isIgnore()
-					&& checkAdjacent(position, currentPos))
+					&& checkAdjacent(position, currentPos)) {
+				bS.die();
 				return true;
+			}
 		}
 		return false;
 	}

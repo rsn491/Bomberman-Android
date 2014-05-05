@@ -195,8 +195,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 		protected Void doInBackground(Object... objects) {
 			try {
 
-				toSend = new Message(Message.REQUEST, OperationCodes.BOMB,
-						mapController.getBombermansStatus().get(playerId));
+				toSend = new Message(Message.REQUEST, OperationCodes.BOMB);
 				synchronized (output) {
 					output.writeObject(toSend);
 					output.reset();

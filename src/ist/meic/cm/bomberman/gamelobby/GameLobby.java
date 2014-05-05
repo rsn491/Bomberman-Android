@@ -96,6 +96,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 							.setTitle("Insert the host IP Address:");
 					final EditText input = new EditText(GameLobby.this);
 					alert.setView(input);
+					alert.setCancelable(false);
 					alert.setPositiveButton("OK",
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
@@ -138,6 +139,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int whichButton) {
+									trying = false;
 									dialog.cancel();
 								}
 							});
@@ -362,7 +364,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 			setResult(0, i);
 
 			finish();
-		} else 
+		} else
 			Toast.makeText(context,
 					"No other players are connected at the moment!",
 					Toast.LENGTH_SHORT).show();

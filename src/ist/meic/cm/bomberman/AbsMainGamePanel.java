@@ -41,6 +41,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 	protected ObjectInputStream input;
 	private boolean gameEnded;
 	private boolean canContinue;
+	private Thread continueThread;
 
 	public AbsMainGamePanel(Context context) {
 		super(context);
@@ -88,7 +89,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-											if (canContinue) {
+											if (!InGame.Over() /*&& canContinue*/) {
 												resumeWatching();
 											} else
 												InGame.quit();
@@ -116,7 +117,8 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		alert.setPositiveButton("Continue",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
-						continueThread();
+					//	continueThread();
+						
 					}
 
 				});
@@ -134,7 +136,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		}
 	}
 
-	private void continueThread() {
+	/*private void continueThread() {
 		final Handler handler = new Handler();
 		Runnable runnable = new Runnable() {
 			boolean running = true;
@@ -144,7 +146,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 
 					handler.post(new Runnable() {
 						public void run() {
-							if (!continueToWatch()) {
+							if (InGame.Over() || !continueToWatch()) {
 								gameOver(null);
 								running = false;
 							}
@@ -153,9 +155,9 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 				}
 			}
 		};
-		Thread continueThread = new Thread(runnable);
+		continueThread = new Thread(runnable);
 		continueThread.start();
-	}
+	}*/
 
 	private String checkScores() {
 		StringBuilder sb = new StringBuilder();
@@ -171,7 +173,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 					max = mapController.getScore(i);
 					winner = i;
 				}
-			if (canContinue = continueToWatch()) {
+			/*if (canContinue = continueToWatch()) {
 				if (tmp == max)
 					sb.append("\n\nIt currently is a draw!");
 				else if (max > tmp) {
@@ -182,7 +184,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 					sb.append(" points");
 				} else
 					sb.append("\n\nThe current winner is you!");
-			} else if (tmp == max)
+			} else */if (tmp == max)
 				sb.append("\n\nIt is a draw!");
 			else if (max > tmp) {
 				sb.append("\n\nThe Winner:\nPlayer ");
@@ -196,16 +198,18 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		return sb.toString();
 	}
 
-	private boolean continueToWatch() {
+	/*private boolean continueToWatch() {
 
 		int i = 0;
+
 		for (BombermanStatus current : mapController.getBombermansStatus()) {
 			if (i != playerId && !current.isDead())
 				return true;
 			i++;
 		}
+
 		return false;
-	}
+	}*/
 
 	public MapController getMapController() {
 		return mapController;
