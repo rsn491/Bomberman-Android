@@ -125,7 +125,9 @@ public class GameLobby extends Activity implements OnItemClickListener {
 													.toString((InGame
 															.getRobotSpeed())),
 											getExplosionDetails(),
-											getPointsDetails());
+											getPointsDetails(), Integer
+													.toString(InGame
+															.getDuration()));
 
 									playersList.remove(NO_PLAYERS);
 									playersList.add(playerName);

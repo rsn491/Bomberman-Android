@@ -46,7 +46,7 @@ public class InGame extends Activity {
 	private static Button quit, pause;
 	private static int robotSpeed;
 	private SharedPreferences prefs;
-	private int time;
+	private static int time;
 
 	private static boolean over;
 
@@ -246,9 +246,16 @@ public class InGame extends Activity {
 				+ playerName);
 		((TextView) findViewById(R.id.player_score)).setText("Score\n0");
 
-		((TextView) findViewById(R.id.time_left))
-				.setText("Time\n" + time + "s");
-		((TextView) findViewById(R.id.number_of_players)).setText("Number\n1");
+		if (!multiplayerC) {
+			((TextView) findViewById(R.id.time_left)).setText("Time\n" + time
+					+ "s");
+			((TextView) findViewById(R.id.number_of_players))
+					.setText("Number\n1");
+		} else {
+			((TextView) findViewById(R.id.time_left)).setText("Time\n" + "--s");
+			((TextView) findViewById(R.id.number_of_players))
+					.setText("Number\n-");
+		}
 
 		final RelativeLayout rl = (RelativeLayout) findViewById(R.id.in_game_screen);
 		// sets the width and height of the game screen (pixels)
@@ -450,5 +457,13 @@ public class InGame extends Activity {
 
 	public static boolean Over() {
 		return over;
+	}
+
+	public static int getDuration() {
+		return time;
+	}
+
+	public static void setDuration(int duration) {
+		time = duration;
 	}
 }

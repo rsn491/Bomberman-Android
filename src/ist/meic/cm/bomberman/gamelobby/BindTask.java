@@ -1,6 +1,7 @@
 package ist.meic.cm.bomberman.gamelobby;
 
 import ist.meic.cm.bomberman.AbsMainGamePanel;
+import ist.meic.cm.bomberman.InGame;
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.multiplayerC.Message;
 
@@ -23,6 +24,7 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 	private ArrayList<String> players;
 	private GameLobby gameLobby;
 	private int playerId;
+	private int duration;
 
 	@Override
 	protected Void doInBackground(Object... objects) {
@@ -43,6 +45,7 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 			if (received.getCode() == Message.SUCCESS) {
 				objects[1] = received.getPlayerID();
 				mapController = received.getGameMap();
+				duration = received.getDuration();
 				playerId = received.getPlayerID();
 				gamePanel.setPlayerId(playerId);
 				gamePanel.setMapController(mapController);
@@ -70,6 +73,8 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 		sb.append((String) objects[7]);
 		sb.append(" ");
 		sb.append((String) objects[8]);
+		sb.append(" ");
+		sb.append((String) objects[9]);
 		return sb.toString();
 	}
 
@@ -81,6 +86,8 @@ public class BindTask extends AsyncTask<Object, Void, Void> {
 				gameLobby.setOutput(output);
 				gameLobby.setInput(input);
 				gameLobby.setPlayerId(playerId);
+				if (playerId != 0)
+					InGame.setDuration(duration);
 				gameLobby.setConnected(true);
 			} catch (Exception e) {
 				gameLobby.notConnected();

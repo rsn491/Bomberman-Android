@@ -37,6 +37,8 @@ public class Message implements Serializable {
 
 	private ArrayList<String> players;
 
+	private int duration;
+
 	public Message() {
 		this(Message.SUCCESS);
 	}
@@ -80,6 +82,12 @@ public class Message implements Serializable {
 	public Message(int code, ArrayList<String> players) {
 		this(code);
 		this.players = players;
+	}
+
+	public Message(int code, int playerID, MapController currentMap,
+			ArrayList<String> players, int duration) {
+		this(code, playerID, currentMap, players);
+		this.duration = duration;
 	}
 
 	public int getCode() {
@@ -137,6 +145,11 @@ public class Message implements Serializable {
 
 	public void setPlayers(ArrayList<String> players) {
 		this.players = players;
+	}
+
+	public int getDuration() {
+
+		return duration;
 	}
 
 }
