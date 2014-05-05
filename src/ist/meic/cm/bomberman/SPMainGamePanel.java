@@ -25,7 +25,10 @@ public class SPMainGamePanel extends AbsMainGamePanel {
 
 	@Override
 	public void bomb() {
-		map.bomb(0);
+		if (bomberman != null)
+			map.bomb(0);
+		else
+			gameOver(null);
 	}
 
 	@Override

@@ -298,7 +298,7 @@ public class Menu extends Activity {
 		final EditText input = new EditText(this);
 		input.setHint("Player");
 		alert.setView(input);
-		
+
 		alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String value = "Player";
@@ -315,7 +315,7 @@ public class Menu extends Activity {
 					// multiplayer centralized - mode 1
 					intent.putExtra("game_mode", "multiplayer");
 				}
-				
+
 				startActivity(intent);
 			}
 		});

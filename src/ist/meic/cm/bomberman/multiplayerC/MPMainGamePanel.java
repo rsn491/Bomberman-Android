@@ -40,16 +40,19 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 
 	@Override
 	public void bomb() {
-		if (canBomb) {
-			synchronized (BOMBLOCK) {
-				if (exploded) {
-					bt = new BombTask();
-					bt.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-					canBomb = false;
-					exploded = false;
+		if (bomberman != null) {
+			if (canBomb) {
+				synchronized (BOMBLOCK) {
+					if (exploded) {
+						bt = new BombTask();
+						bt.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+						canBomb = false;
+						exploded = false;
+					}
 				}
 			}
-		}
+		} else
+			gameOver(null);
 	}
 
 	@Override
@@ -59,10 +62,13 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 	}
 
 	private void sendBombermanStatus() {
-		synchronized (output) {
-			mt = new MoveTask();
-			mt.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		}
+		if (bomberman != null)
+			synchronized (output) {
+				mt = new MoveTask();
+				mt.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			}
+		else
+			gameOver(null);
 	}
 
 	@Override

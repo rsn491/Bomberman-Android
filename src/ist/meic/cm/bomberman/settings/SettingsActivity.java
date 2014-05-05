@@ -9,7 +9,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,10 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class SettingsActivity extends Activity implements
-		OnSharedPreferenceChangeListener {
-
-	private Settings settings;
+public class SettingsActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,8 +29,6 @@ public class SettingsActivity extends Activity implements
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_settings);
-
-		settings = new Settings();
 
 		FragmentManager mFragmentManager = getFragmentManager();
 		FragmentTransaction mFragmentTransaction = mFragmentManager
@@ -65,35 +59,8 @@ public class SettingsActivity extends Activity implements
 
 	private void displaySharedPreferences() {
 
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(SettingsActivity.this);
-
-		settings.setLevelName(prefs.getString(Settings.MAP,
-				Settings.MAP_DEFAULT));
-
-		settings.setGameDuration(Integer.parseInt(prefs.getString(
-				Settings.DURATION, Settings.DURATION_DEFAULT)));
-
-		settings.setRobotSpeed(Integer.parseInt(prefs.getString(Settings.RS,
-				Settings.RS_DEFAULT)));
-
-		settings.setExplosionTimeout(Integer.parseInt(prefs.getString(
-				Settings.ET, Settings.ET_DEFAULT)));
-
-		settings.setExplosionDuration(Integer.parseInt(prefs.getString(
-				Settings.ED, Settings.ED_DEFAULT)));
-
-		settings.setExplosionRange(Integer.parseInt(prefs.getString(
-				Settings.ER, Settings.ER_DEFAULT)));
-
-		settings.setExplosionRange(Integer.parseInt(prefs.getString(
-				Settings.PR, Settings.PR_DEFAULT)));
-
-		settings.setPointsOpponent(Integer.parseInt(prefs.getString(
-				Settings.PO, Settings.PO_DEFAULT)));
-
 		Builder ad = new AlertDialog.Builder(SettingsActivity.this)
-				.setTitle("Current Settings").setMessage(settings.toString())
+				.setTitle("Current Settings").setMessage(prefsToString())
 				.setNeutralButton("OK", null).setIcon(R.drawable.ic_launcher);
 		try {
 			ad.show();
@@ -103,56 +70,42 @@ public class SettingsActivity extends Activity implements
 		}
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this)
-				.registerOnSharedPreferenceChangeListener(this);
+	private String prefsToString() {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(SettingsActivity.this);
 
-	}
+		StringBuilder builder = new StringBuilder();
+		builder.append("Map: ");
+		builder.append(prefs.getString(Settings.MAP, Settings.MAP_DEFAULT));
+		builder.append("\n");
 
-	@Override
-	public void onPause() {
-		PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this)
-				.unregisterOnSharedPreferenceChangeListener(this);
-		super.onPause();
-	}
+		builder.append("Game Duration: ");
+		builder.append(prefs.getString(Settings.DURATION,
+				Settings.DURATION_DEFAULT));
+		builder.append("\n");
 
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-		if (key.equals(Settings.MAP)) {
+		builder.append("Robot Speed: ");
+		builder.append(prefs.getString(Settings.RS, Settings.RS_DEFAULT));
+		builder.append("\n");
 
-			settings.setLevelName(prefs.getString(Settings.MAP,
-					Settings.MAP_DEFAULT));
-		} else if (key.equals(Settings.DURATION)) {
+		builder.append("Explosion Timeout: ");
+		builder.append(prefs.getString(Settings.ET, Settings.ET_DEFAULT));
+		builder.append("\n");
 
-			settings.setGameDuration(Integer.parseInt(prefs.getString(
-					Settings.DURATION, Settings.DURATION_DEFAULT)));
-		} else if (key.equals(Settings.RS)) {
+		builder.append("Explosion Duration: ");
+		builder.append(prefs.getString(Settings.ED, Settings.ED_DEFAULT));
+		builder.append("\n");
 
-			settings.setRobotSpeed(Integer.parseInt(prefs.getString(
-					Settings.RS, Settings.RS_DEFAULT)));
-		} else if (key.equals(Settings.ET)) {
+		builder.append("Explosion Range: ");
+		builder.append(prefs.getString(Settings.ER, Settings.ER_DEFAULT));
+		builder.append("\n");
 
-			settings.setExplosionTimeout(Integer.parseInt(prefs.getString(
-					Settings.ET, Settings.ET_DEFAULT)));
-		} else if (key.equals(Settings.ED)) {
+		builder.append("Points Robot: ");
+		builder.append(prefs.getString(Settings.PR, Settings.PR_DEFAULT));
+		builder.append("\n");
 
-			settings.setExplosionDuration(Integer.parseInt(prefs.getString(
-					Settings.ED, Settings.ED_DEFAULT)));
-		} else if (key.equals(Settings.ER)) {
-
-			settings.setExplosionRange(Integer.parseInt(prefs.getString(
-					Settings.ER, Settings.ER_DEFAULT)));
-		} else if (key.equals(Settings.PR)) {
-
-			settings.setExplosionRange(Integer.parseInt(prefs.getString(
-					Settings.PR, Settings.PR_DEFAULT)));
-		} else if (key.equals(Settings.PO)) {
-
-			settings.setPointsOpponent(Integer.parseInt(prefs.getString(
-					Settings.PO, Settings.PO_DEFAULT)));
-		}
-
+		builder.append("Points Opponent: ");
+		builder.append(prefs.getString(Settings.PO, Settings.PO_DEFAULT));
+		return builder.toString();
 	}
 }

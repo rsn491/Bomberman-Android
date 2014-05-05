@@ -151,45 +151,57 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 	}
 
 	public void moveDown() {
-		if (bomberman.moveDown()) {
-			mapController.bombermanMove(playerId, OperationCodes.DOWN);
-			gameOver(bomberman);
+		if (bomberman != null)
+			if (bomberman.moveDown()) {
+				mapController.bombermanMove(playerId, OperationCodes.DOWN);
+				gameOver(bomberman);
 
-		} else
-			bomberman.setBitmap(Bitmap.createScaledBitmap(BitmapFactory
-					.decodeResource(getResources(), R.drawable.trydown), InGame
-					.getWidth() / 21, InGame.getHeight() / 14, true));
+			} else
+				bomberman.setBitmap(Bitmap.createScaledBitmap(BitmapFactory
+						.decodeResource(getResources(), R.drawable.trydown),
+						InGame.getWidth() / 21, InGame.getHeight() / 14, true));
+		else
+			gameOver(null);
 	}
 
 	public void moveLeft() {
-		if (bomberman.moveLeft()) {
-			mapController.bombermanMove(playerId, OperationCodes.LEFT);
-			gameOver(bomberman);
-		} else
-			bomberman.setBitmap(Bitmap.createScaledBitmap(BitmapFactory
-					.decodeResource(getResources(), R.drawable.tryleft), InGame
-					.getWidth() / 21, InGame.getHeight() / 14, true));
+		if (bomberman != null)
+			if (bomberman.moveLeft()) {
+				mapController.bombermanMove(playerId, OperationCodes.LEFT);
+				gameOver(bomberman);
+			} else
+				bomberman.setBitmap(Bitmap.createScaledBitmap(BitmapFactory
+						.decodeResource(getResources(), R.drawable.tryleft),
+						InGame.getWidth() / 21, InGame.getHeight() / 14, true));
+		else
+			gameOver(null);
 	}
 
 	public void moveRight() {
-		if (bomberman.moveRight()) {
-			mapController.bombermanMove(playerId, OperationCodes.RIGHT);
-			gameOver(bomberman);
-		} else
-			bomberman.setBitmap(Bitmap.createScaledBitmap(BitmapFactory
-					.decodeResource(getResources(), R.drawable.tryright),
-					InGame.getWidth() / 21, InGame.getHeight() / 14, true));
+		if (bomberman != null)
+			if (bomberman.moveRight()) {
+				mapController.bombermanMove(playerId, OperationCodes.RIGHT);
+				gameOver(bomberman);
+			} else
+				bomberman.setBitmap(Bitmap.createScaledBitmap(BitmapFactory
+						.decodeResource(getResources(), R.drawable.tryright),
+						InGame.getWidth() / 21, InGame.getHeight() / 14, true));
+		else
+			gameOver(null);
 
 	}
 
 	public void moveUp() {
-		if (bomberman.moveUp()) {
-			mapController.bombermanMove(playerId, OperationCodes.UP);
-			gameOver(bomberman);
-		} else
-			bomberman.setBitmap(Bitmap.createScaledBitmap(BitmapFactory
-					.decodeResource(getResources(), R.drawable.tryup), InGame
-					.getWidth() / 21, InGame.getHeight() / 14, true));
+		if (bomberman != null)
+			if (bomberman.moveUp()) {
+				mapController.bombermanMove(playerId, OperationCodes.UP);
+				gameOver(bomberman);
+			} else
+				bomberman.setBitmap(Bitmap.createScaledBitmap(BitmapFactory
+						.decodeResource(getResources(), R.drawable.tryup),
+						InGame.getWidth() / 21, InGame.getHeight() / 14, true));
+		else
+			gameOver(null);
 
 	}
 
@@ -292,10 +304,8 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 	public boolean checkGhosts() {
 
 		bomberman = map.getBomberman(playerId);
-		if (bomberman != null)
-			return gameOver(bomberman);
 
-		return false;
+		return gameOver(bomberman);
 	}
 
 }

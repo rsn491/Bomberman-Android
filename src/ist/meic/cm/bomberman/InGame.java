@@ -1,17 +1,11 @@
 package ist.meic.cm.bomberman;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.gamelobby.GameLobby;
-import ist.meic.cm.bomberman.model.Bomberman;
 import ist.meic.cm.bomberman.multiplayerC.MPMainGamePanel;
 import ist.meic.cm.bomberman.multiplayerC.SyncMap;
 import ist.meic.cm.bomberman.settings.Settings;
-import ist.meic.cm.bomberman.settings.SettingsActivity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
