@@ -362,16 +362,10 @@ public class GameLobby extends Activity implements OnItemClickListener {
 			setResult(0, i);
 
 			finish();
-		} else {
+		} else 
 			Toast.makeText(context,
 					"No other players are connected at the moment!",
-					Toast.LENGTH_SHORT).show();Intent i = new Intent();
-
-					i.putExtra("playerId", playerId);
-
-					setResult(0, i);
-
-					finish();}
+					Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
