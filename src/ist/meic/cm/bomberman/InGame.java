@@ -181,18 +181,19 @@ public class InGame extends Activity {
 			public void onClick(View v) {
 				// Perform action on click
 
+				if (multiplayerC) {
+					((MPMainGamePanel) gamePanel).endConnection();
+					intent = new Intent(getBaseContext(), SyncMap.class);
+					intent.putExtra("end", true);
+					intent.putExtra("option", OperationCodes.MAP);
+					startService(intent);
+				}
+				
 				if (timer != null) {
 					timer.interrupt();
 
 					gamePanel.stopController();
-
-					if (multiplayerC) {
-						((MPMainGamePanel) gamePanel).endConnection();
-						intent = new Intent(getBaseContext(), SyncMap.class);
-						intent.putExtra("end", true);
-						intent.putExtra("option", OperationCodes.MAP);
-						startService(intent);
-					}
+				
 				}
 				finish();
 
