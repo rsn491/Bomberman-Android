@@ -206,7 +206,7 @@ public class Menu extends Activity {
 		findViewById(R.id.Exit).setOnTouchListener(mDelayHideTouchListener);
 	}
 
-	private boolean connected() {return true;/*
+	private boolean connected() {
 		try {
 			ConnectivityManager connectivityManager = (ConnectivityManager) Menu.this
 					.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -219,13 +219,13 @@ public class Menu extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;*/
+		return false;
 
 	}
 
-	public boolean isWifiOn() {return true;/*
+	public boolean isWifiOn() {
 		WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		return wifi.isWifiEnabled();*/
+		return wifi.isWifiEnabled();
 	}
 
 	@Override
