@@ -210,9 +210,11 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			InGame.playSoundBomb();
 			canBomb = true;
 			exploded = true;
 			return null;
 		}
+
 	}
 }

@@ -125,8 +125,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int multiplayer_c=0x7f0b0001;
     }
     public static final class raw {
-        public static final int move=0x7f050000;
-        public static final int theme=0x7f050001;
+        public static final int bomb=0x7f050000;
+        public static final int move=0x7f050001;
+        public static final int theme=0x7f050002;
     }
     public static final class string {
         public static final int action_settings=0x7f090002;

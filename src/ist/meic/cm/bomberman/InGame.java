@@ -38,6 +38,7 @@ public class InGame extends Activity {
 	private static AbsMainGamePanel gamePanel;
 
 	private MediaPlayer player;
+	private static MediaPlayer bomb_player;
 	private String levelName;
 	private Thread timer;
 	private String playerName;
@@ -48,6 +49,7 @@ public class InGame extends Activity {
 	private int time;
 
 	private Intent intent;
+	private static Context InGame_context;
 	private static int pointsRobot, pointsOpon;
 	private static int explosionDuration;
 	private static int explosionTimeout;
@@ -86,6 +88,8 @@ public class InGame extends Activity {
 		setKeyPad();
 		prepareLayout();
 		Log.d("Debug", "PREPARED");
+
+		InGame_context = (Context) InGame.this;
 	}
 
 	private void loadPrefs() {
@@ -224,6 +228,14 @@ public class InGame extends Activity {
 		player = MediaPlayer.create(InGame.this, R.raw.move);
 		player.setVolume(100, 100);
 		player.start();
+	}
+
+	public static void playSoundBomb() {
+		if (bomb_player != null)
+			bomb_player.release();
+		bomb_player = MediaPlayer.create(InGame_context, R.raw.bomb);
+		bomb_player.setVolume(100, 100);
+		bomb_player.start();
 	}
 
 	public void prepareLayout() {

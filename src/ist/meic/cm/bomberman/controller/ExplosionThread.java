@@ -114,24 +114,27 @@ public class ExplosionThread extends Thread implements Serializable {
 	//
 	public void deleteBomb() {
 		LinkedList<GhostStatus> ghostsStatus = mapController.getGhostsStatus();
-		LinkedList<BombermanStatus> bombermanStatus = mapController.getBombermansStatus();
+		LinkedList<BombermanStatus> bombermanStatus = mapController
+				.getBombermansStatus();
 		//
 		bombStatus.die();
 		bombStatus.getBomberman().setCanBomb(true);
+		InGame.playSoundBomb();
 		//
 		bombExplode();
 
 		for (Status ghost : ghostsStatus) {
-			if(!ghost.isDead()) {
+			if (!ghost.isDead()) {
 				if (checkDeathPos(ghost.getI())) {
 					ghost.die(); // remove this ghost from the list of ghosts
 					// Statuses, no longer exists
-					mapController.killedGhost(bombStatus.getBomberman().getId()); // TODO
+					mapController
+							.killedGhost(bombStatus.getBomberman().getId()); // TODO
 				}
 			}
 		}
 		for (Status bomberman : bombermanStatus) {
-			if(!bomberman.isDead()) {
+			if (!bomberman.isDead()) {
 				if (checkDeathPos(bomberman.getI())) {
 					bomberman.die();
 				}
