@@ -58,6 +58,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 	private List<RowItem> rowItems;
 
 	private Button connect;
+	private Button quit;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +170,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 			}
 
 		});
-		Button quit = (Button) findViewById(R.id.Quit);
+		quit = (Button) findViewById(R.id.Quit);
 		quit.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -400,5 +401,10 @@ public class GameLobby extends Activity implements OnItemClickListener {
 	public void setPlayerId(int playerId) {
 		this.playerId = playerId;
 
+	}
+
+	@Override
+	public void onBackPressed() {
+		quit.performClick();
 	}
 }

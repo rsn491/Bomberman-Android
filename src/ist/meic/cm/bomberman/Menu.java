@@ -64,6 +64,8 @@ public class Menu extends Activity {
 
 	private BackgroundSound mBackgroundSound;
 
+	private Button exit;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,7 +73,7 @@ public class Menu extends Activity {
 
 		setContentView(R.layout.activity_menu);
 
-		Button exit = (Button) findViewById(R.id.Exit);
+		exit = (Button) findViewById(R.id.Exit);
 		exit.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -329,7 +331,7 @@ public class Menu extends Activity {
 		alert.show();
 	}
 
-	public class BackgroundSound extends AsyncTask<Void, Void, Void> {
+	private class BackgroundSound extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -340,5 +342,10 @@ public class Menu extends Activity {
 			player.start();
 			return null;
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		exit.performClick();
 	}
 }
