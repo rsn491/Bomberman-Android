@@ -398,18 +398,20 @@ public class InGame extends Activity {
 					} catch (InterruptedException e) {
 
 					}
-					handler.post(new Runnable() {
+					if (running)
+						handler.post(new Runnable() {
 
-						public void run() {
+							public void run() {
 
-							running = updateTime();
+								running = updateTime();
 
-							if (!running) {
-								over = true;
-								gamePanel.gameOver(null);
+								if (!running) {
+
+									over = true;
+									gamePanel.showGameOver();
+								}
 							}
-						}
-					});
+						});
 				}
 			}
 		};

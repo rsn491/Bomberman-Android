@@ -1,5 +1,12 @@
 package ist.meic.cm.bomberman;
 
+import ist.meic.cm.bomberman.controller.MapController;
+import ist.meic.cm.bomberman.controller.OperationCodes;
+import ist.meic.cm.bomberman.model.Bomberman;
+import ist.meic.cm.bomberman.model.Creature;
+import ist.meic.cm.bomberman.model.Map;
+import ist.meic.cm.bomberman.status.BombermanStatus;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -11,20 +18,9 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.EditText;
-import android.widget.Toast;
-import ist.meic.cm.bomberman.controller.MapController;
-import ist.meic.cm.bomberman.controller.OperationCodes;
-import ist.meic.cm.bomberman.gamelobby.BindTask;
-import ist.meic.cm.bomberman.gamelobby.GameLobby;
-import ist.meic.cm.bomberman.model.Bomberman;
-import ist.meic.cm.bomberman.model.Creature;
-import ist.meic.cm.bomberman.model.Map;
-import ist.meic.cm.bomberman.status.BombermanStatus;
 
 public abstract class AbsMainGamePanel extends SurfaceView implements
 		SurfaceHolder.Callback {
@@ -78,31 +74,10 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 						|| creature.checkCreature(bS)
 						|| (creature instanceof Bomberman && creature
 								.isDestroyed()) || isDead()) {
-
+					gameEnded = true;
 					bS.setIgnore();
 
-					Builder ad = new AlertDialog.Builder(getContext())
-							.setTitle("Game Over!")
-							.setMessage(checkScores())
-							.setNeutralButton("OK",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											if (!InGame.Over() /*&& canContinue*/) {
-												resumeWatching();
-											} else
-												InGame.quit();
-										}
-									}).setCancelable(false)
-							.setIcon(R.drawable.ic_launcher);
-					try {
-						ad.show();
-
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					gameEnded = true;
+					showGameOver();
 					return true;
 				}
 			}
@@ -110,15 +85,35 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		return false;
 	}
 
+	void showGameOver() {
+		AlertDialog.Builder ad = new AlertDialog.Builder(getContext())
+				.setTitle("Game Over!").setMessage(checkScores())
+				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						if (!InGame.isSinglePlayer() && !InGame.Over()
+						/* && canContinue */) {
+							resumeWatching();
+						} else
+							InGame.quit();
+					}
+				}).setCancelable(false).setIcon(R.drawable.ic_launcher);
+		try {
+
+			ad.show();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void resumeWatching() {
 
-		final AlertDialog.Builder alert = new AlertDialog.Builder(getContext())
+		AlertDialog.Builder alert = new AlertDialog.Builder(getContext())
 				.setTitle("Do you wish to continue watching?");
 		alert.setPositiveButton("Continue",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
-					//	continueThread();
-						
+						// continueThread();
 					}
 
 				});
@@ -136,28 +131,17 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		}
 	}
 
-	/*private void continueThread() {
-		final Handler handler = new Handler();
-		Runnable runnable = new Runnable() {
-			boolean running = true;
-
-			public void run() {
-				while (!getThread().isInterrupted() && running) {
-
-					handler.post(new Runnable() {
-						public void run() {
-							if (InGame.Over() || !continueToWatch()) {
-								gameOver(null);
-								running = false;
-							}
-						}
-					});
-				}
-			}
-		};
-		continueThread = new Thread(runnable);
-		continueThread.start();
-	}*/
+	/*
+	 * private void continueThread() { final Handler handler = new Handler();
+	 * Runnable runnable = new Runnable() { boolean running = true;
+	 * 
+	 * public void run() { while (!getThread().isInterrupted() && running) {
+	 * 
+	 * handler.post(new Runnable() { public void run() { if (InGame.Over() ||
+	 * !continueToWatch()) { gameEnded = false; gameOver(null); running = false;
+	 * } } }); } } }; continueThread = new Thread(runnable);
+	 * continueThread.start(); }
+	 */
 
 	private String checkScores() {
 		StringBuilder sb = new StringBuilder();
@@ -173,7 +157,8 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 					max = mapController.getScore(i);
 					winner = i;
 				}
-			/*if (canContinue = continueToWatch()) {
+
+			if (!InGame.Over()/* canContinue = continueToWatch() */) {
 				if (tmp == max)
 					sb.append("\n\nIt currently is a draw!");
 				else if (max > tmp) {
@@ -184,7 +169,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 					sb.append(" points");
 				} else
 					sb.append("\n\nThe current winner is you!");
-			} else */if (tmp == max)
+			} else if (tmp == max)
 				sb.append("\n\nIt is a draw!");
 			else if (max > tmp) {
 				sb.append("\n\nThe Winner:\nPlayer ");
@@ -198,18 +183,16 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		return sb.toString();
 	}
 
-	/*private boolean continueToWatch() {
-
-		int i = 0;
-
-		for (BombermanStatus current : mapController.getBombermansStatus()) {
-			if (i != playerId && !current.isDead())
-				return true;
-			i++;
-		}
-
-		return false;
-	}*/
+	/*
+	 * private boolean continueToWatch() {
+	 * 
+	 * int i = 0;
+	 * 
+	 * for (BombermanStatus current : mapController.getBombermansStatus()) { if
+	 * (i != playerId && !current.isDead()) return true; i++; }
+	 * 
+	 * return false; }
+	 */
 
 	public MapController getMapController() {
 		return mapController;
@@ -415,5 +398,4 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 
 		return gameOver(bomberman);
 	}
-
 }
