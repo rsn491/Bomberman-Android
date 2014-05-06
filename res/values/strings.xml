@@ -10,5 +10,6 @@
     <string name="bomb">Bomb</string>
     <string name="title_activity_multiplayer_c">MultiplayerC</string>
     <string name="image">Image thumbnail</string>
+    <string name="title_activity_in_game_p2_p">InGameP2P</string>
 
 </resources>

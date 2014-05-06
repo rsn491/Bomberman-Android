@@ -122,7 +122,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class menu {
         public static final int in_game=0x7f0b0000;
-        public static final int multiplayer_c=0x7f0b0001;
+        public static final int in_game_p2=0x7f0b0001;
+        public static final int multiplayer_c=0x7f0b0002;
     }
     public static final class raw {
         public static final int bomb=0x7f050000;
@@ -138,6 +139,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int pause=0x7f090004;
         public static final int quit=0x7f090005;
         public static final int title_activity_in_game=0x7f090001;
+        public static final int title_activity_in_game_p2_p=0x7f090009;
         public static final int title_activity_multiplayer_c=0x7f090007;
     }
     public static final class style {
