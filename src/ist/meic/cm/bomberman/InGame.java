@@ -5,6 +5,8 @@ import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.gamelobby.GameLobby;
 import ist.meic.cm.bomberman.multiplayerC.MPMainGamePanel;
 import ist.meic.cm.bomberman.multiplayerC.SyncMap;
+import ist.meic.cm.bomberman.p2p.MPDMainGamePanel;
+import ist.meic.cm.bomberman.p2p.WiFiServiceDiscoveryActivity;
 import ist.meic.cm.bomberman.settings.Settings;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -51,6 +53,7 @@ public class InGame extends Activity {
 	private static boolean over;
 
 	private Intent intent;
+	private boolean multiplayerD;
 	private static Context InGame_context;
 	private static int pointsRobot, pointsOpon;
 	private static int explosionDuration;
@@ -79,10 +82,15 @@ public class InGame extends Activity {
 			Log.d("Debug", "Starting single player mode");
 			playerId = 0;
 			multiplayerC = false;
-		}
-		if (intent.getStringExtra("game_mode").equals("multiplayer")) {
+			multiplayerD = false;
+		} else if (intent.getStringExtra("game_mode").equals("multiplayer")) {
 			Log.d("Debug", "Starting multi player mode");
+			multiplayerD = false;
 			multiplayerC = true;
+		} else if (intent.getStringExtra("game_mode").equals("multiplayerD")) {
+			Log.d("Debug", "Starting decentralized mode");
+			multiplayerC = false;
+			multiplayerD = true;
 		}
 
 		setContentView(R.layout.activity_in_game);
@@ -248,7 +256,7 @@ public class InGame extends Activity {
 				+ playerName);
 		((TextView) findViewById(R.id.player_score)).setText("Score\n0");
 
-		if (!multiplayerC) {
+		if (!multiplayerC && !multiplayerD) {
 			((TextView) findViewById(R.id.time_left)).setText("Time\n" + time
 					+ "s");
 			((TextView) findViewById(R.id.number_of_players))
@@ -292,7 +300,6 @@ public class InGame extends Activity {
 				});
 
 		if (multiplayerC) {
-
 			Intent i = new Intent(getApplicationContext(), GameLobby.class);
 
 			i.putExtra("levelName", levelName);
@@ -302,6 +309,20 @@ public class InGame extends Activity {
 			gamePanel = new MPMainGamePanel(this, levelName);
 
 			startActivityForResult(i, 0);
+
+			connected = true;
+		} else if (multiplayerD) {
+
+			Intent i = new Intent(getApplicationContext(),
+					WiFiServiceDiscoveryActivity.class);
+
+			i.putExtra("levelName", levelName);
+
+			i.putExtra("playerName", playerName);
+
+			gamePanel = new MPDMainGamePanel(this, levelName);
+
+			startActivityForResult(i, 2);
 
 			connected = true;
 		} else {
@@ -332,6 +353,19 @@ public class InGame extends Activity {
 					.toString());
 		} else if (resultCode == 1)
 			quit();
+		else if (resultCode == 2) {
+			playerId = data.getIntExtra("playerId", 0);
+
+			if (playerId != 0)
+				chooseHead();
+
+			timerThread();
+			// TO DO
+			StringBuilder sb = new StringBuilder("Number\n");
+			sb.append(gamePanel.getMapController().getLastPlayerID());
+			((TextView) findViewById(R.id.number_of_players)).setText(sb
+					.toString());
+		}
 
 	}
 

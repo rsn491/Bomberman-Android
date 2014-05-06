@@ -87,15 +87,16 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int Quit=0x7f0c0011;
         public static final int Refresh=0x7f0c0012;
         public static final int Start=0x7f0c0010;
-        public static final int action_settings=0x7f0c001f;
+        public static final int action_settings=0x7f0c0021;
         public static final int bombButton=0x7f0c000b;
-        public static final int btnGetPreferences=0x7f0c001b;
-        public static final int descText=0x7f0c001e;
+        public static final int btnGetPreferences=0x7f0c001d;
+        public static final int container_root=0x7f0c001a;
+        public static final int descText=0x7f0c0020;
         public static final int down_button=0x7f0c0009;
-        public static final int fragment=0x7f0c001a;
+        public static final int fragment=0x7f0c001c;
         public static final int fullscreen_content_controls=0x7f0c0014;
         public static final int head=0x7f0c000c;
-        public static final int iconImage=0x7f0c001c;
+        public static final int iconImage=0x7f0c001e;
         public static final int imageView1=0x7f0c0019;
         public static final int imageView2=0x7f0c0018;
         public static final int in_game_screen=0x7f0c0004;
@@ -108,22 +109,24 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int quit_button=0x7f0c0006;
         public static final int right_button=0x7f0c000a;
         public static final int settings=0x7f0c0016;
+        public static final int status_text=0x7f0c001b;
         public static final int textView1=0x7f0c000e;
         public static final int time_left=0x7f0c0002;
-        public static final int titleText=0x7f0c001d;
+        public static final int titleText=0x7f0c001f;
         public static final int up_button=0x7f0c0008;
     }
     public static final class layout {
         public static final int activity_in_game=0x7f030000;
         public static final int activity_lobby=0x7f030001;
         public static final int activity_menu=0x7f030002;
-        public static final int activity_settings=0x7f030003;
-        public static final int list_item=0x7f030004;
+        public static final int activity_p2p=0x7f030003;
+        public static final int activity_settings=0x7f030004;
+        public static final int devices_list=0x7f030005;
+        public static final int list_item=0x7f030006;
     }
     public static final class menu {
         public static final int in_game=0x7f0b0000;
-        public static final int in_game_p2=0x7f0b0001;
-        public static final int multiplayer_c=0x7f0b0002;
+        public static final int multiplayer_c=0x7f0b0001;
     }
     public static final class raw {
         public static final int bomb=0x7f050000;
@@ -134,12 +137,12 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int action_settings=0x7f090002;
         public static final int app_name=0x7f090000;
         public static final int bomb=0x7f090006;
+        public static final int finding_service=0x7f090009;
         public static final int hello_world=0x7f090003;
         public static final int image=0x7f090008;
         public static final int pause=0x7f090004;
         public static final int quit=0x7f090005;
         public static final int title_activity_in_game=0x7f090001;
-        public static final int title_activity_in_game_p2_p=0x7f090009;
         public static final int title_activity_multiplayer_c=0x7f090007;
     }
     public static final class style {

@@ -66,6 +66,10 @@ public class Menu extends Activity {
 
 	private Button exit;
 
+	private final static int SINGLE = 0;
+	private final static int CENTRALIZED = 1;
+	private final static int DECENTRALIZED = 2;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -112,20 +116,16 @@ public class Menu extends Activity {
 											Toast.makeText(Menu.this,
 													"Wifi must be ON!",
 													Toast.LENGTH_SHORT).show();
-										} else if (connected())
-											askForName(InGame.class, 1);
-										else
-											Toast.makeText(
-													Menu.this,
-													"You must connected to a Network!",
-													Toast.LENGTH_SHORT).show();
+										} else
+											whichMultiplayer();
+
 									}
 								})
 						.setPositiveButton("Single Player",
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
-										askForName(InGame.class, 0);
+										askForName(SINGLE);
 									}
 
 								})
@@ -206,6 +206,39 @@ public class Menu extends Activity {
 		findViewById(R.id.NewGame).setOnTouchListener(mDelayHideTouchListener);
 
 		findViewById(R.id.Exit).setOnTouchListener(mDelayHideTouchListener);
+	}
+
+	private void whichMultiplayer() {
+		new AlertDialog.Builder(Menu.this)
+				.setTitle("Multiplayer Mode")
+				.setMessage("Please Select the Multiplayer Mode.")
+				.setNeutralButton("Centralized",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								if (connected())
+									askForName(CENTRALIZED);
+								else
+									Toast.makeText(Menu.this,
+											"You must connected to a Network!",
+											Toast.LENGTH_SHORT).show();
+							}
+						})
+				.setPositiveButton("Decentralized",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								askForName(DECENTRALIZED);
+							}
+
+						})
+				.setNegativeButton(android.R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// do nothing
+							}
+						}).setIcon(R.drawable.ic_launcher).show();
 	}
 
 	private boolean connected() {
@@ -292,8 +325,7 @@ public class Menu extends Activity {
 		mHideHandler.postDelayed(mHideRunnable, delayMillis);
 	}
 
-	private void askForName(final Class<? extends InGame> gameMode,
-			final int mode) {
+	private void askForName(final int mode) {
 
 		final AlertDialog.Builder alert = new AlertDialog.Builder(Menu.this)
 				.setTitle("Insert Player Name:");
@@ -307,15 +339,16 @@ public class Menu extends Activity {
 				String tmp = input.getText().toString().trim();
 				if (!tmp.equals(""))
 					value = tmp;
-				Intent intent = new Intent(Menu.this, gameMode);
+				Intent intent = new Intent(Menu.this, InGame.class);
 				intent.putExtra("player_name", value);
-				if (mode == 0) {
+				if (mode == SINGLE) {
 					// singlePlayer - mode 0
 					intent.putExtra("game_mode", "singleplayer");
-				}
-				if (mode == 1) {
+				} else if (mode == CENTRALIZED) {
 					// multiplayer centralized - mode 1
 					intent.putExtra("game_mode", "multiplayer");
+				} else if (mode == DECENTRALIZED) {
+					intent.putExtra("game_mode", "multiplayerD");
 				}
 
 				startActivity(intent);

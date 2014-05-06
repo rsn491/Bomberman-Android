@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" >
@@ -54,6 +54,12 @@
             android:noHistory="true" >
         </activity>
         <activity
+            android:name="ist.meic.cm.bomberman.p2p.WiFiServiceDiscoveryActivity"
+            android:configChanges="keyboardHidden|screenSize"
+            android:label="@style/FullscreenTheme"
+            android:noHistory="true" >
+        </activity>
+        <activity
             android:name="ist.meic.cm.bomberman.settings.PrefsFragment"
             android:configChanges="keyboardHidden|screenSize"
             android:label="@style/FullscreenTheme"
@@ -65,11 +71,6 @@
             android:enabled="true"
             android:label="SyncMap" >
         </service>
-
-        <activity
-            android:name="ist.meic.cm.bomberman.p2p.GameLobbyP2P"
-            android:label="@string/title_activity_in_game_p2_p" >
-        </activity>
     </application>
 
 </manifest>
