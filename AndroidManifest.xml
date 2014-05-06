@@ -65,7 +65,7 @@
         </service>
 
         <activity
-            android:name="ist.meic.cm.bomberman.p2p.InGameP2P"
+            android:name="ist.meic.cm.bomberman.p2p.GameLobbyP2P"
             android:label="@string/title_activity_in_game_p2_p" >
         </activity>
     </application>

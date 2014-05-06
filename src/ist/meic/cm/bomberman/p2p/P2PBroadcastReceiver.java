@@ -20,10 +20,10 @@ public class P2PBroadcastReceiver extends BroadcastReceiver {
 
 	private WifiP2pManager mManager;
 	private Channel mChannel;
-	private InGameP2P activity;
+	private GameLobbyP2P activity;
 	private PeerListListener peerListListener;
 	
-	public P2PBroadcastReceiver(WifiP2pManager manager, Channel channel, InGameP2P activity, PeerListListener peerListListener) {
+	public P2PBroadcastReceiver(WifiP2pManager manager, Channel channel, GameLobbyP2P activity, PeerListListener peerListListener) {
 		super();
 		this.mManager = manager;
 		this.mChannel = channel;

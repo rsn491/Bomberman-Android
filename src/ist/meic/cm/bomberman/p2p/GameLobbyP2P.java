@@ -29,7 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import android.os.Build;
 
-public class InGameP2P extends Activity implements ConnectionInfoListener {
+public class GameLobbyP2P extends Activity implements ConnectionInfoListener {
 
 	private final IntentFilter intentFilter = new IntentFilter();
 	private Channel mChannel;
