@@ -12,6 +12,8 @@
     </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
     </uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
+    </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
     </uses-permission>
 
@@ -61,6 +63,11 @@
             android:enabled="true"
             android:label="SyncMap" >
         </service>
+
+        <activity
+            android:name="ist.meic.cm.bomberman.p2p.InGameP2P"
+            android:label="@string/title_activity_in_game_p2_p" >
+        </activity>
     </application>
 
 </manifest>
