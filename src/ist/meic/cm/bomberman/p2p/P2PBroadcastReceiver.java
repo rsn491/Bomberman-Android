@@ -16,14 +16,14 @@ import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
-public class p2pBroadcastReceiver extends BroadcastReceiver {
+public class P2PBroadcastReceiver extends BroadcastReceiver {
 
 	private WifiP2pManager mManager;
 	private Channel mChannel;
 	private InGameP2P activity;
 	private PeerListListener peerListListener;
 	
-	public p2pBroadcastReceiver(WifiP2pManager manager, Channel channel, InGameP2P activity, PeerListListener peerListListener) {
+	public P2PBroadcastReceiver(WifiP2pManager manager, Channel channel, InGameP2P activity, PeerListListener peerListListener) {
 		super();
 		this.mManager = manager;
 		this.mChannel = channel;

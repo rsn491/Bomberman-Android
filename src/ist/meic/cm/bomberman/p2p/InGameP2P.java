@@ -34,9 +34,9 @@ public class InGameP2P extends Activity implements ConnectionInfoListener {
 	private final IntentFilter intentFilter = new IntentFilter();
 	private Channel mChannel;
 	private WifiP2pManager mManager;
-	private p2pBroadcastReceiver receiver;
+	private P2PBroadcastReceiver receiver;
 	private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
-	private p2pBroadcastReceiver mReceiver;
+	private P2PBroadcastReceiver mReceiver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,7 @@ public class InGameP2P extends Activity implements ConnectionInfoListener {
 	@Override
     public void onResume() {
         super.onResume();
-        receiver = new p2pBroadcastReceiver(mManager, mChannel, this,peerListListener);
+        receiver = new P2PBroadcastReceiver(mManager, mChannel, this,peerListListener);
         registerReceiver(receiver, intentFilter);
     }
 
