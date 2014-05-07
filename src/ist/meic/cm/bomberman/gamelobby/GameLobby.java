@@ -40,7 +40,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 	private Context context;
 	private boolean trying;
 	private BindTask communication;
-	private WaitTask waitToStart = new WaitTask();
+	private WaitTask waitToStart;
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private CustomBaseAdapter adapter;
@@ -162,6 +162,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 
 				if (!starting && connected) {
 					starting = true;
+					waitToStart = new WaitTask();
 					waitToStart.execute();
 				} else
 					Toast.makeText(context,
