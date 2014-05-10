@@ -34,10 +34,11 @@ public class WiFiGlobal {
 	}
 
 	public static WiFiGlobal getInstance() {
+		synchronized (WiFiGlobal.class) {
 
-		if (WiFiGlobal_Instance == null)
-			WiFiGlobal_Instance = new WiFiGlobal();
-
+			if (WiFiGlobal_Instance == null)
+				WiFiGlobal_Instance = new WiFiGlobal();
+		}
 		return WiFiGlobal_Instance;
 	}
 
@@ -107,8 +108,11 @@ public class WiFiGlobal {
 	}
 
 	public ArrayList<Client> getClients() {
-		if (clients == null)
-			clients = new ArrayList<Client>();
+		synchronized (WiFiGlobal.class) {
+
+			if (clients == null)
+				clients = new ArrayList<Client>();
+		}
 		return clients;
 	}
 

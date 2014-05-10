@@ -107,7 +107,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 	private Button play;
 
-	private WiFiGlobal global;
+	private static WiFiGlobal global = WiFiGlobal.getInstance();
 
 	private boolean starting;
 
@@ -142,8 +142,6 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 		manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
 		channel = manager.initialize(this, getMainLooper(), null);
-
-		global = WiFiGlobal.getInstance();
 
 		global.setContext(WiFiServiceDiscoveryActivity.this);
 
@@ -573,30 +571,30 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 				ObjectInputStream input;
 				ObjectOutputStream output;
 				Game game = global.getGame();
+				game.setReady(0);
 				ArrayList<Client> clients = global.getClients();
 				for (Client current : clients) {
 					input = current.getIn();
 					received = (Message) input.readObject();
-
 					if (received.getCode() == Message.READY)
 						game.setReady(received.getPlayerID());
 				}
 
 				boolean[] ready = game.getReady();
 
-				for (int i = 0; i < clients.size(); i++)
+				for (int i = 0; i < clients.size() + 1; i++)
 					if (!ready[i]) {
 						started = false;
 						break;
 					}
 
-				if (started) {
+				if (started)
 					toSend = new Message(Message.SUCCESS);
-					for (Client current : clients) {
-						output = current.getOut();
-						output.writeObject(toSend);
-						output.reset();
-					}
+				
+				for (Client current : clients) {
+					output = current.getOut();
+					output.writeObject(toSend);
+					output.reset();
 				}
 
 			} catch (IOException e) {
@@ -663,7 +661,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 			startActivity(i);
 		} else
 			Toast.makeText(WiFiServiceDiscoveryActivity.this,
-					"No other players are connected at the moment!",
+					"The other players are not connected at the moment!",
 					Toast.LENGTH_SHORT).show();
 	}
 

@@ -42,7 +42,7 @@ public class Manager implements Runnable, IManager {// To do
 
 	private String levelName;
 
-	private WiFiGlobal global;
+	private static WiFiGlobal global = WiFiGlobal.getInstance();
 	private static final String TAG = "ChatHandler";
 
 	public Manager(String playerName, Socket socket, String prefs) {
@@ -74,7 +74,7 @@ public class Manager implements Runnable, IManager {// To do
 
 	private void start() {
 		playerID = 0;
-		global = WiFiGlobal.getInstance();
+
 		if (global.getGame() == null) {
 			currentMap = new MapController(levelName, false);
 			currentMap.joinBomberman();
@@ -128,14 +128,16 @@ public class Manager implements Runnable, IManager {// To do
 
 				toSend = new Message(Message.SUCCESS, playerID, currentMap,
 						addPlayer(details, game), prefs);
-			} else
+
 				synchronized (global) {
 					ArrayList<Client> clients = global.getClients();
+					System.out.println("CLIENTS");
 					clients.add(new Client(socket, output, input, playerID));
 					global.setClients(clients);
 					global.setGame(game);
 					global.setMap(currentMap);
 				}
+			}
 
 		}
 

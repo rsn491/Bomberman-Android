@@ -26,6 +26,7 @@ public class GroupOwnerHandler extends Thread {
 	private String prefs;
 	private String playerName;
 	private static final String TAG = "GroupOwnerSocketHandler";
+	private static WiFiGlobal global = WiFiGlobal.getInstance();
 
 	public GroupOwnerHandler(String playerName, String prefs)
 			throws IOException {
@@ -39,7 +40,6 @@ public class GroupOwnerHandler extends Thread {
 			throw e;
 		}
 
-		WiFiGlobal global = WiFiGlobal.getInstance();
 		global.setServerSocket(socket);
 		this.prefs = prefs;
 		this.playerName = playerName;
@@ -49,7 +49,7 @@ public class GroupOwnerHandler extends Thread {
 	 * A ThreadPool for client sockets.
 	 */
 	private final ThreadPoolExecutor pool = new ThreadPoolExecutor(
-			THREAD_COUNT, THREAD_COUNT, 10000, TimeUnit.SECONDS,
+			THREAD_COUNT, THREAD_COUNT, 10, TimeUnit.SECONDS,
 			new LinkedBlockingQueue<Runnable>());
 	private Manager manager;
 	private boolean running;
@@ -62,7 +62,8 @@ public class GroupOwnerHandler extends Thread {
 				// A blocking operation. Initiate a ChatManager instance when
 				// there is a new connection
 
-				pool.execute(manager = new Manager(playerName, socket.accept(), prefs));
+				pool.execute(manager = new Manager(playerName, socket.accept(),
+						prefs));
 				Log.d(TAG, "Launching the I/O handler");
 
 			} catch (IOException e) {

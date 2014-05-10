@@ -29,12 +29,11 @@ public class ClientManager implements Runnable, IManager {
 
 	private String playerName;
 
-	private WiFiGlobal global;
+	private static WiFiGlobal global = WiFiGlobal.getInstance();
 
 	public ClientManager(String playerName, Socket socket) {
 		this.socket = socket;
 		this.playerName = playerName;
-		global = WiFiGlobal.getInstance();
 		global.setSocket(socket);
 		start();
 	}
@@ -62,9 +61,21 @@ public class ClientManager implements Runnable, IManager {
 			global.setPrefs(received.getPrefs());
 			global.setPlayerName(playerName);
 			WiFiServiceDiscoveryActivity.setCanPlay(true);
+			readyToPlay();
 		} else if (received.getCode() == Message.FAIL)
 			askForName();
 
+	}
+
+	private void readyToPlay() {
+		final Context context = WiFiGlobal.getInstance().getContext();
+		((Activity) context).runOnUiThread(new Runnable() {
+			public void run() {
+
+				Toast.makeText(context, "Ready To Play!", Toast.LENGTH_SHORT)
+						.show();
+			}
+		});
 	}
 
 	private void start() {
@@ -76,7 +87,7 @@ public class ClientManager implements Runnable, IManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		global.setOutput(output);
 		global.setInput(input);
 
