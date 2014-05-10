@@ -1,5 +1,6 @@
 package ist.meic.cm.bomberman;
 
+import ist.meic.cm.bomberman.p2p.WiFiServiceDiscoveryActivity;
 import ist.meic.cm.bomberman.settings.SettingsActivity;
 import ist.meic.cm.bomberman.util.SystemUiHider;
 
@@ -125,7 +126,7 @@ public class Menu extends Activity {
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
-										askForName(SINGLE);
+										askForName(SINGLE, InGame.class);
 									}
 
 								})
@@ -217,7 +218,7 @@ public class Menu extends Activity {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								if (connected())
-									askForName(CENTRALIZED);
+									askForName(CENTRALIZED, InGame.class);
 								else
 									Toast.makeText(Menu.this,
 											"You must connected to a Network!",
@@ -228,7 +229,8 @@ public class Menu extends Activity {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int which) {
-								askForName(DECENTRALIZED);
+								askForName(DECENTRALIZED,
+										WiFiServiceDiscoveryActivity.class);
 							}
 
 						})
@@ -325,7 +327,8 @@ public class Menu extends Activity {
 		mHideHandler.postDelayed(mHideRunnable, delayMillis);
 	}
 
-	private void askForName(final int mode) {
+	private void askForName(final int mode,
+			final Class<? extends Activity> activity) {
 
 		final AlertDialog.Builder alert = new AlertDialog.Builder(Menu.this)
 				.setTitle("Insert Player Name:");
@@ -339,7 +342,7 @@ public class Menu extends Activity {
 				String tmp = input.getText().toString().trim();
 				if (!tmp.equals(""))
 					value = tmp;
-				Intent intent = new Intent(Menu.this, InGame.class);
+				Intent intent = new Intent(Menu.this, activity);
 				intent.putExtra("player_name", value);
 				if (mode == SINGLE) {
 					// singlePlayer - mode 0

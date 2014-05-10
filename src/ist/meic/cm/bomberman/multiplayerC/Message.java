@@ -39,6 +39,8 @@ public class Message implements Serializable {
 
 	private int duration;
 
+	private String prefs;
+
 	public Message() {
 		this(Message.SUCCESS);
 	}
@@ -88,6 +90,17 @@ public class Message implements Serializable {
 			ArrayList<String> players, int duration) {
 		this(code, playerID, currentMap, players);
 		this.duration = duration;
+	}
+
+	public Message(int code, int playerID, MapController currentMap,
+			ArrayList<String> players, String prefs) {
+		this(code, playerID, currentMap, players);
+		this.prefs = prefs;
+	}
+
+	public Message(int code, int playerID) {
+		this(code);
+		this.playerID = playerID;
 	}
 
 	public int getCode() {
@@ -150,6 +163,10 @@ public class Message implements Serializable {
 	public int getDuration() {
 
 		return duration;
+	}
+
+	public String getPrefs() {
+		return prefs;
 	}
 
 }

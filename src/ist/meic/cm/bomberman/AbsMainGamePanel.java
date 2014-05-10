@@ -85,7 +85,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		return false;
 	}
 
-	void showGameOver() {
+	protected void showGameOver() {
 		AlertDialog.Builder ad = new AlertDialog.Builder(getContext())
 				.setTitle("Game Over!").setMessage(checkScores())
 				.setNeutralButton("OK", new DialogInterface.OnClickListener() {

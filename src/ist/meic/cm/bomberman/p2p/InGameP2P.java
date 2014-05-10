@@ -1,17 +1,22 @@
-package ist.meic.cm.bomberman;
+package ist.meic.cm.bomberman.p2p;
 
-import ist.meic.cm.bomberman.controller.MapController;
+import java.util.ArrayList;
+
+import ist.meic.cm.bomberman.AbsMainGamePanel;
+import ist.meic.cm.bomberman.InGame;
+import ist.meic.cm.bomberman.R;
+import ist.meic.cm.bomberman.SPMainGamePanel;
 import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.gamelobby.GameLobby;
 import ist.meic.cm.bomberman.multiplayerC.MPMainGamePanel;
 import ist.meic.cm.bomberman.multiplayerC.SyncMap;
+import ist.meic.cm.bomberman.p2p.manager.ClientManager;
+import ist.meic.cm.bomberman.p2p.manager.IManager;
 import ist.meic.cm.bomberman.settings.Settings;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
@@ -21,41 +26,42 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class InGame extends Activity {
-	private static int height;
-	private static int width;
-	private static boolean multiplayerC;
-	private static boolean prepared;
-	private static boolean connected;
-	private static AbsMainGamePanel gamePanel;
+public class InGameP2P extends Activity {
 
-	private MediaPlayer player;
-	private static MediaPlayer bomb_player;
-	private String levelName;
-	private Thread timer;
-	private String playerName;
-	private static int playerId;
-	private static Button quit, pause;
-	private static int robotSpeed;
+	private IManager manager;
+	private Intent intent;
+	private boolean prepared;
+	private boolean isClient;
 	private SharedPreferences prefs;
 	private static int time;
-
-	private static boolean over;
-
-	private Intent intent;
+	private static int robotSpeed;
 	private static Context InGame_context;
-	private static int pointsRobot, pointsOpon;
+	private String levelName;
 	private static int explosionDuration;
 	private static int explosionTimeout;
 	private static int explosionRange;
+	private static int pointsRobot;
+	private static int pointsOpon;
+
+	private MPDMainGamePanel gamePanel;
+	private static Button quit;
+	private static MediaPlayer bomb_player;
+	private Button pause;
+	private MediaPlayer player;
+	private String playerName;
+	private static int width;
+	private static int height;
+	private static boolean over;
+	private Thread timer;
+	private int playerId;
+	private ArrayList<String> playersList;
 
 	static final long INTERVAL = 1000;
 
@@ -63,7 +69,6 @@ public class InGame extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		prepared = false;
-		connected = false;
 		super.onCreate(savedInstanceState);
 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -71,28 +76,49 @@ public class InGame extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		loadPrefs();
-
 		intent = this.getIntent();
 
-		if (intent.getStringExtra("game_mode").equals("singleplayer")) {
-			Log.d("Debug", "Starting single player mode");
-			playerId = 0;
-			multiplayerC = false;
-		} else if (intent.getStringExtra("game_mode").equals("multiplayer")) {
-			Log.d("Debug", "Starting multi player mode");
-			multiplayerC = true;
+	/*	globalVariable = (GlobalClass) getApplicationContext();
+		
+		manager = globalVariable.getManager();*/
+
+		if (intent.getBooleanExtra("isClient", true)) {
+			isClient = true;
+		/*	genPrefs(((ClientManager) manager).getPrefs());
+			playerId = ((ClientManager) manager).getPlayerID();*/
+		} else {
+			isClient = false;
+			loadPrefs();
 		}
 
 		setContentView(R.layout.activity_in_game);
 		setKeyPad();
 		prepareLayout();
 
-		InGame_context = (Context) InGame.this;
+		InGame_context = (Context) InGameP2P.this;
+	}
+
+	private void genPrefs(String settings) {
+		prefs = PreferenceManager.getDefaultSharedPreferences(InGameP2P.this);
+
+		String[] setts = settings.split(" ");
+
+		time = Integer.parseInt(setts[0]);
+
+		robotSpeed = Integer.parseInt(setts[1]);
+
+		levelName = setts[3];
+
+		explosionDuration = Integer.parseInt(setts[4]);
+		explosionTimeout = Integer.parseInt(setts[5]);
+		explosionRange = Integer.parseInt(setts[6]);
+
+		pointsRobot = Integer.parseInt(setts[7]);
+		pointsOpon = Integer.parseInt(setts[8]);
 	}
 
 	private void loadPrefs() {
-		prefs = PreferenceManager.getDefaultSharedPreferences(InGame.this);
+		prefs = PreferenceManager.getDefaultSharedPreferences(InGameP2P.this);
 
 		time = Integer.parseInt(prefs.getString(Settings.DURATION,
 				Settings.DURATION_DEFAULT));
@@ -116,24 +142,6 @@ public class InGame extends Activity {
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-
-		if (multiplayerC)
-			registerReceiver(broadcastReceiver, new IntentFilter(
-					"your.custom.BROADCAST"));
-	}
-
-	@Override
-	public void onPause() {
-
-		if (multiplayerC)
-			unregisterReceiver(broadcastReceiver);
-
-		super.onPause();
-	}
-
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.in_game, menu);
@@ -144,6 +152,7 @@ public class InGame extends Activity {
 	private void setKeyPad() {
 		final Button up = (Button) findViewById(R.id.up_button);
 		up.setOnClickListener(new View.OnClickListener() {
+
 			public void onClick(View v) {
 				// Perform action on click
 				gamePanel.moveUp();
@@ -180,24 +189,9 @@ public class InGame extends Activity {
 			public void onClick(View v) {
 				// Perform action on click
 
-				if (multiplayerC
-						&& ((MPMainGamePanel) gamePanel).getOutput() != null) {
-					((MPMainGamePanel) gamePanel).endConnection();
-					intent = new Intent(getBaseContext(), SyncMap.class);
-					intent.putExtra("end", true);
-					intent.putExtra("option", OperationCodes.MAP);
-					startService(intent);
-				}
+				// To DO
 
-				if (timer != null) {
-					timer.interrupt();
-
-					gamePanel.stopController();
-
-				}
-				finish();
-
-				intent = new Intent(InGame.this,
+				intent = new Intent(InGameP2P.this,
 						ist.meic.cm.bomberman.Menu.class);
 				startActivity(intent);
 			}
@@ -226,7 +220,7 @@ public class InGame extends Activity {
 	private void playSoundMove() {
 		if (player != null)
 			player.release();
-		player = MediaPlayer.create(InGame.this, R.raw.move);
+		player = MediaPlayer.create(InGame_context, R.raw.move);
 		player.setVolume(100, 100);
 		player.start();
 	}
@@ -247,22 +241,13 @@ public class InGame extends Activity {
 				+ playerName);
 		((TextView) findViewById(R.id.player_score)).setText("Score\n0");
 
-		if (!multiplayerC) {
-			((TextView) findViewById(R.id.time_left)).setText("Time\n" + time
-					+ "s");
-			((TextView) findViewById(R.id.number_of_players))
-					.setText("Number\n1");
-		} else {
-			((TextView) findViewById(R.id.time_left)).setText("Time\n" + "--s");
-			((TextView) findViewById(R.id.number_of_players))
-					.setText("Number\n-");
-		}
+		((TextView) findViewById(R.id.time_left)).setText("Time\n" + "--s");
+		((TextView) findViewById(R.id.number_of_players)).setText("Number\n-");
 
 		final RelativeLayout rl = (RelativeLayout) findViewById(R.id.in_game_screen);
 		// sets the width and height of the game screen (pixels)
 		rl.getViewTreeObserver().addOnGlobalLayoutListener(
 				new OnGlobalLayoutListener() {
-					@SuppressLint("NewApi")
 					@SuppressWarnings("deprecation")
 					@Override
 					public void onGlobalLayout() {
@@ -290,100 +275,15 @@ public class InGame extends Activity {
 					}
 				});
 
-		if (multiplayerC) {
-			Intent i = new Intent(getApplicationContext(), GameLobby.class);
+		gamePanel = new MPDMainGamePanel(this, levelName);
 
-			i.putExtra("levelName", levelName);
+		/*if (isClient)
+			gamePanel.setMapController(((ClientManager) manager)
+					.getMapController());*/
 
-			i.putExtra("playerName", playerName);
-
-			gamePanel = new MPMainGamePanel(this, levelName);
-
-			startActivityForResult(i, 0);
-
-			connected = true;
-		}else {
-			gamePanel = new SPMainGamePanel(this, levelName);
-			timerThread();
-		}
+		timerThread();
 
 		rl.addView(gamePanel);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-
-		if (resultCode == 0) {
-			playerId = data.getIntExtra("playerId", 0);
-
-			if (playerId != 0)
-				chooseHead();
-
-			timerThread();
-			intent = new Intent(getBaseContext(), SyncMap.class);
-			intent.putExtra("option", OperationCodes.MAP);
-			startService(intent);
-			StringBuilder sb = new StringBuilder("Number\n");
-			sb.append(gamePanel.getMapController().getLastPlayerID());
-			((TextView) findViewById(R.id.number_of_players)).setText(sb
-					.toString());
-		} else if (resultCode == 1)
-			quit();
-
-	}
-
-	private void chooseHead() {
-		ImageView image = (ImageView) findViewById(R.id.head);
-		if (playerId == 1) {
-			image.setImageResource(R.drawable.mario);
-		} else
-			image.setImageResource(R.drawable.luigi);
-
-	}
-
-	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			updateUI(intent);
-		}
-
-	};
-
-	private void updateUI(Intent intent) {
-
-		gamePanel.setMapController((MapController) intent
-				.getSerializableExtra("mapController"));
-	}
-
-	public boolean updateTime() {
-
-		if (time == 0)
-			return false;
-
-		time--;
-		StringBuilder sb = new StringBuilder("Time\n");
-		sb.append(time);
-		sb.append("s");
-		((TextView) findViewById(R.id.time_left)).setText(sb.toString());
-
-		return true;
-	}
-
-	public static int getHeight() {
-		return height;
-	}
-
-	public static int getWidth() {
-		return width;
-	}
-
-	public static int getId() {
-		return playerId;
-	}
-
-	public static boolean isPrepared() {
-		return prepared;
 	}
 
 	private void timerThread() {
@@ -419,17 +319,18 @@ public class InGame extends Activity {
 		timer.start();
 	}
 
-	@Override
-	public void onBackPressed() {
-		pause.performClick();
-	}
+	public boolean updateTime() {
 
-	public static AbsMainGamePanel getGamePanel() {
-		return gamePanel;
-	}
+		if (time == 0)
+			return false;
 
-	public static boolean isSinglePlayer() {
-		return !multiplayerC;
+		time--;
+		StringBuilder sb = new StringBuilder("Time\n");
+		sb.append(time);
+		sb.append("s");
+		((TextView) findViewById(R.id.time_left)).setText(sb.toString());
+
+		return true;
 	}
 
 	public static int getRobotSpeed() {
@@ -467,5 +368,14 @@ public class InGame extends Activity {
 
 	public static void setDuration(int duration) {
 		time = duration;
+	}
+
+	public static int getWidth() {
+		return width;
+	}
+
+	public static int getHeight() {
+		// TODO Auto-generated method stub
+		return height;
 	}
 }

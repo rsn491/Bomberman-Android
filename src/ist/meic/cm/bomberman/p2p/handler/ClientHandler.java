@@ -1,9 +1,9 @@
-package ist.meic.cm.bomberman.p2p;
+package ist.meic.cm.bomberman.p2p.handler;
 
-import android.os.Handler;
 import android.util.Log;
 
-import ist.meic.cm.bomberman.p2p.Manager.Manager;
+import ist.meic.cm.bomberman.p2p.WiFiServiceDiscoveryActivity;
+import ist.meic.cm.bomberman.p2p.manager.ClientManager;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -13,13 +13,13 @@ import java.net.Socket;
 public class ClientHandler extends Thread {
 
 	private static final String TAG = "ClientSocketHandler";
-	private Handler handler;
-	private Manager manager;
+	private ClientManager manager;
 	private InetAddress mAddress;
+	private String playerName;
 
-	public ClientHandler(Handler handler, InetAddress groupOwnerAddress) {
-		this.handler = handler;
+	public ClientHandler(String playerName,InetAddress groupOwnerAddress) {
 		this.mAddress = groupOwnerAddress;
+		this.playerName=playerName;
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class ClientHandler extends Thread {
 			socket.connect(new InetSocketAddress(mAddress.getHostAddress(),
 					WiFiServiceDiscoveryActivity.SERVER_PORT), 5000);
 			Log.d(TAG, "Launching the I/O handler");
-			manager = new Manager(socket, handler);
+			manager = new ClientManager(playerName,socket);
 			new Thread(manager).start();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -43,7 +43,7 @@ public class ClientHandler extends Thread {
 		}
 	}
 
-	public Manager getManager() {
+	public ClientManager getManager() {
 		return manager;
 	}
 

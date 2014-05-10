@@ -23,7 +23,7 @@ public class MapController implements Serializable {
 	private MapModels mapModel;
 	private String map;
 
-	public MapController(String levelName) {
+	public MapController(String levelName, boolean ghostsMove) {
 		numberOfPlayers = 0;
 		bombermansStatus = new LinkedList<BombermanStatus>();
 		ghostsStatus = new LinkedList<GhostStatus>();
@@ -35,6 +35,14 @@ public class MapController implements Serializable {
 		loadGhosts();
 		ghostThread = new GhostThread(this);
 		ghostThread.setRunning(true);
+	}
+
+	public MapController(String levelName) {
+		this(levelName, true);
+		ghostThread.start();
+	}
+
+	public void moveGhosts() {
 		ghostThread.start();
 	}
 
