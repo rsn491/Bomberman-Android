@@ -87,11 +87,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 	private Button host, join;
 
-	private Thread handler = null;
-
-	private static Button start;
-
-	private boolean canStart;
+	private static Thread handler = null;
 
 	private boolean canJoin, canHost;
 
@@ -101,9 +97,9 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 	private static WaitTask waitToStart;
 
-	private boolean isClient, started;
+	private boolean isClient;
 
-	private InetAddress address;
+	private static InetAddress address;
 
 	private Button play;
 
@@ -115,11 +111,9 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		canStart = false;
 		canHost = true;
 		canJoin = true;
 		isClient = false;
-		started = false;
 		canPlay = false;
 		starting = false;
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -195,32 +189,6 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 		});
 
-		start = (Button) findViewById(R.id.StartP2P);
-		start.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				if (canStart)
-
-					if (started && isClient) {
-						handler = new ClientHandler(playerName, address);
-						handler.start();
-					} else if (!started) {
-						handler.start();
-						started = true;
-					} else
-						Toast.makeText(WiFiServiceDiscoveryActivity.this,
-								"You have already started!", Toast.LENGTH_SHORT)
-								.show();
-				else
-					Toast.makeText(WiFiServiceDiscoveryActivity.this,
-							"You can't start without having a connection!",
-							Toast.LENGTH_SHORT).show();
-			}
-
-		});
-
 		join = (Button) findViewById(R.id.Join);
 		join.setOnClickListener(new OnClickListener() {
 
@@ -291,7 +259,8 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 	}
 
 	public static void tryToStart() {
-		start.performClick();
+		handler = new ClientHandler(playerName, address);
+		handler.start();
 	}
 
 	@Override
@@ -483,7 +452,6 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 				String prefs = getPrefs();
 				global.setPrefs(prefs);
 				handler = new GroupOwnerHandler(playerName, prefs);
-				canStart = true;
 
 				Toast.makeText(WiFiServiceDiscoveryActivity.this,
 						"Connected as a Host!", Toast.LENGTH_SHORT).show();
@@ -497,12 +465,12 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 			Log.d(TAG, "Connected as peer");
 			handler = new ClientHandler(playerName, p2pInfo.groupOwnerAddress);
 			address = p2pInfo.groupOwnerAddress;
-			canStart = true;
 			isClient = true;
 			Toast.makeText(WiFiServiceDiscoveryActivity.this,
 					"Connected as a client!", Toast.LENGTH_SHORT).show();
 
 		}
+		handler.start();
 	}
 
 	private String getPrefs() {
@@ -590,7 +558,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 				if (started)
 					toSend = new Message(Message.SUCCESS);
-				
+
 				for (Client current : clients) {
 					output = current.getOut();
 					output.writeObject(toSend);
@@ -657,6 +625,9 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 		if (received.getCode() == Message.SUCCESS) {
 			Intent i = new Intent(WiFiServiceDiscoveryActivity.this,
 					InGame.class);
+
+			i.putExtra("isClient", isClient);
+			i.putExtra("game_mode", "multiplayerD");
 
 			startActivity(i);
 		} else

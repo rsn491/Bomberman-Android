@@ -6,7 +6,6 @@ import android.util.Log;
 
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.multiplayerC.Message;
-import ist.meic.cm.bomberman.p2p.InGameP2P;
 import ist.meic.cm.bomberman.p2p.WiFiServiceDiscoveryActivity;
 
 import java.io.IOException;

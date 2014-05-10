@@ -5,6 +5,8 @@ import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.gamelobby.GameLobby;
 import ist.meic.cm.bomberman.multiplayerC.MPMainGamePanel;
 import ist.meic.cm.bomberman.multiplayerC.SyncMap;
+import ist.meic.cm.bomberman.p2p.MPDMainGamePanel;
+import ist.meic.cm.bomberman.p2p.manager.WiFiGlobal;
 import ist.meic.cm.bomberman.settings.Settings;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -51,11 +53,14 @@ public class InGame extends Activity {
 	private static boolean over;
 
 	private Intent intent;
+	private boolean isClient;
 	private static Context InGame_context;
 	private static int pointsRobot, pointsOpon;
 	private static int explosionDuration;
 	private static int explosionTimeout;
 	private static int explosionRange;
+	private static boolean multiplayerD;
+	private static WiFiGlobal global = WiFiGlobal.getInstance();
 
 	static final long INTERVAL = 1000;
 
@@ -71,24 +76,53 @@ public class InGame extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		loadPrefs();
-
 		intent = this.getIntent();
 
 		if (intent.getStringExtra("game_mode").equals("singleplayer")) {
 			Log.d("Debug", "Starting single player mode");
 			playerId = 0;
 			multiplayerC = false;
+			multiplayerD = false;
 		} else if (intent.getStringExtra("game_mode").equals("multiplayer")) {
 			Log.d("Debug", "Starting multi player mode");
 			multiplayerC = true;
+			multiplayerD = false;
+		} else if (intent.getStringExtra("game_mode").equals("multiplayerD")) {
+			multiplayerD = true;
+			multiplayerC = false;
+			isClient = intent.getBooleanExtra("isClient", true);
+			playerId = global.getPlayerID();
+			playerName = global.getPlayerName();
 		}
+
+		if (!isClient)
+			loadPrefs();
+		else
+			genPrefs(global.getPrefs());
 
 		setContentView(R.layout.activity_in_game);
 		setKeyPad();
 		prepareLayout();
 
 		InGame_context = (Context) InGame.this;
+	}
+
+	private void genPrefs(String settings) {
+
+		String[] setts = settings.split(" ");
+
+		levelName = setts[0];
+
+		time = Integer.parseInt(setts[1]);
+
+		robotSpeed = Integer.parseInt(setts[2]);
+
+		explosionDuration = Integer.parseInt(setts[3]);
+		explosionTimeout = Integer.parseInt(setts[4]);
+		explosionRange = Integer.parseInt(setts[5]);
+
+		pointsRobot = Integer.parseInt(setts[6]);
+		pointsOpon = Integer.parseInt(setts[7]);
 	}
 
 	private void loadPrefs() {
@@ -241,13 +275,14 @@ public class InGame extends Activity {
 
 	public void prepareLayout() {
 
-		playerName = this.getIntent().getStringExtra("player_name");
+		if (!multiplayerD)
+			playerName = this.getIntent().getStringExtra("player_name");
 
 		((TextView) findViewById(R.id.player_name)).setText("Name\n"
 				+ playerName);
 		((TextView) findViewById(R.id.player_score)).setText("Score\n0");
 
-		if (!multiplayerC) {
+		if (!multiplayerC && !multiplayerD) {
 			((TextView) findViewById(R.id.time_left)).setText("Time\n" + time
 					+ "s");
 			((TextView) findViewById(R.id.number_of_players))
@@ -302,7 +337,18 @@ public class InGame extends Activity {
 			startActivityForResult(i, 0);
 
 			connected = true;
-		}else {
+		} else if (multiplayerD) {
+			gamePanel = new MPDMainGamePanel(this, levelName);
+			gamePanel.setMapController(global.getMap());
+			if (!isClient)
+				gamePanel.getMapController().moveGhosts();
+
+			if (playerId != 0)
+				chooseHead();
+
+			timerThread();
+			connected = true;
+		} else {
 			gamePanel = new SPMainGamePanel(this, levelName);
 			timerThread();
 		}
@@ -429,7 +475,7 @@ public class InGame extends Activity {
 	}
 
 	public static boolean isSinglePlayer() {
-		return !multiplayerC;
+		return !multiplayerC && !multiplayerD;
 	}
 
 	public static int getRobotSpeed() {

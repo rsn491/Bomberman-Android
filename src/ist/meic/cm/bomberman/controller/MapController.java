@@ -43,6 +43,8 @@ public class MapController implements Serializable {
 	}
 
 	public void moveGhosts() {
+		ghostThread = new GhostThread(this);
+		ghostThread.setRunning(true);
 		ghostThread.start();
 	}
 

@@ -17,9 +17,9 @@ public class ClientHandler extends Thread {
 	private InetAddress mAddress;
 	private String playerName;
 
-	public ClientHandler(String playerName,InetAddress groupOwnerAddress) {
+	public ClientHandler(String playerName, InetAddress groupOwnerAddress) {
 		this.mAddress = groupOwnerAddress;
-		this.playerName=playerName;
+		this.playerName = playerName;
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class ClientHandler extends Thread {
 			socket.connect(new InetSocketAddress(mAddress.getHostAddress(),
 					WiFiServiceDiscoveryActivity.SERVER_PORT), 5000);
 			Log.d(TAG, "Launching the I/O handler");
-			manager = new ClientManager(playerName,socket);
+			manager = new ClientManager(playerName, socket);
 			new Thread(manager).start();
 		} catch (IOException e) {
 			e.printStackTrace();

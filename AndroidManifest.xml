@@ -65,12 +65,6 @@
             android:label="@style/FullscreenTheme"
             android:noHistory="true" >
         </activity>
-         <activity
-            android:name="ist.meic.cm.bomberman.p2p.InGameP2P"
-            android:configChanges="keyboardHidden|screenSize"
-            android:label="@style/FullscreenTheme"
-            android:noHistory="true" >
-        </activity>
 
         <service
             android:name="ist.meic.cm.bomberman.multiplayerC.SyncMap"

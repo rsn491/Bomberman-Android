@@ -82,26 +82,25 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     public static final class id {
         public static final int Connect=0x7f0c000f;
         public static final int Exit=0x7f0c0017;
-        public static final int Host=0x7f0c001d;
-        public static final int Join=0x7f0c001c;
+        public static final int Host=0x7f0c001c;
+        public static final int Join=0x7f0c001b;
         public static final int LinearLayout1=0x7f0c000d;
         public static final int NewGame=0x7f0c0015;
         public static final int PlayP2P=0x7f0c001a;
         public static final int Quit=0x7f0c0011;
-        public static final int QuitP2P=0x7f0c001e;
+        public static final int QuitP2P=0x7f0c001d;
         public static final int Refresh=0x7f0c0012;
         public static final int Start=0x7f0c0010;
-        public static final int StartP2P=0x7f0c001b;
-        public static final int action_settings=0x7f0c0026;
+        public static final int action_settings=0x7f0c0025;
         public static final int bombButton=0x7f0c000b;
-        public static final int btnGetPreferences=0x7f0c0022;
-        public static final int container_root=0x7f0c001f;
-        public static final int descText=0x7f0c0025;
+        public static final int btnGetPreferences=0x7f0c0021;
+        public static final int container_root=0x7f0c001e;
+        public static final int descText=0x7f0c0024;
         public static final int down_button=0x7f0c0009;
-        public static final int fragment=0x7f0c0021;
+        public static final int fragment=0x7f0c0020;
         public static final int fullscreen_content_controls=0x7f0c0014;
         public static final int head=0x7f0c000c;
-        public static final int iconImage=0x7f0c0023;
+        public static final int iconImage=0x7f0c0022;
         public static final int imageView1=0x7f0c0019;
         public static final int imageView2=0x7f0c0018;
         public static final int in_game_screen=0x7f0c0004;
@@ -114,10 +113,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int quit_button=0x7f0c0006;
         public static final int right_button=0x7f0c000a;
         public static final int settings=0x7f0c0016;
-        public static final int status_text=0x7f0c0020;
+        public static final int status_text=0x7f0c001f;
         public static final int textView1=0x7f0c000e;
         public static final int time_left=0x7f0c0002;
-        public static final int titleText=0x7f0c0024;
+        public static final int titleText=0x7f0c0023;
         public static final int up_button=0x7f0c0008;
     }
     public static final class layout {
