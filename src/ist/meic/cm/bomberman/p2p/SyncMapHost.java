@@ -25,7 +25,6 @@ import android.os.IBinder;
 public class SyncMapHost extends Service {
 	private MPDMainGamePanel gamePanel;
 	private boolean end;
-	private OperationCodes option;
 	private boolean running;
 
 	@Override
@@ -39,9 +38,8 @@ public class SyncMapHost extends Service {
 
 		gamePanel = (MPDMainGamePanel) InGame.getGamePanel();
 		end = intent.getBooleanExtra("end", false);
-		option = (OperationCodes) intent.getSerializableExtra("option");
 		running = true;
-
+		System.out.println("inside service1");
 		ThreadRefresh td = new ThreadRefresh();
 		td.start();
 		return super.onStartCommand(intent, flags, startId);
@@ -68,19 +66,36 @@ public class SyncMapHost extends Service {
 			try {
 
 				if (end) {
-					toSend = new Message(Message.END);
-					// sendToServer();
+
+				/*	Client newHost = clients.get(0);
+					clients.remove(0);
+					toSend = new Message(Message.END, clients, newHost);
+
+					output = newHost.getOut();
+					sendToClient();*/
+					System.out.println("inside service2");
+					for(Client current : clients){
+						output = current.getOut();
+						toSend = new Message(Message.END);
+						sendToClient();
+					}
+
 					gamePanel.endConnection();
 					running = false;
-				} else
+				} else {
+					Client current;
 					while (running) {
-						for (Client current : clients) {
 
+						for (int i = 0; i < clients.size(); i++) {
+
+							current = clients.get(i);
 							input = current.getIn();
 							output = current.getOut();
 							received = (Message) input.readObject();
 
-							if (received.getCode() == Message.REQUEST) {
+							int code = received.getCode();
+
+							if (code == Message.REQUEST) {
 								OperationCodes request = received.getRequest();
 								if (request.equals(OperationCodes.BOMB))
 									gamePanel.getMapController().newBomb(
@@ -99,12 +114,23 @@ public class SyncMapHost extends Service {
 											gamePanel.getMapController());
 									sendToClient();
 								}
+							} else if (code == Message.END) {
+
+								clients.get(i).getSocket().close();
+
+								clients.remove(i);
+
+								gamePanel.getMapController()
+										.getBombermansStatus()
+										.get(current.getPlayerID()).die();
+								break;
 							}
 
 						}
 
 						sleep(REFRESH);
 					}
+				}
 
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

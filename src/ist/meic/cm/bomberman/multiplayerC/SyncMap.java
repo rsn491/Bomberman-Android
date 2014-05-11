@@ -85,8 +85,12 @@ public class SyncMap extends Service {
 							mapController = received.getGameMap();
 
 							handler.sendEmptyMessage(0);
+						} else if (received.getCode() == Message.END) {
+							running = false;
+							gamePanel.endConnection();
+							handler.sendEmptyMessage(1);
 						}
-						
+
 						sleep(REFRESH);
 					}
 
@@ -118,11 +122,19 @@ public class SyncMap extends Service {
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(android.os.Message msg) {
-			System.out.println("handling");
 			Intent intent = new Intent();
 			intent.setAction("your.custom.BROADCAST");
 			intent.setPackage("ist.meic.cm.bomberman");
-			intent.putExtra("mapController", mapController);
+			System.out.println(msg.what);
+			if (msg.what == 1) {
+				intent.putExtra("mode", 1);
+
+			} else {
+
+				intent.putExtra("mode", 0);
+				intent.putExtra("mapController", mapController);
+
+			}
 			sendBroadcast(intent);
 		}
 	};

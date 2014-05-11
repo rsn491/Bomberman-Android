@@ -1,5 +1,7 @@
 package ist.meic.cm.bomberman;
 
+import java.io.IOException;
+
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.gamelobby.GameLobby;
@@ -18,6 +20,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
+import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -214,14 +219,57 @@ public class InGame extends Activity {
 		quit.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// Perform action on click
-
-				if (multiplayerC
-						&& ((MPMainGamePanel) gamePanel).getOutput() != null) {
+				System.out.println("quit");
+				if (multiplayerD && !isClient) {
+					System.out.println("SERVICE");
+					intent = new Intent(getBaseContext(), SyncMapHost.class);
+					intent.putExtra("end", true);
+					startService(intent);
+				} else if ((multiplayerC && ((MPMainGamePanel) gamePanel)
+						.getOutput() != null)
+						|| (isClient && !((MPMainGamePanel) gamePanel)
+								.getState())) {
+					System.out.println("??");
 					((MPMainGamePanel) gamePanel).endConnection();
 					intent = new Intent(getBaseContext(), SyncMap.class);
 					intent.putExtra("end", true);
 					intent.putExtra("option", OperationCodes.MAP);
 					startService(intent);
+
+				}
+
+				if (multiplayerD) {
+					Channel channel = global.getChannel();
+					WifiP2pManager manager = global.getManager();
+
+					if (manager != null && channel != null) {
+						manager.removeGroup(channel, new ActionListener() {
+
+							@Override
+							public void onFailure(int reasonCode) {
+								Log.d("QUIT", "Disconnect failed. Reason :"
+										+ reasonCode);
+							}
+
+							@Override
+							public void onSuccess() {
+							}
+
+						});
+					}
+
+					if (isClient)
+						try {
+							global.getSocket().close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					else
+						try {
+							global.getServerSocket().close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 				}
 
 				if (timer != null) {
@@ -382,7 +430,6 @@ public class InGame extends Activity {
 
 	private void startHostService() {
 		intent = new Intent(getBaseContext(), SyncMapHost.class);
-		intent.putExtra("option", OperationCodes.MAP);
 		intent.putExtra("end", false);
 		startService(intent);
 	}
@@ -427,7 +474,11 @@ public class InGame extends Activity {
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			updateUI(intent);
+			if (intent.getIntExtra("mode", 1) == 1) {
+				System.out.println("QUIT!!!!!!!!!!!");
+				quit();
+			} else
+				updateUI(intent);
 		}
 
 	};

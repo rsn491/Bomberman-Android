@@ -2,6 +2,7 @@ package ist.meic.cm.bomberman.multiplayerC;
 
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
+import ist.meic.cm.bomberman.p2p.manager.Client;
 import ist.meic.cm.bomberman.status.BombermanStatus;
 import ist.meic.cm.bomberman.status.GhostStatus;
 
@@ -40,6 +41,10 @@ public class Message implements Serializable {
 	private int duration;
 
 	private String prefs;
+
+	private ArrayList<Client> clients;
+
+	private Client client;
 
 	public Message() {
 		this(Message.SUCCESS);
@@ -101,6 +106,12 @@ public class Message implements Serializable {
 	public Message(int code, int playerID) {
 		this(code);
 		this.playerID = playerID;
+	}
+
+	public Message(int code, ArrayList<Client> clients, Client client) {
+		this(code);
+		this.clients = clients;
+		this.client=client;
 	}
 
 	public int getCode() {
@@ -167,6 +178,22 @@ public class Message implements Serializable {
 
 	public String getPrefs() {
 		return prefs;
+	}
+
+	public ArrayList<Client> getClients() {
+		return clients;
+	}
+
+	public void setClients(ArrayList<Client> clients) {
+		this.clients = clients;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
 	}
 
 }

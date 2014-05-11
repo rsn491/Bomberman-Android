@@ -23,7 +23,6 @@ public class MPDMainGamePanel extends AbsMainGamePanel {
 
 	public MPDMainGamePanel(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 	}
 
 	public MPDMainGamePanel(Context context, String levelName) {
