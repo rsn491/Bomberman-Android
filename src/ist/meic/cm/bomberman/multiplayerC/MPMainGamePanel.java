@@ -4,6 +4,7 @@ import ist.meic.cm.bomberman.AbsMainGamePanel;
 import ist.meic.cm.bomberman.InGame;
 import ist.meic.cm.bomberman.R;
 import ist.meic.cm.bomberman.controller.OperationCodes;
+import ist.meic.cm.bomberman.model.Creature;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -164,6 +165,15 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 		super.pauseGame();
 
 		sendBombermanStatus();
+	}
+
+	@Override
+	public boolean gameOver(Creature creature) {
+		boolean over = super.gameOver(creature);
+		if (over)
+			sendBombermanStatus();
+		
+		return over;
 	}
 
 	private class MoveTask extends AsyncTask<Object, Void, Void> {

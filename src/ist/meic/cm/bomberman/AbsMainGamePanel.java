@@ -76,6 +76,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 								.isDestroyed()) || isDead()) {
 					gameEnded = true;
 					bS.setIgnore();
+					bS.die();
 
 					showGameOver();
 					return true;
