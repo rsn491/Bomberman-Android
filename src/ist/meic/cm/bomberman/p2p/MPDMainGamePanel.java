@@ -19,11 +19,7 @@ public class MPDMainGamePanel extends AbsMainGamePanel {
 	private ArrayList<Client> clients;
 	private Channel channel;
 	private WifiP2pManager manager;
-	private boolean canBomb;
 	private boolean connected;
-	private boolean exploded;
-	private int CAN_BOMB_AGAIN_INTERVAL;
-	private static final int ADJUST = 1000;
 
 	public MPDMainGamePanel(Context context) {
 		super(context);
@@ -32,9 +28,6 @@ public class MPDMainGamePanel extends AbsMainGamePanel {
 
 	public MPDMainGamePanel(Context context, String levelName) {
 		super(context, levelName);
-		canBomb = true;
-		exploded = true;
-		CAN_BOMB_AGAIN_INTERVAL = InGame.getExplosionTimeout() * ADJUST;
 	}
 
 	public void setServerSocket(ServerSocket serverSocket) {

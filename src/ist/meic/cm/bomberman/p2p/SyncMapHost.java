@@ -55,7 +55,7 @@ public class SyncMapHost extends Service {
 		private Message toSend;
 		private Message received;
 		private ServerSocket mySocket;
-		private static final long REFRESH = 500;
+		private static final long REFRESH = 100;
 
 		@Override
 		public void run() {
@@ -81,9 +81,24 @@ public class SyncMapHost extends Service {
 							received = (Message) input.readObject();
 
 							if (received.getCode() == Message.REQUEST) {
-								toSend = new Message(Message.SUCCESS,
-										gamePanel.getMapController());
-								sendToClient();
+								OperationCodes request = received.getRequest();
+								if (request.equals(OperationCodes.BOMB))
+									gamePanel.getMapController().newBomb(
+											current.getPlayerID());
+								else if (request.equals(OperationCodes.MOVE)) {
+									LinkedList<BombermanStatus> bombermansStatus = gamePanel
+											.getMapController()
+											.getBombermansStatus();
+									bombermansStatus.set(current.getPlayerID(),
+											received.getBombermanStatus());
+									gamePanel.getMapController()
+											.setBombermansStatus(
+													bombermansStatus);
+								} else if (request.equals(OperationCodes.MAP)) {
+									toSend = new Message(Message.SUCCESS,
+											gamePanel.getMapController());
+									sendToClient();
+								}
 							}
 
 						}
