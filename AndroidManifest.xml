@@ -71,6 +71,11 @@
             android:enabled="true"
             android:label="SyncMap" >
         </service>
+        <service
+            android:name="ist.meic.cm.bomberman.p2p.SyncMapHost"
+            android:enabled="true"
+            android:label="SyncMapHost" >
+        </service>
     </application>
 
 </manifest>

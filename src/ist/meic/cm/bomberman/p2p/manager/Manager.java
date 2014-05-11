@@ -130,7 +130,6 @@ public class Manager implements Runnable, IManager {// To do
 
 				synchronized (global) {
 					ArrayList<Client> clients = global.getClients();
-					System.out.println("CLIENTS");
 					clients.add(new Client(socket, output, input, playerID));
 					global.setClients(clients);
 					global.setGame(game);

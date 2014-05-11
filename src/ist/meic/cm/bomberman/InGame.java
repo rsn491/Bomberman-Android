@@ -6,6 +6,7 @@ import ist.meic.cm.bomberman.gamelobby.GameLobby;
 import ist.meic.cm.bomberman.multiplayerC.MPMainGamePanel;
 import ist.meic.cm.bomberman.multiplayerC.SyncMap;
 import ist.meic.cm.bomberman.p2p.MPDMainGamePanel;
+import ist.meic.cm.bomberman.p2p.SyncMapHost;
 import ist.meic.cm.bomberman.p2p.manager.WiFiGlobal;
 import ist.meic.cm.bomberman.settings.Settings;
 import android.annotation.SuppressLint;
@@ -153,7 +154,7 @@ public class InGame extends Activity {
 	public void onResume() {
 		super.onResume();
 
-		if (multiplayerC)
+		if (multiplayerC || (multiplayerD && isClient))
 			registerReceiver(broadcastReceiver, new IntentFilter(
 					"your.custom.BROADCAST"));
 	}
@@ -161,7 +162,7 @@ public class InGame extends Activity {
 	@Override
 	public void onPause() {
 
-		if (multiplayerC)
+		if (multiplayerC || (multiplayerD && isClient))
 			unregisterReceiver(broadcastReceiver);
 
 		super.onPause();
@@ -338,10 +339,33 @@ public class InGame extends Activity {
 
 			connected = true;
 		} else if (multiplayerD) {
-			gamePanel = new MPDMainGamePanel(this, levelName);
+
+			if (isClient) {
+				gamePanel = new MPMainGamePanel(this, levelName);
+				gamePanel.setSocket(global.getSocket());
+				gamePanel.setOutput(global.getOutput());
+				gamePanel.setInput(global.getInput());
+				gamePanel.setPlayerId(playerId);
+			} else {
+				gamePanel = new MPDMainGamePanel(this, levelName);
+				((MPDMainGamePanel) gamePanel).setServerSocket(global
+						.getServerSocket());
+				((MPDMainGamePanel) gamePanel).setClients(global.getClients());
+				((MPDMainGamePanel) gamePanel).setChannel(global.getChannel());
+				((MPDMainGamePanel) gamePanel).setManager(global.getManager());
+			}
 			gamePanel.setMapController(global.getMap());
-			if (!isClient)
+			if (!isClient) {
 				gamePanel.getMapController().moveGhosts();
+				((MPDMainGamePanel) gamePanel).setConnected();
+				startHostService();
+			} else
+				startServiceUpdate();
+
+			StringBuilder sb = new StringBuilder("Number\n");
+			sb.append(gamePanel.getMapController().getLastPlayerID());
+			((TextView) findViewById(R.id.number_of_players)).setText(sb
+					.toString());
 
 			if (playerId != 0)
 				chooseHead();
@@ -356,6 +380,13 @@ public class InGame extends Activity {
 		rl.addView(gamePanel);
 	}
 
+	private void startHostService() {
+		intent = new Intent(getBaseContext(), SyncMapHost.class);
+		intent.putExtra("option", OperationCodes.MAP);
+		intent.putExtra("end", false);
+		startService(intent);
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -367,9 +398,7 @@ public class InGame extends Activity {
 				chooseHead();
 
 			timerThread();
-			intent = new Intent(getBaseContext(), SyncMap.class);
-			intent.putExtra("option", OperationCodes.MAP);
-			startService(intent);
+			startServiceUpdate();
 			StringBuilder sb = new StringBuilder("Number\n");
 			sb.append(gamePanel.getMapController().getLastPlayerID());
 			((TextView) findViewById(R.id.number_of_players)).setText(sb
@@ -377,6 +406,13 @@ public class InGame extends Activity {
 		} else if (resultCode == 1)
 			quit();
 
+	}
+
+	private void startServiceUpdate() {
+		intent = new Intent(getBaseContext(), SyncMap.class);
+		intent.putExtra("option", OperationCodes.MAP);
+		intent.putExtra("end", false);
+		startService(intent);
 	}
 
 	private void chooseHead() {

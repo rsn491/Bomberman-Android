@@ -1,29 +1,32 @@
-package ist.meic.cm.bomberman.multiplayerC;
+package ist.meic.cm.bomberman.p2p;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.io.StreamCorruptedException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ist.meic.cm.bomberman.InGame;
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
+import ist.meic.cm.bomberman.multiplayerC.Message;
+import ist.meic.cm.bomberman.p2p.manager.Client;
 import ist.meic.cm.bomberman.status.BombermanStatus;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 
-public class SyncMap extends Service {
-	private MPMainGamePanel gamePanel;
+public class SyncMapHost extends Service {
+	private MPDMainGamePanel gamePanel;
 	private boolean end;
 	private OperationCodes option;
 	private boolean running;
-	private MapController mapController;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -34,10 +37,9 @@ public class SyncMap extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		gamePanel = (MPMainGamePanel) InGame.getGamePanel();
+		gamePanel = (MPDMainGamePanel) InGame.getGamePanel();
 		end = intent.getBooleanExtra("end", false);
 		option = (OperationCodes) intent.getSerializableExtra("option");
-
 		running = true;
 
 		ThreadRefresh td = new ThreadRefresh();
@@ -47,46 +49,45 @@ public class SyncMap extends Service {
 
 	private class ThreadRefresh extends Thread {
 
-		private Socket client;
+		private ArrayList<Client> clients;
 		private ObjectInputStream input;
 		private ObjectOutputStream output;
 		private Message toSend;
 		private Message received;
+		private ServerSocket mySocket;
 		private static final long REFRESH = 500;
 
 		@Override
 		public void run() {
 			super.run();
 
-			client = gamePanel.getClient();
+			clients = gamePanel.getClients();
 
-			input = gamePanel.getInput();
-
-			output = gamePanel.getOutput();
+			mySocket = gamePanel.getServerSocket();
 
 			try {
 
 				if (end) {
 					toSend = new Message(Message.END);
-					sendToServer();
+					// sendToServer();
 					gamePanel.endConnection();
 					running = false;
 				} else
 					while (running) {
-						toSend = new Message(Message.REQUEST, option);
+						for (Client current : clients) {
 
-						sendToServer();
+							input = current.getIn();
+							output = current.getOut();
+							received = (Message) input.readObject();
 
-						received = (Message) input.readObject();
+							if (received.getCode() == Message.REQUEST) {
+								toSend = new Message(Message.SUCCESS,
+										gamePanel.getMapController());
+								sendToClient();
+							}
 
-						if (received.getCode() == Message.SUCCESS) {
-							System.out.println("Received answer");
-
-							mapController = received.getGameMap();
-
-							handler.sendEmptyMessage(0);
 						}
-						
+
 						sleep(REFRESH);
 					}
 
@@ -106,7 +107,7 @@ public class SyncMap extends Service {
 
 		}
 
-		private void sendToServer() throws IOException {
+		private void sendToClient() throws IOException {
 			synchronized (output) {
 				output.writeObject(toSend);
 				output.reset();
@@ -114,17 +115,5 @@ public class SyncMap extends Service {
 
 		}
 	}
-
-	private Handler handler = new Handler() {
-		@Override
-		public void handleMessage(android.os.Message msg) {
-			System.out.println("handling");
-			Intent intent = new Intent();
-			intent.setAction("your.custom.BROADCAST");
-			intent.setPackage("ist.meic.cm.bomberman");
-			intent.putExtra("mapController", mapController);
-			sendBroadcast(intent);
-		}
-	};
 
 }
