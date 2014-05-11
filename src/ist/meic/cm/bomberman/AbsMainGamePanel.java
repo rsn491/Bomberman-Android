@@ -18,6 +18,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -92,7 +93,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						if (!InGame.isSinglePlayer() && !InGame.Over()
-						/* && canContinue */) {
+								&& canContinue) {
 							resumeWatching();
 						} else
 							InGame.quit();
@@ -114,7 +115,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		alert.setPositiveButton("Continue",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
-						// continueThread();
+						continueThread();
 					}
 
 				});
@@ -132,17 +133,30 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		}
 	}
 
-	/*
-	 * private void continueThread() { final Handler handler = new Handler();
-	 * Runnable runnable = new Runnable() { boolean running = true;
-	 * 
-	 * public void run() { while (!getThread().isInterrupted() && running) {
-	 * 
-	 * handler.post(new Runnable() { public void run() { if (InGame.Over() ||
-	 * !continueToWatch()) { gameEnded = false; gameOver(null); running = false;
-	 * } } }); } } }; continueThread = new Thread(runnable);
-	 * continueThread.start(); }
-	 */
+	private void continueThread() {
+		final Handler handler = new Handler();
+		Runnable runnable = new Runnable() {
+			boolean running = true;
+
+			public void run() {
+				while (!getThread().isInterrupted() && running) {
+
+					handler.post(new Runnable() {
+						public void run() {
+							if (running)
+								if (!InGame.Over() && !continueToWatch()) {
+
+									showGameOver();
+									running = false;
+								}
+						}
+					});
+				}
+			}
+		};
+		continueThread = new Thread(runnable);
+		continueThread.start();
+	}
 
 	private String checkScores() {
 		StringBuilder sb = new StringBuilder();
@@ -159,7 +173,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 					winner = i;
 				}
 
-			if (!InGame.Over()/* canContinue = continueToWatch() */) {
+			if (!InGame.Over() && (canContinue = continueToWatch())) {
 				if (tmp == max)
 					sb.append("\n\nIt currently is a draw!");
 				else if (max > tmp) {
@@ -184,16 +198,18 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		return sb.toString();
 	}
 
-	/*
-	 * private boolean continueToWatch() {
-	 * 
-	 * int i = 0;
-	 * 
-	 * for (BombermanStatus current : mapController.getBombermansStatus()) { if
-	 * (i != playerId && !current.isDead()) return true; i++; }
-	 * 
-	 * return false; }
-	 */
+	private boolean continueToWatch() {
+
+		int i = 0;
+
+		for (BombermanStatus current : mapController.getBombermansStatus()) {
+			if (i != playerId && !current.isDead())
+				return true;
+			i++;
+		}
+
+		return false;
+	}
 
 	public MapController getMapController() {
 		return mapController;

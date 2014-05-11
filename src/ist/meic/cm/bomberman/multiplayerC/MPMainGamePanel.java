@@ -170,9 +170,14 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 	@Override
 	public boolean gameOver(Creature creature) {
 		boolean over = super.gameOver(creature);
-		if (over)
-			sendBombermanStatus();
-		
+		if (over) {
+			mapController.getBombermansStatus().get(playerId).die();
+			synchronized (output) {
+				mt = new MoveTask();
+				mt.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			}
+		}
+
 		return over;
 	}
 
