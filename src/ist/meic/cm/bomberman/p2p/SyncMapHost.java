@@ -16,11 +16,16 @@ import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.multiplayerC.Message;
 import ist.meic.cm.bomberman.p2p.manager.Client;
+import ist.meic.cm.bomberman.p2p.manager.WiFiGlobal;
 import ist.meic.cm.bomberman.status.BombermanStatus;
 import android.app.Service;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
+import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 
 public class SyncMapHost extends Service {
 	private MPDMainGamePanel gamePanel;
@@ -67,21 +72,49 @@ public class SyncMapHost extends Service {
 
 				if (end) {
 
-				/*	Client newHost = clients.get(0);
-					clients.remove(0);
-					toSend = new Message(Message.END, clients, newHost);
-
-					output = newHost.getOut();
-					sendToClient();*/
+					/*
+					 * Client newHost = clients.get(0); clients.remove(0);
+					 * toSend = new Message(Message.END, clients, newHost);
+					 * 
+					 * output = newHost.getOut(); sendToClient();
+					 */
 					System.out.println("inside service2");
-					for(Client current : clients){
+					for (Client current : clients) {
 						output = current.getOut();
+						input = current.getIn();
+						System.out.println("inside service3");
+						// received = (Message) input.readObject();
 						toSend = new Message(Message.END);
 						sendToClient();
+						System.out.println("inside service4");
 					}
-
+					System.out.println("inside service5");
 					gamePanel.endConnection();
+					mySocket.close();
 					running = false;
+
+					WiFiGlobal global = WiFiGlobal.getInstance();
+
+					Channel channel = global.getChannel();
+					WifiP2pManager manager = global.getManager();
+
+					if (manager != null && channel != null) {
+						manager.removeGroup(channel, new ActionListener() {
+
+							@Override
+							public void onFailure(int reasonCode) {
+								Log.d("QUIT", "Disconnect failed. Reason :"
+										+ reasonCode);
+							}
+
+							@Override
+							public void onSuccess() {
+							}
+
+						});
+					}
+					global.clear();
+
 				} else {
 					Client current;
 					while (running) {

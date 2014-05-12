@@ -155,4 +155,7 @@ public class WiFiGlobal {
 		return playerName;
 	}
 
+	public synchronized void clear() {
+		WiFiGlobal_Instance = null;
+	}
 }

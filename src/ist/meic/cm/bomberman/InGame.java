@@ -220,8 +220,10 @@ public class InGame extends Activity {
 			public void onClick(View v) {
 				// Perform action on click
 				System.out.println("quit");
+
 				if (multiplayerD && !isClient) {
 					System.out.println("SERVICE");
+					((MPDMainGamePanel) gamePanel).endConnection();
 					intent = new Intent(getBaseContext(), SyncMapHost.class);
 					intent.putExtra("end", true);
 					startService(intent);
@@ -238,7 +240,7 @@ public class InGame extends Activity {
 
 				}
 
-				if (multiplayerD) {
+				if (isClient) {
 					Channel channel = global.getChannel();
 					WifiP2pManager manager = global.getManager();
 
@@ -257,19 +259,7 @@ public class InGame extends Activity {
 
 						});
 					}
-
-					if (isClient)
-						try {
-							global.getSocket().close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					else
-						try {
-							global.getServerSocket().close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+					global.clear();
 				}
 
 				if (timer != null) {
@@ -278,12 +268,14 @@ public class InGame extends Activity {
 					gamePanel.stopController();
 
 				}
+
 				finish();
 
 				intent = new Intent(InGame.this,
 						ist.meic.cm.bomberman.Menu.class);
 				startActivity(intent);
 			}
+
 		});
 		pause = (Button) findViewById(R.id.pause_button);
 		pause.setOnClickListener(new View.OnClickListener() {
@@ -600,5 +592,9 @@ public class InGame extends Activity {
 
 	public static void setDuration(int duration) {
 		time = duration;
+	}
+
+	public static boolean isDecentralized() {
+		return multiplayerD;
 	}
 }

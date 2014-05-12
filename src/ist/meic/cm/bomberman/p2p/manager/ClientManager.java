@@ -15,6 +15,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,6 +30,8 @@ public class ClientManager implements Runnable, IManager {
 
 	private String playerName;
 
+	private CommTask commTask;
+
 	private static WiFiGlobal global = WiFiGlobal.getInstance();
 
 	public ClientManager(String playerName, Socket socket) {
@@ -41,6 +44,11 @@ public class ClientManager implements Runnable, IManager {
 	@Override
 	public void run() {
 
+		communication();
+
+	}
+
+	private void communication() {
 		try {
 			toSend = new Message(Message.JOIN, playerName);
 
@@ -64,7 +72,6 @@ public class ClientManager implements Runnable, IManager {
 			readyToPlay();
 		} else if (received.getCode() == Message.FAIL)
 			askForName();
-
 	}
 
 	private void readyToPlay() {
@@ -113,6 +120,7 @@ public class ClientManager implements Runnable, IManager {
 
 				alert.setPositiveButton("OK",
 						new DialogInterface.OnClickListener() {
+
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
 								String value = hint;
@@ -127,7 +135,9 @@ public class ClientManager implements Runnable, IManager {
 								Toast.makeText(context,
 										"Trying to Start Again!",
 										Toast.LENGTH_SHORT).show();
-								WiFiServiceDiscoveryActivity.tryToStart();
+
+								commTask = new CommTask();
+								commTask.execute();
 							}
 						});
 
@@ -148,4 +158,15 @@ public class ClientManager implements Runnable, IManager {
 		return input;
 	}
 
+	private class CommTask extends AsyncTask<Object, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Object... objects) {
+
+			communication();
+
+			return null;
+		}
+
+	}
 }

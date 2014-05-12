@@ -88,23 +88,29 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 	}
 
 	protected void showGameOver() {
-		AlertDialog.Builder ad = new AlertDialog.Builder(getContext())
-				.setTitle("Game Over!").setMessage(checkScores())
-				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						if (!InGame.isSinglePlayer() && !InGame.Over()
-								&& canContinue) {
-							resumeWatching();
-						} else
-							InGame.quit();
-					}
-				}).setCancelable(false).setIcon(R.drawable.ic_launcher);
-		try {
+		synchronized (CHECKINGAMEOVER) {
+			AlertDialog.Builder ad = new AlertDialog.Builder(getContext())
+					.setTitle("Game Over!")
+					.setMessage(checkScores())
+					.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									if (!InGame.isSinglePlayer()
+											&& !InGame.Over() && canContinue) {
+										resumeWatching();
+									} else
+										InGame.quit();
+								}
+							}).setCancelable(false)
+					.setIcon(R.drawable.ic_launcher);
+			try {
 
-			ad.show();
+				ad.show();
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

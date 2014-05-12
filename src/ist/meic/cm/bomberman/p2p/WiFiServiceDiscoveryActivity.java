@@ -258,11 +258,6 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 		});
 	}
 
-	public static void tryToStart() {
-		handler = new ClientHandler(playerName, address);
-		handler.start();
-	}
-
 	@Override
 	protected void onRestart() {
 		Fragment frag = getFragmentManager().findFragmentByTag("services");

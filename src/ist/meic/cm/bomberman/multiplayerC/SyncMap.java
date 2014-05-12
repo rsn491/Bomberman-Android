@@ -71,6 +71,7 @@ public class SyncMap extends Service {
 					sendToServer();
 					gamePanel.endConnection();
 					running = false;
+					client.close();
 				} else
 					while (running) {
 						toSend = new Message(Message.REQUEST, option);
@@ -89,6 +90,7 @@ public class SyncMap extends Service {
 							running = false;
 							gamePanel.endConnection();
 							handler.sendEmptyMessage(1);
+							System.out.println("END");
 						}
 
 						sleep(REFRESH);
