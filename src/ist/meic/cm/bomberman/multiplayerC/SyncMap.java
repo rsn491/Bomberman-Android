@@ -88,7 +88,6 @@ public class SyncMap extends Service {
 							handler.sendEmptyMessage(0);
 						} else if (received.getCode() == Message.END) {
 							running = false;
-							gamePanel.endConnection();
 							handler.sendEmptyMessage(1);
 						}
 

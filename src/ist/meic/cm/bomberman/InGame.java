@@ -217,7 +217,7 @@ public class InGame extends Activity {
 		});
 		quit = (Button) findViewById(R.id.quit_button);
 		quit.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
+			public void onClick(View v) {  
 				// Perform action on click
 				System.out.println("quit");
 
@@ -225,6 +225,7 @@ public class InGame extends Activity {
 					((MPDMainGamePanel) gamePanel).endConnection();
 					intent = new Intent(getBaseContext(), SyncMapHost.class);
 					intent.putExtra("end", true);
+					stopService(intent);
 					startService(intent);
 				} else if ((multiplayerC && ((MPMainGamePanel) gamePanel)
 						.getOutput() != null)
@@ -465,7 +466,7 @@ public class InGame extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getIntExtra("mode", 1) == 1) {
-				stopService(new Intent(InGame.this, SyncMap.class));
+				stopService(new Intent(getBaseContext(), SyncMap.class));
 				quit();
 			} else
 				updateUI(intent);
