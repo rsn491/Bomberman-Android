@@ -90,7 +90,6 @@ public class SyncMap extends Service {
 							running = false;
 							gamePanel.endConnection();
 							handler.sendEmptyMessage(1);
-							System.out.println("END");
 						}
 
 						sleep(REFRESH);
@@ -127,7 +126,6 @@ public class SyncMap extends Service {
 			Intent intent = new Intent();
 			intent.setAction("your.custom.BROADCAST");
 			intent.setPackage("ist.meic.cm.bomberman");
-			System.out.println(msg.what);
 			if (msg.what == 1) {
 				intent.putExtra("mode", 1);
 

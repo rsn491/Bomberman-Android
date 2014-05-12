@@ -222,7 +222,6 @@ public class InGame extends Activity {
 				System.out.println("quit");
 
 				if (multiplayerD && !isClient) {
-					System.out.println("SERVICE");
 					((MPDMainGamePanel) gamePanel).endConnection();
 					intent = new Intent(getBaseContext(), SyncMapHost.class);
 					intent.putExtra("end", true);
@@ -231,7 +230,6 @@ public class InGame extends Activity {
 						.getOutput() != null)
 						|| (isClient && !((MPMainGamePanel) gamePanel)
 								.getState())) {
-					System.out.println("??");
 					((MPMainGamePanel) gamePanel).endConnection();
 					intent = new Intent(getBaseContext(), SyncMap.class);
 					intent.putExtra("end", true);
@@ -467,7 +465,7 @@ public class InGame extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getIntExtra("mode", 1) == 1) {
-				System.out.println("QUIT!!!!!!!!!!!");
+				stopService(new Intent(InGame.this, SyncMap.class));
 				quit();
 			} else
 				updateUI(intent);

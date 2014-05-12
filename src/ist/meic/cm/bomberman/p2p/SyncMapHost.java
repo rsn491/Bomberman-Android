@@ -44,7 +44,6 @@ public class SyncMapHost extends Service {
 		gamePanel = (MPDMainGamePanel) InGame.getGamePanel();
 		end = intent.getBooleanExtra("end", false);
 		running = true;
-		System.out.println("inside service1");
 		ThreadRefresh td = new ThreadRefresh();
 		td.start();
 		return super.onStartCommand(intent, flags, startId);
@@ -72,23 +71,12 @@ public class SyncMapHost extends Service {
 
 				if (end) {
 
-					/*
-					 * Client newHost = clients.get(0); clients.remove(0);
-					 * toSend = new Message(Message.END, clients, newHost);
-					 * 
-					 * output = newHost.getOut(); sendToClient();
-					 */
-					System.out.println("inside service2");
 					for (Client current : clients) {
 						output = current.getOut();
 						input = current.getIn();
-						System.out.println("inside service3");
-						// received = (Message) input.readObject();
 						toSend = new Message(Message.END);
 						sendToClient();
-						System.out.println("inside service4");
 					}
-					System.out.println("inside service5");
 					gamePanel.endConnection();
 					mySocket.close();
 					running = false;
