@@ -6,7 +6,6 @@ import ist.meic.cm.bomberman.status.GhostStatus;
 import ist.meic.cm.bomberman.status.Status;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class ExplodingThread extends Thread {
 	protected final static int OTHER_LINE_STEP = 21;

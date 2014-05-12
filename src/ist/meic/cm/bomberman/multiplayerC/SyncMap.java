@@ -52,7 +52,7 @@ public class SyncMap extends Service {
 		private ObjectOutputStream output;
 		private Message toSend;
 		private Message received;
-		private static final long REFRESH = 500;
+		private static final long REFRESH = 400;
 
 		@Override
 		public void run() {

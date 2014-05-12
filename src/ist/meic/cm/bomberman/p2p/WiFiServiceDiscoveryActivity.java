@@ -1,6 +1,25 @@
 package ist.meic.cm.bomberman.p2p;
 
-import android.annotation.SuppressLint;
+import ist.meic.cm.bomberman.InGame;
+import ist.meic.cm.bomberman.R;
+import ist.meic.cm.bomberman.multiplayerC.Message;
+import ist.meic.cm.bomberman.p2p.WiFiDirectServicesList.DeviceClickListener;
+import ist.meic.cm.bomberman.p2p.WiFiDirectServicesList.WiFiDevicesAdapter;
+import ist.meic.cm.bomberman.p2p.handler.ClientHandler;
+import ist.meic.cm.bomberman.p2p.handler.GroupOwnerHandler;
+import ist.meic.cm.bomberman.p2p.manager.Client;
+import ist.meic.cm.bomberman.p2p.manager.Game;
+import ist.meic.cm.bomberman.p2p.manager.WiFiGlobal;
+import ist.meic.cm.bomberman.settings.Settings;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
@@ -23,40 +42,15 @@ import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Handler.Callback;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import ist.meic.cm.bomberman.InGame;
-import ist.meic.cm.bomberman.R;
-import ist.meic.cm.bomberman.multiplayerC.Message;
-import ist.meic.cm.bomberman.p2p.WiFiDirectServicesList.DeviceClickListener;
-import ist.meic.cm.bomberman.p2p.WiFiDirectServicesList.WiFiDevicesAdapter;
-import ist.meic.cm.bomberman.p2p.handler.ClientHandler;
-import ist.meic.cm.bomberman.p2p.handler.GroupOwnerHandler;
-import ist.meic.cm.bomberman.p2p.manager.Client;
-import ist.meic.cm.bomberman.p2p.manager.Game;
-import ist.meic.cm.bomberman.p2p.manager.Manager;
-import ist.meic.cm.bomberman.p2p.manager.WiFiGlobal;
-import ist.meic.cm.bomberman.settings.Settings;
-import ist.meic.cm.bomberman.settings.SettingsActivity;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class WiFiServiceDiscoveryActivity extends Activity implements
 		DeviceClickListener, ConnectionInfoListener {

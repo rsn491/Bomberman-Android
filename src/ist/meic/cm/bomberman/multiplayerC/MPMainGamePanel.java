@@ -18,8 +18,8 @@ import android.os.AsyncTask;
 
 public class MPMainGamePanel extends AbsMainGamePanel {
 
-	private int CAN_BOMB_AGAIN_INTERVAL;
-	private static final int ADJUST = 1000;
+	private long CAN_BOMB_AGAIN_INTERVAL;
+	private static final long ADJUST = 1000;
 	private static final Object BOMBLOCK = new Object();
 	private boolean connected;
 	private boolean canBomb;
@@ -36,7 +36,7 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 		canBomb = true;
 		connected = true;
 		exploded = true;
-		CAN_BOMB_AGAIN_INTERVAL = InGame.getExplosionTimeout() * ADJUST;
+		CAN_BOMB_AGAIN_INTERVAL = (long) (InGame.getExplosionTimeout() * ADJUST);
 	}
 
 	@Override

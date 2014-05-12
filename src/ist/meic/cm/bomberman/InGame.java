@@ -1,7 +1,5 @@
 package ist.meic.cm.bomberman;
 
-import java.io.IOException;
-
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.gamelobby.GameLobby;
@@ -52,7 +50,7 @@ public class InGame extends Activity {
 	private String playerName;
 	private static int playerId;
 	private static Button quit, pause;
-	private static int robotSpeed;
+	private static double robotSpeed;
 	private SharedPreferences prefs;
 	private static int time;
 
@@ -62,8 +60,8 @@ public class InGame extends Activity {
 	private boolean isClient;
 	private static Context InGame_context;
 	private static int pointsRobot, pointsOpon;
-	private static int explosionDuration;
-	private static int explosionTimeout;
+	private static double explosionDuration;
+	private static double explosionTimeout;
 	private static int explosionRange;
 	private static boolean multiplayerD;
 	private static WiFiGlobal global = WiFiGlobal.getInstance();
@@ -121,10 +119,10 @@ public class InGame extends Activity {
 
 		time = Integer.parseInt(setts[1]);
 
-		robotSpeed = Integer.parseInt(setts[2]);
+		robotSpeed = Double.parseDouble(setts[2]);
 
-		explosionDuration = Integer.parseInt(setts[3]);
-		explosionTimeout = Integer.parseInt(setts[4]);
+		explosionDuration = Double.parseDouble(setts[3]);
+		explosionTimeout = Double.parseDouble(setts[4]);
 		explosionRange = Integer.parseInt(setts[5]);
 
 		pointsRobot = Integer.parseInt(setts[6]);
@@ -137,14 +135,14 @@ public class InGame extends Activity {
 		time = Integer.parseInt(prefs.getString(Settings.DURATION,
 				Settings.DURATION_DEFAULT));
 
-		robotSpeed = Integer.parseInt(prefs.getString(Settings.RS,
+		robotSpeed = Double.parseDouble(prefs.getString(Settings.RS,
 				Settings.RS_DEFAULT));
 
 		levelName = prefs.getString(Settings.MAP, Settings.MAP_DEFAULT);
 
-		explosionDuration = Integer.parseInt(prefs.getString(Settings.ED,
+		explosionDuration = Double.parseDouble(prefs.getString(Settings.ED,
 				Settings.ED_DEFAULT));
-		explosionTimeout = Integer.parseInt(prefs.getString(Settings.ET,
+		explosionTimeout = Double.parseDouble(prefs.getString(Settings.ET,
 				Settings.ET_DEFAULT));
 		explosionRange = Integer.parseInt(prefs.getString(Settings.ER,
 				Settings.ER_DEFAULT));
@@ -217,7 +215,7 @@ public class InGame extends Activity {
 		});
 		quit = (Button) findViewById(R.id.quit_button);
 		quit.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {  
+			public void onClick(View v) {
 				// Perform action on click
 				System.out.println("quit");
 
@@ -556,16 +554,16 @@ public class InGame extends Activity {
 		return !multiplayerC && !multiplayerD;
 	}
 
-	public static int getRobotSpeed() {
+	public static double getRobotSpeed() {
 
 		return robotSpeed;
 	}
 
-	public static int getExplosionDuration() {
+	public static double getExplosionDuration() {
 		return explosionDuration;
 	}
 
-	public static int getExplosionTimeout() {
+	public static double getExplosionTimeout() {
 		return explosionTimeout;
 	}
 

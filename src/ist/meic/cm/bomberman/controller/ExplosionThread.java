@@ -8,30 +8,29 @@ import ist.meic.cm.bomberman.status.Status;
 
 import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.List;
 
 public class ExplosionThread extends Thread implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -390850487009272286L;
-	private int EXPLOSION_DURATION;
-	private int EXPLOSION_TIMEOUT;
-	private int EXPLOSION_RANGE;
+	private long EXPLOSION_DURATION;
+	private long EXPLOSION_TIMEOUT;
+	private long EXPLOSION_RANGE;
 	private MapController mapController;
 	private int position;
 	private BombStatus bombStatus;
 	private char[] array;
 	protected final static int OTHER_LINE_STEP = 21;
-	private static final int ADJUST = 1000;
+	private static final long ADJUST = 1000;
 
 	public ExplosionThread(int position, BombStatus bombStatus,
 			MapController mapController) {
 		this.mapController = mapController;
 		this.position = position;
 		this.bombStatus = bombStatus;
-		EXPLOSION_DURATION = InGame.getExplosionDuration() * ADJUST;
-		EXPLOSION_TIMEOUT = InGame.getExplosionTimeout() * ADJUST;
+		EXPLOSION_DURATION = (long) (InGame.getExplosionDuration() * ADJUST);
+		EXPLOSION_TIMEOUT = (long) (InGame.getExplosionTimeout() * ADJUST);
 		EXPLOSION_RANGE = InGame.getExplosionRange();
 	}
 

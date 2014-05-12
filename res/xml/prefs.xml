@@ -20,7 +20,7 @@
             android:title="Game Duration" />
         <EditTextPreference
             android:defaultValue="1"
-            android:inputType="number"
+            android:inputType="number|numberDecimal"
             android:key="robotSpeed"
             android:summary="Please enter the robot speed"
             android:title="Robot Speed" />
@@ -30,13 +30,13 @@
         android:title="Explosion Settings" >
         <EditTextPreference
             android:defaultValue="3"
-            android:inputType="number"
+            android:inputType="number|numberDecimal"
             android:key="explosionTimeout"
             android:summary="Please enter the explosion timeout"
             android:title="Explosion Timeout" />
         <EditTextPreference
             android:defaultValue="3"
-            android:inputType="number"
+            android:inputType="number|numberDecimal"
             android:key="explosionDuration"
             android:summary="Please enter the explosion duration"
             android:title="Explosion Duration" />

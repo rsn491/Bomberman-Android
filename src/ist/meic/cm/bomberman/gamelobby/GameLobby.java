@@ -122,7 +122,7 @@ public class GameLobby extends Activity implements OnItemClickListener {
 									communication.execute(
 											InGame.getGamePanel(), playerId,
 											levelName, value, playerName,
-											GameLobby.this, Integer
+											GameLobby.this, Double
 													.toString((InGame
 															.getRobotSpeed())),
 											getExplosionDetails(),
@@ -369,10 +369,16 @@ public class GameLobby extends Activity implements OnItemClickListener {
 			setResult(0, i);
 
 			finish();
-		} else
+		} else{
 			Toast.makeText(context,
 					"No other players are connected at the moment!",
-					Toast.LENGTH_SHORT).show();
+					Toast.LENGTH_SHORT).show();Intent i = new Intent();
+
+					i.putExtra("playerId", playerId);
+
+					setResult(0, i);
+
+					finish();}
 	}
 
 	@Override
