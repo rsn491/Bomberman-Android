@@ -59,6 +59,8 @@ public class SyncMapHost extends Service {
 		private ServerSocket mySocket;
 		private static final long REFRESH = 100;
 
+		private WiFiGlobal global = WiFiGlobal.getInstance();
+
 		@Override
 		public void run() {
 			super.run();
@@ -71,17 +73,17 @@ public class SyncMapHost extends Service {
 
 				if (end) {
 
-					for (Client current : clients) {
-						output = current.getOut();
-						input = current.getIn();
-						toSend = new Message(Message.END);
-						sendToClient();
+					synchronized (global) {
+						for (Client current : clients) {
+							output = current.getOut();
+							input = current.getIn();
+							toSend = new Message(Message.END);
+							sendToClient();
+						}
 					}
 					gamePanel.endConnection();
 					mySocket.close();
 					running = false;
-
-					WiFiGlobal global = WiFiGlobal.getInstance();
 
 					Channel channel = global.getChannel();
 					WifiP2pManager manager = global.getManager();
@@ -107,48 +109,55 @@ public class SyncMapHost extends Service {
 					Client current;
 					while (running) {
 
-						for (int i = 0; i < clients.size(); i++) {
+						synchronized (global) {
+							for (int i = 0; i < clients.size(); i++) {
 
-							current = clients.get(i);
-							input = current.getIn();
-							output = current.getOut();
-							received = (Message) input.readObject();
+								current = clients.get(i);
+								input = current.getIn();
+								output = current.getOut();
+								received = (Message) input.readObject();
 
-							int code = received.getCode();
+								int code = received.getCode();
 
-							if (code == Message.REQUEST) {
-								OperationCodes request = received.getRequest();
-								if (request.equals(OperationCodes.BOMB))
-									gamePanel.getMapController().newBomb(
-											current.getPlayerID());
-								else if (request.equals(OperationCodes.MOVE)) {
-									LinkedList<BombermanStatus> bombermansStatus = gamePanel
-											.getMapController()
-											.getBombermansStatus();
-									bombermansStatus.set(current.getPlayerID(),
-											received.getBombermanStatus());
+								if (code == Message.REQUEST) {
+									OperationCodes request = received
+											.getRequest();
+									if (request.equals(OperationCodes.BOMB))
+										gamePanel.getMapController().newBomb(
+												current.getPlayerID());
+									else if (request
+											.equals(OperationCodes.MOVE)) {
+										LinkedList<BombermanStatus> bombermansStatus = gamePanel
+												.getMapController()
+												.getBombermansStatus();
+										bombermansStatus.set(
+												current.getPlayerID(),
+												received.getBombermanStatus());
+										gamePanel.getMapController()
+												.setBombermansStatus(
+														bombermansStatus);
+									} else if (request
+											.equals(OperationCodes.MAP)) {
+										toSend = new Message(Message.SUCCESS,
+												gamePanel.getMapController());
+										sendToClient();
+									}
+								} else if (code == Message.END) {
+
+									System.out.println("ENDS!!");
+									
+									current.getSocket().close();
+
+									clients.remove(i);
+
 									gamePanel.getMapController()
-											.setBombermansStatus(
-													bombermansStatus);
-								} else if (request.equals(OperationCodes.MAP)) {
-									toSend = new Message(Message.SUCCESS,
-											gamePanel.getMapController());
-									sendToClient();
+											.getBombermansStatus()
+											.get(current.getPlayerID()).die();
+									break;
 								}
-							} else if (code == Message.END) {
 
-								clients.get(i).getSocket().close();
-
-								clients.remove(i);
-
-								gamePanel.getMapController()
-										.getBombermansStatus()
-										.get(current.getPlayerID()).die();
-								break;
 							}
-
 						}
-
 						sleep(REFRESH);
 					}
 				}

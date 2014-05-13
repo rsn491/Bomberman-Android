@@ -1,6 +1,7 @@
 package ist.meic.cm.bomberman.p2p.manager;
 
 import ist.meic.cm.bomberman.controller.MapController;
+import ist.meic.cm.bomberman.p2p.handler.GroupOwnerHandler;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -28,6 +29,7 @@ public class WiFiGlobal {
 	private static MapController map;
 	private static String prefs;
 	private static String playerName;
+	private static GroupOwnerHandler handler;
 
 	private WiFiGlobal() {
 		game = null;
@@ -165,12 +167,25 @@ public class WiFiGlobal {
 		serverSocket = null;
 		output = null;
 		input = null;
-		if(clients != null)
+		if (clients != null)
 			clients.clear();
 		clients = null;
 		playerID = 0;
 		map = null;
 		prefs = null;
 		playerName = null;
+		if (handler != null){
+			handler.setRunning();
+			handler.setCanStart(false);
+		}
+		handler = null;
+	}
+
+	public void setHandler(GroupOwnerHandler handler) {
+		this.handler = handler;
+	}
+
+	public GroupOwnerHandler getHandler() {
+		return handler;
 	}
 }

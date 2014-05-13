@@ -4,11 +4,9 @@ import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.p2p.manager.Client;
 import ist.meic.cm.bomberman.status.BombermanStatus;
-import ist.meic.cm.bomberman.status.GhostStatus;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Message implements Serializable {
 
@@ -45,6 +43,8 @@ public class Message implements Serializable {
 	private ArrayList<Client> clients;
 
 	private Client client;
+
+	private boolean canStart;
 
 	public Message() {
 		this(Message.SUCCESS);
@@ -111,7 +111,13 @@ public class Message implements Serializable {
 	public Message(int code, ArrayList<Client> clients, Client client) {
 		this(code);
 		this.clients = clients;
-		this.client=client;
+		this.client = client;
+	}
+
+	public Message(int code, int playerID, MapController currentMap,
+			ArrayList<String> players, String prefs, boolean canStart) {
+		this(code, playerID, currentMap, players, prefs);
+		this.canStart = canStart;
 	}
 
 	public int getCode() {
@@ -194,6 +200,14 @@ public class Message implements Serializable {
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	public boolean canStart() {
+		return canStart;
+	}
+
+	public void setCanStart(boolean canStart) {
+		this.canStart = canStart;
 	}
 
 }

@@ -12,11 +12,16 @@ import java.util.LinkedList;
 import ist.meic.cm.bomberman.InGame;
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
+import ist.meic.cm.bomberman.p2p.manager.WiFiGlobal;
 import ist.meic.cm.bomberman.status.BombermanStatus;
 import android.app.Service;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
+import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 
 public class SyncMap extends Service {
 	private MPMainGamePanel gamePanel;
@@ -69,9 +74,36 @@ public class SyncMap extends Service {
 				if (end) {
 					toSend = new Message(Message.END);
 					sendToServer();
-					gamePanel.endConnection();
 					running = false;
-					client.close();
+
+					if (InGame.isClient()) {
+						WiFiGlobal global = WiFiGlobal.getInstance();
+						Channel channel = global.getChannel();
+						WifiP2pManager manager = global.getManager();
+
+						if (manager != null && channel != null) {
+							manager.removeGroup(channel, new ActionListener() {
+
+								@Override
+								public void onFailure(int reasonCode) {
+									Log.d("QUIT", "Disconnect failed. Reason :"
+											+ reasonCode);
+								}
+
+								@Override
+								public void onSuccess() {
+									try {
+										client.close();
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+
+							});
+						}
+						WiFiGlobal.clear();
+					}
 				} else
 					while (running) {
 						toSend = new Message(Message.REQUEST, option);

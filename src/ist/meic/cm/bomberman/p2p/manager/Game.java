@@ -55,4 +55,8 @@ public class Game {
 	public int getDuration() {
 		return duration;
 	}
+
+	public boolean is4Players() {
+		return mapController.is4Players();
+	}
 }

@@ -50,17 +50,27 @@ public class MapModels implements Serializable {
 			"WWWWWWWWWWWWWWWWWWWW";
 	
 	private String currentMap;
+	private boolean fourPlayers;
 
 	public MapModels(String levelName) {
-		if(levelName.equals("Level1"))
+		if(levelName.equals("Level1")){
 			currentMap = MAP1;
-		else if(levelName.equals("Level2"))
+			fourPlayers = false;
+		} else if(levelName.equals("Level2")){
 			currentMap = MAP2;
-		else if(levelName.equals("Level3"))
+			fourPlayers = true;
+		} else if(levelName.equals("Level3")){
 			currentMap = MAP3;
+			fourPlayers = true;
+		}
 	}
 
 	public  String getMap() {
 		return currentMap;
+	}
+
+	public boolean is4Players() {
+		
+		return fourPlayers;
 	}
 }

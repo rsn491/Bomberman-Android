@@ -52,6 +52,7 @@ public class GroupOwnerHandler extends Thread {
 	private ThreadPoolExecutor pool;
 	private Manager manager;
 	private boolean running;
+	private boolean autoStart;
 
 	@Override
 	public void run() {
@@ -89,4 +90,11 @@ public class GroupOwnerHandler extends Thread {
 		return manager;
 	}
 
+	public void setCanStart(boolean autoStart) {
+		this.autoStart = autoStart;
+	}
+
+	public boolean canStart() {
+		return autoStart;
+	}
 }

@@ -199,4 +199,8 @@ public class MapController implements Serializable {
 			return scoreTable.getScore(playerId);
 		return 0;
 	}
+	
+	public boolean is4Players(){
+		return mapModel.is4Players();
+	}
 }

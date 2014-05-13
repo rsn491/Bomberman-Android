@@ -57,7 +57,7 @@ public class InGame extends Activity {
 	private static boolean over;
 
 	private Intent intent;
-	private boolean isClient;
+	private static boolean isClient;
 	private static Context InGame_context;
 	private static int pointsRobot, pointsOpon;
 	private static double explosionDuration;
@@ -232,11 +232,12 @@ public class InGame extends Activity {
 					intent = new Intent(getBaseContext(), SyncMap.class);
 					intent.putExtra("end", true);
 					intent.putExtra("option", OperationCodes.MAP);
+					stopService(intent);
 					startService(intent);
 
 				}
 
-				if (isClient) {
+				else if (isClient) {
 					Channel channel = global.getChannel();
 					WifiP2pManager manager = global.getManager();
 
@@ -463,7 +464,6 @@ public class InGame extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getIntExtra("mode", 1) == 1) {
-				stopService(new Intent(getBaseContext(), SyncMap.class));
 				((MPMainGamePanel) gamePanel).endConnection();
 				quit();
 			} else
@@ -593,5 +593,9 @@ public class InGame extends Activity {
 
 	public static boolean isDecentralized() {
 		return multiplayerD;
+	}
+
+	public static boolean isClient() {
+		return isClient;
 	}
 }

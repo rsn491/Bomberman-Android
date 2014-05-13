@@ -99,6 +99,8 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 	private static WiFiGlobal global = WiFiGlobal.getInstance();
 
+	private static boolean autoPlay;
+
 	private boolean starting;
 
 	private boolean connected;
@@ -113,6 +115,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 		canPlay = false;
 		starting = false;
 		connected = false;
+		autoPlay = false;
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -150,7 +153,8 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 						if (!starting) {
 							global.setManager(manager);
 							global.setChannel(channel);
-							((GroupOwnerHandler) handler).setRunning();
+
+							global.setHandler((GroupOwnerHandler) handler);
 
 							startTask = new StartTask();
 							startTask.execute();
@@ -421,7 +425,6 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 			@Override
 			public void onSuccess() {
 				appendStatus("Connecting to service");
-				System.out.println("connect P2P");
 
 			}
 
@@ -566,8 +569,12 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 						break;
 					}
 
-				if (started)
+				if (started) {
 					toSend = new Message(Message.SUCCESS);
+					if (clients.size() < 3
+							|| (game.is4Players() && clients.size() < 4))
+						global.getHandler().setCanStart(true);
+				}
 
 				for (Client current : clients) {
 					output = current.getOut();
@@ -601,23 +608,24 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 		@Override
 		protected Void doInBackground(Object... objects) {
-			try {
+			if (!autoPlay)
+				try {
 
-				toSend = new Message(Message.READY, global.getPlayerID());
+					toSend = new Message(Message.READY, global.getPlayerID());
 
-				ObjectOutputStream output = global.getOutput();
-				output.writeObject(toSend);
-				output.reset();
+					ObjectOutputStream output = global.getOutput();
+					output.writeObject(toSend);
+					output.reset();
 
-				ObjectInputStream input = global.getInput();
-				received = (Message) input.readObject();
+					ObjectInputStream input = global.getInput();
+					received = (Message) input.readObject();
 
-			} catch (IOException e) {
-				started = false;
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+				} catch (IOException e) {
+					started = false;
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
 			return null;
 		}
 
@@ -632,7 +640,8 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 	}
 
 	private void startGame(Message received) {
-		if (received.getCode() == Message.SUCCESS) {
+		if ((received != null && received.getCode() == Message.SUCCESS)
+				|| autoPlay) {
 			Intent i = new Intent(WiFiServiceDiscoveryActivity.this,
 					InGame.class);
 
@@ -651,5 +660,9 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 		Toast.makeText(getApplicationContext(),
 				"TIMEOUT: Couldn't play the game!\nTry again!",
 				Toast.LENGTH_SHORT).show();
+	}
+
+	public static void setAutoPlay() {
+		autoPlay = true;
 	}
 }

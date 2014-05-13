@@ -7,6 +7,7 @@ import android.util.Log;
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.multiplayerC.Message;
 import ist.meic.cm.bomberman.p2p.WiFiServiceDiscoveryActivity;
+import ist.meic.cm.bomberman.p2p.handler.GroupOwnerHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -126,8 +127,14 @@ public class Manager implements Runnable, IManager {// To do
 			playerID = currentMap.joinBomberman();
 			if (playerID != -1) {
 
-				toSend = new Message(Message.SUCCESS, playerID, currentMap,
-						addPlayer(details, game), prefs);
+				GroupOwnerHandler handler = global.getHandler();
+
+				if (handler != null && handler.canStart())
+					toSend = new Message(Message.SUCCESS, playerID, currentMap,
+							addPlayer(details, game), prefs, true);
+				else
+					toSend = new Message(Message.SUCCESS, playerID, currentMap,
+							addPlayer(details, game), prefs);
 
 				synchronized (global) {
 					ArrayList<Client> clients = global.getClients();

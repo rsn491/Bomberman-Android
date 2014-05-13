@@ -14,7 +14,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -70,6 +69,9 @@ public class ClientManager implements Runnable, IManager {
 			global.setPlayerName(playerName);
 			WiFiServiceDiscoveryActivity.setCanPlay(true);
 			readyToPlay();
+			
+			if(received.canStart())
+				WiFiServiceDiscoveryActivity.setAutoPlay();
 		} else if (received.getCode() == Message.FAIL)
 			askForName();
 	}
