@@ -14,20 +14,20 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 
 public class WiFiGlobal {
 
-	private static WiFiGlobal WiFiGlobal_Instance;
-	private Context context;
-	private Game game;
-	private WifiP2pManager manager;
-	private Channel channel;
-	private Socket socket;
-	private ServerSocket serverSocket;
-	private ObjectOutputStream output;
-	private ObjectInputStream input;
-	private ArrayList<Client> clients;
-	private int playerID;
-	private MapController map;
-	private String prefs;
-	private String playerName;
+	private static volatile WiFiGlobal WiFiGlobal_Instance = null;
+	private static Context context;
+	private static Game game;
+	private static WifiP2pManager manager;
+	private static Channel channel;
+	private static Socket socket;
+	private static ServerSocket serverSocket;
+	private static ObjectOutputStream output;
+	private static ObjectInputStream input;
+	private static ArrayList<Client> clients;
+	private static int playerID;
+	private static MapController map;
+	private static String prefs;
+	private static String playerName;
 
 	private WiFiGlobal() {
 		game = null;
@@ -155,7 +155,22 @@ public class WiFiGlobal {
 		return playerName;
 	}
 
-	public synchronized void clear() {
+	public static synchronized void clear() {
 		WiFiGlobal_Instance = null;
+		context = null;
+		game = null;
+		manager = null;
+		channel = null;
+		socket = null;
+		serverSocket = null;
+		output = null;
+		input = null;
+		if(clients != null)
+			clients.clear();
+		clients = null;
+		playerID = 0;
+		map = null;
+		prefs = null;
+		playerName = null;
 	}
 }

@@ -101,6 +101,8 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 	private boolean starting;
 
+	private boolean connected;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,6 +112,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 		isClient = false;
 		canPlay = false;
 		starting = false;
+		connected = false;
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -244,6 +247,22 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 					});
 				}
+
+				if (connected)
+					try {
+						if (!isClient)
+
+							global.getServerSocket().close();
+
+						else
+							global.getSocket().close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				WiFiGlobal.clear();
+
 				Intent intent = new Intent(WiFiServiceDiscoveryActivity.this,
 						ist.meic.cm.bomberman.Menu.class);
 				startActivity(intent);
@@ -428,6 +447,8 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
+
+		connected = true;
 
 		/*
 		 * The group owner accepts connections using a server socket and then

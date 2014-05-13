@@ -48,6 +48,7 @@ public class Manager implements Runnable, IManager {// To do
 		this.socket = socket;
 		this.prefs = prefs;
 		this.playerName = playerName;
+		System.out.println(playerName);
 		genPrefs();
 		start();
 	}

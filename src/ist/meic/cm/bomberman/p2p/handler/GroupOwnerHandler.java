@@ -36,21 +36,20 @@ public class GroupOwnerHandler extends Thread {
 			Log.d("GroupOwnerSocketHandler", "Socket Started");
 		} catch (IOException e) {
 			e.printStackTrace();
-			pool.shutdownNow();
 			throw e;
 		}
 
 		global.setServerSocket(socket);
 		this.prefs = prefs;
 		this.playerName = playerName;
+		pool = new ThreadPoolExecutor(THREAD_COUNT, THREAD_COUNT, 10,
+				TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 	}
 
 	/**
 	 * A ThreadPool for client sockets.
 	 */
-	private final ThreadPoolExecutor pool = new ThreadPoolExecutor(
-			THREAD_COUNT, THREAD_COUNT, 10, TimeUnit.SECONDS,
-			new LinkedBlockingQueue<Runnable>());
+	private ThreadPoolExecutor pool;
 	private Manager manager;
 	private boolean running;
 
@@ -82,7 +81,7 @@ public class GroupOwnerHandler extends Thread {
 
 	public void setRunning() {
 		this.running = false;
-		pool.shutdownNow();
+		pool.shutdown();
 	}
 
 	public Manager getManager() {

@@ -101,7 +101,7 @@ public class SyncMapHost extends Service {
 
 						});
 					}
-					global.clear();
+					WiFiGlobal.clear();
 
 				} else {
 					Client current;

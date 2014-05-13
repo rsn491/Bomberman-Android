@@ -75,7 +75,7 @@ public class ClientManager implements Runnable, IManager {
 	}
 
 	private void readyToPlay() {
-		final Context context = WiFiGlobal.getInstance().getContext();
+		final Context context = global.getContext();
 		((Activity) context).runOnUiThread(new Runnable() {
 			public void run() {
 
@@ -102,7 +102,7 @@ public class ClientManager implements Runnable, IManager {
 
 	private void askForName() {
 
-		final Context context = WiFiGlobal.getInstance().getContext();
+		final Context context = global.getContext();
 		((Activity) context).runOnUiThread(new Runnable() {
 			public void run() {
 

@@ -217,7 +217,6 @@ public class InGame extends Activity {
 		quit.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// Perform action on click
-				System.out.println("quit");
 
 				if (multiplayerD && !isClient) {
 					((MPDMainGamePanel) gamePanel).endConnection();
@@ -227,7 +226,7 @@ public class InGame extends Activity {
 					startService(intent);
 				} else if ((multiplayerC && ((MPMainGamePanel) gamePanel)
 						.getOutput() != null)
-						|| (isClient && !((MPMainGamePanel) gamePanel)
+						|| (isClient && ((MPMainGamePanel) gamePanel)
 								.getState())) {
 					((MPMainGamePanel) gamePanel).endConnection();
 					intent = new Intent(getBaseContext(), SyncMap.class);
@@ -256,7 +255,7 @@ public class InGame extends Activity {
 
 						});
 					}
-					global.clear();
+					WiFiGlobal.clear();
 				}
 
 				if (timer != null) {
@@ -465,6 +464,7 @@ public class InGame extends Activity {
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getIntExtra("mode", 1) == 1) {
 				stopService(new Intent(getBaseContext(), SyncMap.class));
+				((MPMainGamePanel) gamePanel).endConnection();
 				quit();
 			} else
 				updateUI(intent);
