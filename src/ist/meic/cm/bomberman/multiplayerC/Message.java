@@ -46,6 +46,8 @@ public class Message implements Serializable {
 
 	private boolean canStart;
 
+	private int time;
+
 	public Message() {
 		this(Message.SUCCESS);
 	}
@@ -118,6 +120,12 @@ public class Message implements Serializable {
 			ArrayList<String> players, String prefs, boolean canStart) {
 		this(code, playerID, currentMap, players, prefs);
 		this.canStart = canStart;
+	}
+
+	public Message(int code, int playerID, MapController currentMap,
+			ArrayList<String> players, String prefs, boolean canStart, int time) {
+		this(code, playerID, currentMap, players, prefs, canStart);
+		this.time = time;
 	}
 
 	public int getCode() {
@@ -208,6 +216,11 @@ public class Message implements Serializable {
 
 	public void setCanStart(boolean canStart) {
 		this.canStart = canStart;
+	}
+
+	public int getTime() {
+
+		return time;
 	}
 
 }

@@ -157,6 +157,15 @@ public class MPMainGamePanel extends AbsMainGamePanel {
 				R.drawable.right3));
 		map.setBomberman3D(BitmapFactory.decodeResource(getResources(),
 				R.drawable.down3));
+		
+		map.setBomberman4U(BitmapFactory.decodeResource(getResources(),
+				R.drawable.up4));
+		map.setBomberman4L(BitmapFactory.decodeResource(getResources(),
+				R.drawable.left4));
+		map.setBomberman4R(BitmapFactory.decodeResource(getResources(),
+				R.drawable.right4));
+		map.setBomberman4D(BitmapFactory.decodeResource(getResources(),
+				R.drawable.down4));
 	}
 
 	@Override

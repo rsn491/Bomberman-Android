@@ -70,7 +70,6 @@ public class InGame extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		prepared = false;
 		connected = false;
 		super.onCreate(savedInstanceState);
@@ -102,7 +101,7 @@ public class InGame extends Activity {
 		if (!isClient)
 			loadPrefs();
 		else
-			genPrefs(global.getPrefs());
+			genPrefs(global.getPrefs(), intent);
 
 		setContentView(R.layout.activity_in_game);
 		setKeyPad();
@@ -111,13 +110,18 @@ public class InGame extends Activity {
 		InGame_context = (Context) InGame.this;
 	}
 
-	private void genPrefs(String settings) {
+	private void genPrefs(String settings, Intent intent) {
 
 		String[] setts = settings.split(" ");
 
 		levelName = setts[0];
 
 		time = Integer.parseInt(setts[1]);
+
+		int temp = intent.getIntExtra("duration", time);
+
+		if (temp != time)
+			time = temp;
 
 		robotSpeed = Double.parseDouble(setts[2]);
 
@@ -168,6 +172,8 @@ public class InGame extends Activity {
 		if (multiplayerC || (multiplayerD && isClient))
 			unregisterReceiver(broadcastReceiver);
 
+		if (!multiplayerC)
+			quit.performClick();
 		super.onPause();
 	}
 
@@ -394,6 +400,7 @@ public class InGame extends Activity {
 			gamePanel.setMapController(global.getMap());
 			if (!isClient) {
 				gamePanel.getMapController().moveGhosts();
+				global.getGame().timerThread();
 				((MPDMainGamePanel) gamePanel).setConnected();
 				startHostService();
 			} else
@@ -427,20 +434,24 @@ public class InGame extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (resultCode == 0) {
-			playerId = data.getIntExtra("playerId", 0);
+		if (data != null) {
+			if (resultCode == 0) {
+				playerId = data.getIntExtra("playerId", 0);
 
-			if (playerId != 0)
-				chooseHead();
+				if (playerId != 0)
+					chooseHead();
 
-			timerThread();
-			startServiceUpdate();
-			StringBuilder sb = new StringBuilder("Number\n");
-			sb.append(gamePanel.getMapController().getLastPlayerID());
-			((TextView) findViewById(R.id.number_of_players)).setText(sb
-					.toString());
-		} else if (resultCode == 1)
-			quit();
+				time = data.getIntExtra("duration", time);
+
+				timerThread();
+				startServiceUpdate();
+				StringBuilder sb = new StringBuilder("Number\n");
+				sb.append(gamePanel.getMapController().getLastPlayerID());
+				((TextView) findViewById(R.id.number_of_players)).setText(sb
+						.toString());
+			} else if (resultCode == 1)
+				quit();
+		}
 
 	}
 
@@ -453,10 +464,12 @@ public class InGame extends Activity {
 
 	private void chooseHead() {
 		ImageView image = (ImageView) findViewById(R.id.head);
-		if (playerId == 1) {
+		if (playerId == 1)
 			image.setImageResource(R.drawable.mario);
-		} else
+		else if (playerId == 2)
 			image.setImageResource(R.drawable.luigi);
+		else
+			image.setImageResource(R.drawable.head4);
 
 	}
 
@@ -471,11 +484,22 @@ public class InGame extends Activity {
 		}
 
 	};
+	private int numPlayers = 0;
 
 	private void updateUI(Intent intent) {
 
 		gamePanel.setMapController((MapController) intent
 				.getSerializableExtra("mapController"));
+
+		int tmp = numPlayers;
+
+		numPlayers = gamePanel.getMapController().getLastPlayerID();
+		if (tmp != numPlayers) {
+			StringBuilder sb = new StringBuilder("Number\n");
+			sb.append(numPlayers);
+			((TextView) findViewById(R.id.number_of_players)).setText(sb
+					.toString());
+		}
 	}
 
 	public boolean updateTime() {

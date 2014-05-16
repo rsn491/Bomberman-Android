@@ -22,6 +22,7 @@ public class MapController implements Serializable {
 	private ScoreTable scoreTable;
 	private MapModels mapModel;
 	private String map;
+	private int maxNumber;
 
 	public MapController(String levelName, boolean ghostsMove) {
 		numberOfPlayers = 0;
@@ -31,6 +32,11 @@ public class MapController implements Serializable {
 		scoreTable = new ScoreTable();
 		this.levelName = levelName;
 		mapModel = new MapModels(levelName);
+		if(mapModel.is4Players())
+			maxNumber=4;
+		else
+			maxNumber=3;
+		
 		map = mapModel.getMap();
 		loadGhosts();
 		ghostThread = new GhostThread(this);
@@ -56,7 +62,7 @@ public class MapController implements Serializable {
 
 		char id = Character.forDigit(playerId + 1, 10);
 
-		if (numberOfPlayers < 3) {
+		if (numberOfPlayers < maxNumber) {
 			for (int i = 0; i < mapArray.length; i++)
 				if (mapArray[i] == id) {
 					BombermanStatus status = new BombermanStatus(playerId, i,

@@ -1,19 +1,16 @@
 package ist.meic.cm.bomberman.multiplayerC;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
-import java.io.StreamCorruptedException;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.LinkedList;
-
 import ist.meic.cm.bomberman.InGame;
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.p2p.manager.WiFiGlobal;
-import ist.meic.cm.bomberman.status.BombermanStatus;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
+import java.net.Socket;
+
 import android.app.Service;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -113,7 +110,6 @@ public class SyncMap extends Service {
 						received = (Message) input.readObject();
 
 						if (received.getCode() == Message.SUCCESS) {
-							System.out.println("Received answer");
 
 							mapController = received.getGameMap();
 

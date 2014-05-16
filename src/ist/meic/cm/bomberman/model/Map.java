@@ -44,6 +44,10 @@ public class Map {
 	private Object bombermanLock;
 	private int playerId;
 	private boolean hasDied;
+	private Bitmap bomberman4R;
+	private Bitmap bomberman4L;
+	private Bitmap bomberman4U;
+	private Bitmap bomberman4D;
 
 	private final static int H_STEP = 20;
 	private static final int OTHER_LINE_STEP = 21;
@@ -133,9 +137,13 @@ public class Map {
 								bombermanObj
 										.add(new Bomberman(this, bomberman2U,
 												bombermanPos.getI(), a, b));
-							if (i == 2)
+							else if (i == 2)
 								bombermanObj
 										.add(new Bomberman(this, bomberman3U,
+												bombermanPos.getI(), a, b));
+							else if (i == 3)
+								bombermanObj
+										.add(new Bomberman(this, bomberman4U,
 												bombermanPos.getI(), a, b));
 						} else
 							bombermanObj.add(new Bomberman(this, bombermanU,
@@ -147,9 +155,13 @@ public class Map {
 								bombermanObj
 										.add(new Bomberman(this, bomberman2L,
 												bombermanPos.getI(), a, b));
-							if (i == 2)
+							else if (i == 2)
 								bombermanObj
 										.add(new Bomberman(this, bomberman3L,
+												bombermanPos.getI(), a, b));
+							else if (i == 3)
+								bombermanObj
+										.add(new Bomberman(this, bomberman4L,
 												bombermanPos.getI(), a, b));
 						} else
 							bombermanObj.add(new Bomberman(this, bombermanL,
@@ -161,9 +173,13 @@ public class Map {
 								bombermanObj
 										.add(new Bomberman(this, bomberman2R,
 												bombermanPos.getI(), a, b));
-							if (i == 2)
+							else if (i == 2)
 								bombermanObj
 										.add(new Bomberman(this, bomberman3R,
+												bombermanPos.getI(), a, b));
+							else if (i == 3)
+								bombermanObj
+										.add(new Bomberman(this, bomberman4R,
 												bombermanPos.getI(), a, b));
 						} else
 							bombermanObj.add(new Bomberman(this, bombermanR,
@@ -175,9 +191,13 @@ public class Map {
 								bombermanObj
 										.add(new Bomberman(this, bomberman2D,
 												bombermanPos.getI(), a, b));
-							if (i == 2)
+							else if (i == 2)
 								bombermanObj
 										.add(new Bomberman(this, bomberman3D,
+												bombermanPos.getI(), a, b));
+							else if (i == 3)
+								bombermanObj
+										.add(new Bomberman(this, bomberman4D,
 												bombermanPos.getI(), a, b));
 						} else
 							bombermanObj.add(new Bomberman(this, bombermanD,
@@ -288,6 +308,26 @@ public class Map {
 
 	public void setBomberman3D(Bitmap bomberman3D) {
 		this.bomberman3D = Bitmap.createScaledBitmap(bomberman3D, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman4R(Bitmap bomberman4R) {
+		this.bomberman4R = Bitmap.createScaledBitmap(bomberman4R, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman4L(Bitmap bomberman4L) {
+		this.bomberman4L = Bitmap.createScaledBitmap(bomberman4L, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman4U(Bitmap bomberman4U) {
+		this.bomberman4U = Bitmap.createScaledBitmap(bomberman4U, width
+				/ H_STEP, height / 13, true);
+	}
+
+	public void setBomberman4D(Bitmap bomberman4D) {
+		this.bomberman4D = Bitmap.createScaledBitmap(bomberman4D, width
 				/ H_STEP, height / 13, true);
 	}
 

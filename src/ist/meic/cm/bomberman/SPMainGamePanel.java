@@ -1,10 +1,7 @@
 package ist.meic.cm.bomberman;
 
 import ist.meic.cm.bomberman.controller.MapController;
-import ist.meic.cm.bomberman.controller.OperationCodes;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 public class SPMainGamePanel extends AbsMainGamePanel {

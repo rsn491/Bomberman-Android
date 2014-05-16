@@ -1,7 +1,5 @@
 package ist.meic.cm.bomberman.p2p.manager;
 
-import ist.meic.cm.bomberman.Menu;
-import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.multiplayerC.Message;
 import ist.meic.cm.bomberman.p2p.WiFiServiceDiscoveryActivity;
 
@@ -69,9 +67,11 @@ public class ClientManager implements Runnable, IManager {
 			global.setPlayerName(playerName);
 			WiFiServiceDiscoveryActivity.setCanPlay(true);
 			readyToPlay();
-			
-			if(received.canStart())
+
+			if (received.canStart()) {
 				WiFiServiceDiscoveryActivity.setAutoPlay();
+				WiFiServiceDiscoveryActivity.setTime(received.getTime());
+			}
 		} else if (received.getCode() == Message.FAIL)
 			askForName();
 	}

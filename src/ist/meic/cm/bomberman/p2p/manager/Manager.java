@@ -1,28 +1,22 @@
 package ist.meic.cm.bomberman.p2p.manager;
 
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.util.Log;
-
 import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.multiplayerC.Message;
-import ist.meic.cm.bomberman.p2p.WiFiServiceDiscoveryActivity;
 import ist.meic.cm.bomberman.p2p.handler.GroupOwnerHandler;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import android.util.Log;
 
 /**
  * Handles reading and writing of messages with socket buffers. Uses a Handler
  * to post messages to UI thread for UI updates.
  */
-public class Manager implements Runnable, IManager {// To do
+public class Manager implements Runnable, IManager {
 
 	private Socket socket = null;
 
@@ -62,8 +56,10 @@ public class Manager implements Runnable, IManager {// To do
 
 			int request = fromClient.getCode();
 			if (request == Message.JOIN)
-				while (!join(fromClient))
-					fromClient = (Message) input.readObject();
+				synchronized (game) {
+					while (!join(fromClient))
+						fromClient = (Message) input.readObject();
+				}
 
 		} catch (IOException e) {
 			Log.e(TAG, "disconnected", e);
@@ -131,7 +127,8 @@ public class Manager implements Runnable, IManager {// To do
 
 				if (handler != null && handler.canStart())
 					toSend = new Message(Message.SUCCESS, playerID, currentMap,
-							addPlayer(details, game), prefs, true);
+							addPlayer(details, game), prefs, true,
+							game.getTmp());
 				else
 					toSend = new Message(Message.SUCCESS, playerID, currentMap,
 							addPlayer(details, game), prefs);

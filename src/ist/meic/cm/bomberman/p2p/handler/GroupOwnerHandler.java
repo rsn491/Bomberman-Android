@@ -1,19 +1,16 @@
 package ist.meic.cm.bomberman.p2p.handler;
 
-import android.os.Handler;
-import android.util.Log;
-
 import ist.meic.cm.bomberman.p2p.WiFiServiceDiscoveryActivity;
 import ist.meic.cm.bomberman.p2p.manager.Manager;
 import ist.meic.cm.bomberman.p2p.manager.WiFiGlobal;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import android.util.Log;
 
 /**
  * The implementation of a ServerSocket handler. This is used by the wifi p2p
@@ -67,13 +64,6 @@ public class GroupOwnerHandler extends Thread {
 				Log.d(TAG, "Launching the I/O handler");
 
 			} catch (IOException e) {
-				/*
-				 * try { if (socket != null && !socket.isClosed())
-				 * socket.close(); } catch (IOException ioe) {
-				 * 
-				 * }
-				 */
-				// e.printStackTrace();
 				pool.shutdownNow();
 				break;
 			}

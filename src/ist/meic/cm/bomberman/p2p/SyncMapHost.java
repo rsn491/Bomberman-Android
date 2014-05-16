@@ -1,29 +1,25 @@
 package ist.meic.cm.bomberman.p2p;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
-import java.io.StreamCorruptedException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 import ist.meic.cm.bomberman.InGame;
-import ist.meic.cm.bomberman.controller.MapController;
 import ist.meic.cm.bomberman.controller.OperationCodes;
 import ist.meic.cm.bomberman.multiplayerC.Message;
 import ist.meic.cm.bomberman.p2p.manager.Client;
 import ist.meic.cm.bomberman.p2p.manager.WiFiGlobal;
 import ist.meic.cm.bomberman.status.BombermanStatus;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import android.app.Service;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -143,8 +139,6 @@ public class SyncMapHost extends Service {
 										sendToClient();
 									}
 								} else if (code == Message.END) {
-
-									System.out.println("ENDS!!");
 									
 									current.getSocket().close();
 

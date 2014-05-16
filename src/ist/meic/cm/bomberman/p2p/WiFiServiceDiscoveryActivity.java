@@ -95,11 +95,13 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 	private static InetAddress address;
 
-	private Button play;
+	private static Button play;
 
 	private static WiFiGlobal global = WiFiGlobal.getInstance();
 
 	private static boolean autoPlay;
+
+	private static int length;
 
 	private boolean starting;
 
@@ -170,6 +172,9 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 				} else if (isClient && canPlay) {
 					if (!starting) {
+						global.setManager(manager);
+						global.setChannel(channel);
+
 						starting = true;
 						Toast.makeText(WiFiServiceDiscoveryActivity.this,
 								"Waiting to Play!", Toast.LENGTH_SHORT).show();
@@ -648,6 +653,9 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 			i.putExtra("isClient", isClient);
 			i.putExtra("game_mode", "multiplayerD");
 
+			if (autoPlay)
+				i.putExtra("duration", length);
+
 			startActivity(i);
 		} else
 			Toast.makeText(WiFiServiceDiscoveryActivity.this,
@@ -664,5 +672,9 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
 	public static void setAutoPlay() {
 		autoPlay = true;
+	}
+
+	public static void setTime(int time) {
+		length = time;
 	}
 }

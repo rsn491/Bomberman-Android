@@ -1,5 +1,9 @@
 package ist.meic.cm.bomberman.p2p;
 
+import ist.meic.cm.bomberman.AbsMainGamePanel;
+import ist.meic.cm.bomberman.R;
+import ist.meic.cm.bomberman.p2p.manager.Client;
+
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
@@ -8,10 +12,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
-import ist.meic.cm.bomberman.AbsMainGamePanel;
-import ist.meic.cm.bomberman.InGame;
-import ist.meic.cm.bomberman.R;
-import ist.meic.cm.bomberman.p2p.manager.Client;
 
 public class MPDMainGamePanel extends AbsMainGamePanel {
 
@@ -119,6 +119,15 @@ public class MPDMainGamePanel extends AbsMainGamePanel {
 				R.drawable.right3));
 		map.setBomberman3D(BitmapFactory.decodeResource(getResources(),
 				R.drawable.down3));
+		
+		map.setBomberman4U(BitmapFactory.decodeResource(getResources(),
+				R.drawable.up4));
+		map.setBomberman4L(BitmapFactory.decodeResource(getResources(),
+				R.drawable.left4));
+		map.setBomberman4R(BitmapFactory.decodeResource(getResources(),
+				R.drawable.right4));
+		map.setBomberman4D(BitmapFactory.decodeResource(getResources(),
+				R.drawable.down4));
 	}
 
 }

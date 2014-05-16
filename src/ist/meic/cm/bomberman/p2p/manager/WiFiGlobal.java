@@ -32,7 +32,6 @@ public class WiFiGlobal {
 	private static GroupOwnerHandler handler;
 
 	private WiFiGlobal() {
-		game = null;
 	}
 
 	public static WiFiGlobal getInstance() {
@@ -160,6 +159,8 @@ public class WiFiGlobal {
 	public static synchronized void clear() {
 		WiFiGlobal_Instance = null;
 		context = null;
+		if (game != null)
+			game.getPlayers().clear();
 		game = null;
 		manager = null;
 		channel = null;
@@ -174,7 +175,7 @@ public class WiFiGlobal {
 		map = null;
 		prefs = null;
 		playerName = null;
-		if (handler != null){
+		if (handler != null) {
 			handler.setRunning();
 			handler.setCanStart(false);
 		}

@@ -1,6 +1,5 @@
 package ist.meic.cm.bomberman.model;
 
-import ist.meic.cm.bomberman.status.BombermanStatus;
 import android.graphics.Bitmap;
 import android.util.Log;
 

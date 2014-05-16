@@ -49,10 +49,10 @@ public class GameLobby extends Activity implements OnItemClickListener {
 	private boolean starting;
 
 	private static final String[] titles = new String[] { "Player 1",
-			"Player 2", "Player 3" };
+			"Player 2", "Player 3", "Player 4" };
 
 	private static final Integer[] images = { R.drawable.head,
-			R.drawable.mario, R.drawable.luigi };
+			R.drawable.mario, R.drawable.luigi, R.drawable.head4 };
 
 	private ListView listView;
 	private List<RowItem> rowItems;
@@ -365,6 +365,8 @@ public class GameLobby extends Activity implements OnItemClickListener {
 			Intent i = new Intent();
 
 			i.putExtra("playerId", playerId);
+
+			i.putExtra("duration", received.getPlayerID());
 
 			setResult(0, i);
 

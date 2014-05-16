@@ -2,7 +2,6 @@ package ist.meic.cm.bomberman.gamelobby;
 
 import ist.meic.cm.bomberman.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;

@@ -369,6 +369,7 @@ public abstract class AbsMainGamePanel extends SurfaceView implements
 		loadModels();
 		Log.d("Debug", "Loaded models");
 		thread.setRunning(true);
+
 		thread.start();
 		Log.d("Debug", "started thread");
 	}
